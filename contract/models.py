@@ -49,7 +49,7 @@ class Contrato(models.Model):
         ('VI','Software e Licenças'),   
     ]
     custo_despesa = models.CharField(max_length=100,choices=CUSTODESPESA_CHOICES,default='I')
-    centro_custo = models.ForeignKey('CentroDeCusto', on_delete=models.CASCADE, related_name='contratos', null=True, blank=True)
+    centro_custo = models.ForeignKey('CentroDeCusto', on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
     descricao_resumida = models.CharField(max_length=255, null=True)
     CLASSIFICACAO_CHOICES = [
         ('NOVO', 'NOVO'),
@@ -58,9 +58,9 @@ class Contrato(models.Model):
         ('REPLANEJAMENTO', 'REPLANEJAMENTO'),
     ]
     classificacao_orcamento = models.CharField(max_length=100,choices=CLASSIFICACAO_CHOICES,null=True, blank=True)
-    fiscal_principal = models.ForeignKey(Fiscal, on_delete=models.CASCADE, related_name='contratos_fiscal_principal')
-    fiscal_substituto = models.ForeignKey(Fiscal, on_delete=models.CASCADE, related_name='contratos_fiscal_substituto', null=True, blank=True)
-    ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.CASCADE, related_name='contratos', null=True, blank=True)
+    fiscal_principal = models.ForeignKey(Fiscal, on_delete=models.PROTECT, related_name='contratos_fiscal_principal')
+    fiscal_substituto = models.ForeignKey(Fiscal, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', null=True, blank=True)
+    ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
     STATUSPROCESSO_CHOICES = [
         ('I', 'PLANEJAMENTO'),
         ('II', 'Execução'),
@@ -79,7 +79,6 @@ class Contrato(models.Model):
     TIPOCONTRATACAOPROVAVEL_CHOICES = [
         ('I', 'LICITAÇÃO'),
         ('II', 'DISPENSA EM RAZÃO DO VALOR'),
-        ('III','ADITIVO'), 
         ('IV','CONVÊNIO'),  
         ('V','FUNDO FIXO'),  
         ('VI','INEXIGIBILIDADE'),                 
@@ -111,3 +110,10 @@ class Contrato(models.Model):
     class Meta:
         verbose_name = 'Linha Orçamentaria'
         verbose_name_plural = 'Linhas Orçamentarias'
+
+class Aditivo(models.Model):
+    contrato = models.ForeignKey(Contrato, on_delete=models.PROTECT, related_name='aditivos')
+    data_aditivo = models.DateField()
+    descricao = models.TextField(max_length=500, blank=True, null=True)
+    novo_prazo = models.DateField(blank=True, null=True)
+    novo_valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

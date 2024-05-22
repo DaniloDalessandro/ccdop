@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Fiscal, Contrato, Orcamento, CentroDeCusto
+from .models import Fiscal, Contrato, Orcamento, CentroDeCusto,Aditivo
 
 class FiscalAdmin(admin.ModelAdmin):
     list_display = ('nome_completo', 'cargo')
@@ -24,3 +24,9 @@ class CentroDeCustoAdmin(admin.ModelAdmin):
     search_fields = ['centro_gestor', 'centro_solicitante']
 
 admin.site.register(CentroDeCusto, CentroDeCustoAdmin)
+# ------------------------------------------------
+class AditivoAdmin(admin.ModelAdmin):
+    list_display = ('data_aditivo', 'descricao')
+    search_fields = ['data_aditivo', 'descricao']
+
+admin.site.register(Aditivo, AditivoAdmin)
