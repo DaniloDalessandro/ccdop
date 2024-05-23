@@ -1,6 +1,6 @@
 from django.db import models
 
-class Fiscal(models.Model):
+class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
     mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')
     cargo = models.CharField(max_length=50)
@@ -11,8 +11,8 @@ class Fiscal(models.Model):
         return self.nome_completo
     
     class Meta:
-        verbose_name = 'Fiscal'
-        verbose_name_plural = 'Fiscais'
+        verbose_name = 'Colaborador'
+        verbose_name_plural = 'Colaboradores'
 
 class Orcamento(models.Model):
     ano = models.IntegerField(unique=True)
@@ -58,8 +58,8 @@ class Contrato(models.Model):
         ('REPLANEJAMENTO', 'REPLANEJAMENTO'),
     ]
     classificacao_orcamento = models.CharField(max_length=100,choices=CLASSIFICACAO_CHOICES,null=True, blank=True)
-    fiscal_principal = models.ForeignKey(Fiscal, on_delete=models.PROTECT, related_name='contratos_fiscal_principal')
-    fiscal_substituto = models.ForeignKey(Fiscal, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', null=True, blank=True)
+    fiscal_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal')
+    fiscal_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', null=True, blank=True)
     ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
     STATUSPROCESSO_CHOICES = [
         ('I', 'PLANEJAMENTO'),

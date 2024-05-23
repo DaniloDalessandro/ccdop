@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import Fiscal, Contrato, Orcamento, CentroDeCusto,Aditivo
+from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo
 
-class FiscalAdmin(admin.ModelAdmin):
+class ColaboradorAdmin(admin.ModelAdmin):
     list_display = ('nome_completo', 'cargo')
     search_fields = ['nome_completo', 'cargo']
 
-admin.site.register(Fiscal, FiscalAdmin)
+admin.site.register(Colaborador, ColaboradorAdmin)
 # ------------------------------------------------
 class ContratoAdmin(admin.ModelAdmin):
     list_display = ('classe',)
