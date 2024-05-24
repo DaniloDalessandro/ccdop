@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
@@ -103,6 +104,30 @@ class Contrato(models.Model):
         ('III','VENCIDO'),        
     ]
     status_contratacao = models.CharField(max_length=100,choices=STATUSCONTRATACAO_CHOICES,blank=True,null=True)
+
+    @property
+    def aviso_fiscal(self):
+        if self.necessidade_contratacao:
+            delta = datetime.now().date() - self.necessidade_contratacao
+            dias_restantes = max(150 - delta.days, 0)
+            return f"{dias_restantes} dias"
+        return "150 dias"
+    
+    @property
+    def elaboracao_tr(self):
+        if self.necessidade_contratacao:
+            delta = datetime.now().date() - self.necessidade_contratacao
+            dias_restantes = max(110 - delta.days, 0)
+            return f"{dias_restantes} dias"
+        return "110 dias"
+    
+    @property
+    def abertura_tr(self):
+        if self.necessidade_contratacao:
+            delta = datetime.now().date() - self.necessidade_contratacao
+            dias_restantes = max(90 - delta.days, 0)
+            return f"{dias_restantes} dias"
+        return "90 dias"
     
     def __str__(self):
         return self.descricao_resumida

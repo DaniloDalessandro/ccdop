@@ -8,8 +8,21 @@ class ColaboradorAdmin(admin.ModelAdmin):
 admin.site.register(Colaborador, ColaboradorAdmin)
 # ------------------------------------------------
 class ContratoAdmin(admin.ModelAdmin):
-    list_display = ('classe',)
+    list_display = ('classe','aviso_fiscal')
     search_fields = ['classe']
+    readonly_fields = ('aviso_fiscal','elaboracao_tr','abertura_tr')
+
+    def aviso_fiscal(self, obj):
+        return obj.aviso_fiscal
+    aviso_fiscal.short_description = 'Aviso ao Fiscal'
+
+    def elaboracao_tr(self, obj):
+        return obj.elaboracao_tr
+    elaboracao_tr.short_description = 'Elaboração de TR'
+
+    def abertura_tr(self, obj):
+        return obj.abertura_tr
+    abertura_tr.short_description = 'Abertura de TR no ECM'
 
 admin.site.register(Contrato, ContratoAdmin)
 # ------------------------------------------------
