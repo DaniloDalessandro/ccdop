@@ -142,3 +142,9 @@ class Aditivo(models.Model):
     descricao = models.TextField(max_length=500, blank=True, null=True)
     novo_prazo = models.DateField(blank=True, null=True)
     novo_valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+class OrcamentoExterno(models.Model):
+    ano = models.ForeignKey(Orcamento,on_delete=models.PROTECT)
+    valor = models.FloatField(blank=True,null=True)
+    diretoria = models.CharField(max_length=100, blank=True,null=True)
+    centro_custo = models.CharField(max_length=100,blank=True,null=True)
