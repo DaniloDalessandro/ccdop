@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from decimal import Decimal
 
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
@@ -21,6 +22,21 @@ class Orcamento(models.Model):
 
     def __str__(self):
         return str(self.ano)
+    
+    @property
+    def valor_adicionado(self):
+        soma_externo = OrcamentoExterno.objects.filter(ano=self, is_deduction=False).aggregate(total=models.Sum('valor'))['total'] or 0
+        return Decimal(soma_externo)
+
+    @property
+    def valor_subtraido(self):
+        deducao_externo = OrcamentoExterno.objects.filter(ano=self, is_deduction=True).aggregate(total=models.Sum('valor'))['total'] or 0
+        return Decimal(deducao_externo)
+    
+    @property
+    def valor_total(self):
+        valor_externo = OrcamentoExterno.objects.filter(ano=self).aggregate(total=models.Sum('valor'))['total'] or 0
+        return self.valor + Decimal(valor_externo)
     
     class Meta:
         verbose_name = 'Orçamento'
@@ -145,6 +161,7 @@ class Aditivo(models.Model):
 
 class OrcamentoExterno(models.Model):
     ano = models.ForeignKey(Orcamento,on_delete=models.PROTECT)
+    is_deduction = models.BooleanField(default=False,verbose_name='Retirada de orçamento')
     valor = models.FloatField(blank=True,null=True)
     diretoria = models.CharField(max_length=100, blank=True,null=True)
     centro_custo = models.CharField(max_length=100,blank=True,null=True)

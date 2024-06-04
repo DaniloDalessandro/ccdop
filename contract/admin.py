@@ -26,8 +26,19 @@ class ContratoAdmin(admin.ModelAdmin):
 admin.site.register(Contrato, ContratoAdmin)
 # ------------------------------------------------
 class OrcamentoAdmin(admin.ModelAdmin):
-    list_display = ('ano', 'valor')
-    search_fields = ['ano']
+    list_display = ('ano', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total')
+
+    def valor_adicionado(self, obj):
+        return obj.valor_adicionado
+    valor_adicionado.short_description = 'Valor Adicionado'
+
+    def valor_subtraido(self, obj):
+        return obj.valor_subtraido
+    valor_subtraido.short_description = 'Valor Subtraído'
+
+    def valor_total(self, obj):
+        return obj.valor_total
+    valor_total.short_description = 'Valor Total'
 
 admin.site.register(Orcamento, OrcamentoAdmin)
 # ------------------------------------------------
@@ -48,3 +59,4 @@ class OrcamentoExternoAdmin(admin.ModelAdmin):
     search_fields = ['diretoria']
 
 admin.site.register(OrcamentoExterno,OrcamentoExternoAdmin)
+
