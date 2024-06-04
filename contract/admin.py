@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo
-
+from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo,OrcamentoExterno
 class ColaboradorAdmin(admin.ModelAdmin):
     list_display = ('nome_completo', 'cargo')
     search_fields = ['nome_completo', 'cargo']
@@ -43,3 +42,9 @@ class AditivoAdmin(admin.ModelAdmin):
     search_fields = ['data_aditivo', 'descricao']
 
 admin.site.register(Aditivo, AditivoAdmin)
+# ------------------------------------------------
+class OrcamentoExternoAdmin(admin.ModelAdmin):
+    list_display = ('diretoria',)
+    search_fields = ['diretoria']
+
+admin.site.register(OrcamentoExterno,OrcamentoExternoAdmin)
