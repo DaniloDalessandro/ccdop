@@ -14,8 +14,13 @@ class ContratoAdmin(admin.ModelAdmin):
 admin.site.register(Contrato, ContratoAdmin)
 # ------------------------------------------------
 class OrcamentoAdmin(admin.ModelAdmin):
-    list_display = ('ano', 'valor')
-    search_fields = ['ano']
+    list_display = ('ano', 'valor', 'centro', 'orcamento_dop_geral')
+    readonly_fields = ('orcamento_dop_geral',)
+
+    def orcamento_dop_geral(self, obj):
+        return obj.orcamento_dop_geral
+
+    orcamento_dop_geral.short_description = 'Orçamento DOP Geral'
 
 admin.site.register(Orcamento, OrcamentoAdmin)
 # ------------------------------------------------

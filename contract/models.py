@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
@@ -15,15 +16,28 @@ class Colaborador(models.Model):
         verbose_name_plural = 'Colaboradores'
 
 class Orcamento(models.Model):
-    ano = models.IntegerField(unique=True)
+    ano = models.IntegerField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
+    CENTRO_ = [
+        ('I', 'DOP'),
+        ('II', 'GELOG'),
+        ('III','GEOPE'), 
+        ('IV','GESAS'),         
+    ]
+    centro = models.CharField(max_length=10, choices=CENTRO_)
 
     def __str__(self):
         return str(self.ano)
     
+    @property
+    def orcamento_dop_geral(self):
+        total = Orcamento.objects.filter(ano=self.ano).aggregate(Sum('valor'))['valor__sum']
+        return total if total else 0
+    
     class Meta:
         verbose_name = 'Orçamento'
         verbose_name_plural = 'Orçamentos'
+        unique_together = ('ano', 'centro')
     
 class CentroDeCusto(models.Model):
         
