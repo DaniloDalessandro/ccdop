@@ -1,11 +1,30 @@
 from django.db import models
+<<<<<<< HEAD
 from datetime import datetime
 from decimal import Decimal
 from collaborator.models import Colaborador
+=======
+from django.db.models import Sum
+
+class Colaborador(models.Model):
+    nome_completo = models.CharField(max_length=100, null=True)
+    mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')
+    cargo = models.CharField(max_length=50)
+    fone = models.CharField(max_length=11,null=True, blank=True)
+    email = models.EmailField(max_length=100,null=True, blank=True)
+
+    def __str__(self):
+        return self.nome_completo
+    
+    class Meta:
+        verbose_name = 'Colaborador'
+        verbose_name_plural = 'Colaboradores'
+>>>>>>> 27612efd4233fcea42e06a2f269371776bd31332
 
 class Orcamento(models.Model):
-    ano = models.IntegerField(unique=True)
+    ano = models.IntegerField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
+<<<<<<< HEAD
     CENTRO = [
         ('I', 'DOP'),
         ('II', 'GELOG'),
@@ -13,11 +32,21 @@ class Orcamento(models.Model):
         ('IV', 'GESAS'),          
     ]
     centro = models.CharField(max_length=100,choices=CENTRO,unique=True)
+=======
+    CENTRO_ = [
+        ('I', 'DOP'),
+        ('II', 'GELOG'),
+        ('III','GEOPE'), 
+        ('IV','GESAS'),         
+    ]
+    centro = models.CharField(max_length=10, choices=CENTRO_)
+>>>>>>> 27612efd4233fcea42e06a2f269371776bd31332
 
     def __str__(self):
         return str(self.ano)
     
     @property
+<<<<<<< HEAD
     def valor_adicionado(self):
         soma_externo = OrcamentoExterno.objects.filter(ano=self, is_deduction=False).aggregate(total=models.Sum('valor'))['total'] or 0
         return Decimal(soma_externo)
@@ -31,10 +60,16 @@ class Orcamento(models.Model):
     def valor_total(self):
         valor_externo = OrcamentoExterno.objects.filter(ano=self).aggregate(total=models.Sum('valor'))['total'] or 0
         return self.valor + Decimal(valor_externo)
+=======
+    def orcamento_dop_geral(self):
+        total = Orcamento.objects.filter(ano=self.ano).aggregate(Sum('valor'))['valor__sum']
+        return total if total else 0
+>>>>>>> 27612efd4233fcea42e06a2f269371776bd31332
     
     class Meta:
         verbose_name = 'Orçamento'
         verbose_name_plural = 'Orçamentos'
+        unique_together = ('ano', 'centro')
     
 class CentroDeCusto(models.Model):
         

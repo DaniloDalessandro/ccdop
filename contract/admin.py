@@ -26,6 +26,7 @@ class ContratoAdmin(admin.ModelAdmin):
 admin.site.register(Contrato, ContratoAdmin)
 # ------------------------------------------------
 class OrcamentoAdmin(admin.ModelAdmin):
+<<<<<<< HEAD
     list_display = ('ano', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total')
 
     def valor_adicionado(self, obj):
@@ -39,6 +40,15 @@ class OrcamentoAdmin(admin.ModelAdmin):
     def valor_total(self, obj):
         return obj.valor_total
     valor_total.short_description = 'Valor Total'
+=======
+    list_display = ('ano', 'valor', 'centro', 'orcamento_dop_geral')
+    readonly_fields = ('orcamento_dop_geral',)
+
+    def orcamento_dop_geral(self, obj):
+        return obj.orcamento_dop_geral
+
+    orcamento_dop_geral.short_description = 'Orçamento DOP Geral'
+>>>>>>> 27612efd4233fcea42e06a2f269371776bd31332
 
 admin.site.register(Orcamento, OrcamentoAdmin)
 # ------------------------------------------------
