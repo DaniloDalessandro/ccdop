@@ -1,15 +1,11 @@
 from django.contrib import admin
 from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo,OrcamentoExterno
-class ColaboradorAdmin(admin.ModelAdmin):
-    list_display = ('nome_completo', 'cargo')
-    search_fields = ['nome_completo', 'cargo']
 
-admin.site.register(Colaborador, ColaboradorAdmin)
 # ------------------------------------------------
 class ContratoAdmin(admin.ModelAdmin):
     list_display = ('classe','aviso_fiscal')
     search_fields = ['classe']
-    readonly_fields = ('aviso_fiscal','elaboracao_tr','abertura_tr')
+    readonly_fields = ('aviso_fiscal','elaboracao_tr','abertura_tr','percentual_utilizacao')
 
     def aviso_fiscal(self, obj):
         return obj.aviso_fiscal
@@ -22,6 +18,10 @@ class ContratoAdmin(admin.ModelAdmin):
     def abertura_tr(self, obj):
         return obj.abertura_tr
     abertura_tr.short_description = 'Abertura de TR no ECM'
+
+    def percentual_utilizacao_display(self, obj):
+        return obj.percentual_utilizacao
+    percentual_utilizacao_display.short_description = 'Percentual Utilização'
 
 admin.site.register(Contrato, ContratoAdmin)
 # ------------------------------------------------
