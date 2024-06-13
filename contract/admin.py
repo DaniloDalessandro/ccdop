@@ -12,15 +12,6 @@ class ColaboradorAdmin(admin.ModelAdmin):
     search_fields = ('nome_completo', 'mat', 'email')
     ordering = ('nome_completo',)
 
-# -------------------------------------------------------------------------------------------------------------------
-
-class OrcamentoAdmin(admin.ModelAdmin):
-    list_display = ('ano', 'centro', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
-    search_fields = ('ano', 'centro')
-    list_filter = ('centro', 'ano')
-    readonly_fields = ('valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
-
-admin.site.register(Orcamento, OrcamentoAdmin)
 
 # -------------------------------------------------------------------------------------------------------------------
 
@@ -28,14 +19,30 @@ class OrcamentoExternoAdmin(admin.ModelAdmin):
     list_display = ('ano', 'centro', 'valor', 'is_deduction')
     search_fields = ('ano__ano', 'centro')
     list_filter = ('centro', 'is_deduction')
+    
 
 admin.site.register(OrcamentoExterno, OrcamentoExternoAdmin)
 
 # -------------------------------------------------------------------------------------------------------------------
 
+class OrcamentoAdmin(admin.ModelAdmin):
+    list_display = ('ano', 'centro', 'classe', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
+    readonly_fields = ('valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
+    list_filter = ('ano', 'centro', 'classe')
+    search_fields = ('ano', 'centro', 'classe')
+    fieldsets = (
+        (None, {
+            'fields': ('ano', 'centro', 'classe', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
+        }),
+    )
+
+admin.site.register(Orcamento, OrcamentoAdmin)
+
+# -------------------------------------------------------------------------------------------------------------------
+
 class CentroDeCustoAdmin(admin.ModelAdmin):
-    list_display = ('diretoria', 'gerencia')
-    search_fields = ('diretoria', 'gerencia')
+    list_display = ('diretoria', 'gerencia','setor')
+    search_fields = ('diretoria', 'gerencia','setor')
 
 admin.site.register(CentroDeCusto, CentroDeCustoAdmin)
 
@@ -80,8 +87,8 @@ admin.site.register(Remanejamento, RemanejamentoAdmin)
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
-    list_display = ('numero_contrato', 'linha_orcamentaria', 'data_assinatura', 'data_vencimento')
-    search_fields = ('numero_contrato', 'linha_orcamentaria__nome')
+    list_display = ('linha_orcamentaria', 'data_assinatura', 'data_vencimento')
+    search_fields = ('linha_orcamentaria__nome',)
 
 # -------------------------------------------------------------------------------------------------------------------
 
@@ -89,6 +96,8 @@ class ContratoAdmin(admin.ModelAdmin):
 class AditivoAdmin(admin.ModelAdmin):
     list_display = ('id', 'contrato', 'data', 'valor')
     search_fields = ('contrato__numero_contrato',)
+
+# -------------------------------------------------------------------------------------------------------------------
 
 admin.site.site_header = 'Administração do Sistema'
 admin.site.site_title = 'Administração do Sistema'

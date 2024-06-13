@@ -4,6 +4,18 @@ from django.db.models import Sum
 from decimal import Decimal
 from django.utils import timezone
 
+# ============================================================================================================
+
+class CentroDeCusto(models.Model):
+    diretoria = models.CharField(max_length=10)
+    gerencia = models.CharField(max_length=10)
+    setor = models.CharField(max_length=100,verbose_name='Setor')
+
+    def __str__(self):
+        return f"{self.gerencia} - {self.setor}"
+    
+# ============================================================================================================
+
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
     mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')
@@ -13,12 +25,7 @@ class Colaborador(models.Model):
         ('C','COORDENAÇÃO'),
     ]
     perfil = models.CharField(max_length=50,choices=TIPO_PERFIL)
-    CENTRO_ = [
-        ('A', 'GELOG'),
-        ('B','GEOPE'), 
-        ('C','GESAS'),         
-    ]
-    gerencia = models.CharField(max_length=50,choices=CENTRO_)
+    gerencia = models.ForeignKey(CentroDeCusto,on_delete=models.CASCADE)
     setor = models.CharField(max_length=50)
     ramal = models.CharField(max_length=11,null=True, blank=True)
     email = models.EmailField(max_length=100,null=True, blank=True)
@@ -32,70 +39,49 @@ class Colaborador(models.Model):
 
 # ============================================================================================================
 
-CENTRO_CHOICES = [
-    ('I', 'DOP'),
-    ('II', 'GELOG'),
-    ('III', 'GEOPE'), 
-    ('IV', 'GESAS'),         
-]
-
 class Orcamento(models.Model):
     ano = models.IntegerField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    CENTRO_CHOICES = [
-    ('I', 'DOP'),
-    ('II', 'GELOG'),
-    ('III', 'GEOPE'), 
-    ('IV', 'GESAS'),         
+    valor = models.DecimalField(max_digits=10, decimal_places=2,default=Decimal('0.00'))
+    valor_adicionado = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
+    valor_subtraido = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
+    
+    centro = models.ForeignKey(CentroDeCusto,on_delete=models.CASCADE)
+    CLASSE_CHOICES = [
+        ('A', 'OPEX'),
+        ('B', 'CAPEX'),        
     ]
-    centro = models.CharField(max_length=10, choices=CENTRO_CHOICES,default=timezone.now)
+    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return f"{self.ano} - {self.centro}"
-    
-    @property
-    def valor_adicionado(self):
-        """Soma dos valores adicionados de OrcamentoExterno."""
-        soma_externo = OrcamentoExterno.objects.filter(ano=self.ano, centro=self.centro, is_deduction=False).aggregate(total=Sum('valor'))['total'] or 0
-        return Decimal(soma_externo)
-
-    @property
-    def valor_subtraido(self):
-        """Soma dos valores subtraídos de OrcamentoExterno."""
-        deducao_externo = OrcamentoExterno.objects.filter(ano=self.ano, centro=self.centro, is_deduction=True).aggregate(total=Sum('valor'))['total'] or 0
-        return Decimal(deducao_externo)
-    
+            
     @property
     def valor_total(self):
-        """Calcula o valor total do orçamento, considerando adições e subtrações externas."""
-        valor_externo = OrcamentoExterno.objects.filter(ano=self.ano, centro=self.centro).aggregate(total=Sum('valor'))['total'] or 0
-        return (self.valor or Decimal(0)) + Decimal(valor_externo)
+        return self.valor + self.valor_adicionado - self.valor_subtraido
     
     @property
     def orcamento_dop_geral(self):
-        """Calcula o valor total dos orçamentos de todos os centros no ano."""
         total_orcamento_centros = Orcamento.objects.filter(ano=self.ano).aggregate(total=Sum('valor'))['total'] or 0
-        valor_externo_dop = OrcamentoExterno.objects.filter(ano=self.ano, centro='I').aggregate(total=Sum('valor'))['total'] or 0
-        return Decimal(total_orcamento_centros) + Decimal(valor_externo_dop)
+        total_valor_externo = OrcamentoExterno.objects.filter(ano__ano=self.ano).aggregate(total=Sum('valor'))['total'] or 0
+        return Decimal(total_orcamento_centros) + Decimal(total_valor_externo)
 
     class Meta:
         verbose_name = 'Orçamento'
         verbose_name_plural = 'Orçamentos'
-        unique_together = ('ano', 'centro')
+        unique_together = ('ano', 'centro', 'classe')
 
 # ============================================================================================================
 
 class OrcamentoExterno(models.Model):
     ano = models.ForeignKey('Orcamento', on_delete=models.CASCADE, related_name='orcamentos_externos')
-    CENTRO_CHOICES = [
-    ('I', 'DOP'),
-    ('II', 'GELOG'),
-    ('III', 'GEOPE'), 
-    ('IV', 'GESAS'),         
-    ]
-    centro = models.CharField(max_length=10, choices=CENTRO_CHOICES)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
-    is_deduction = models.BooleanField(default=False)
+    centro = models.CharField(max_length=20)
+    CLASSE_CHOICES = [
+        ('OPEX', 'OPEX'),
+        ('CAPEX', 'CAPEX'),        
+    ]
+    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
+    is_deduction = models.BooleanField(default=False, verbose_name='Envio de Orçamento')
 
     def __str__(self):
         return f"{self.ano} - {self.centro} - {'Dedução' if self.is_deduction else 'Adição'}"
@@ -105,14 +91,6 @@ class OrcamentoExterno(models.Model):
         verbose_name_plural = 'Orçamentos Externos'
 
 # ============================================================================================================
-
-class CentroDeCusto(models.Model):
-    diretoria = models.CharField(max_length=10)
-    gerencia = models.CharField(max_length=10)
-    setor = models.CharField(max_length=100,verbose_name='Setor')
-
-    def __str__(self):
-        return f"{self.diretoria} - {self.gerencia} - {self.setor}"
 
 class LinhaOrcamentaria(models.Model):
     CLASSE_CHOICES = [
@@ -148,7 +126,7 @@ class LinhaOrcamentaria(models.Model):
     ]
     classificacao_orcamento = models.CharField(max_length=100, choices=CLASSIFICACAO_CHOICES, null=True, blank=True)
 
-    possivel_fiscal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal')
+    possivel_fiscal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_possivel', verbose_name='Fiscal')
     
     ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
  
@@ -257,26 +235,51 @@ class Remanejamento(models.Model):
         verbose_name_plural = 'Remanejamentos'
     
     def save(self, *args, **kwargs):
-        if not self.pk:  # Remanejamento novo
-            # Subtrai o valor da linha de origem
+        if not self.pk:  
             self.linha_origem.valor_orcado -= self.valor
             self.linha_origem.save()
-
-            # Adiciona o valor à linha de destino
+            
             self.linha_destino.valor_orcado += self.valor
             self.linha_destino.save()
         super().save(*args, **kwargs)
+        
+# ============================================================================================================
 
 class Contrato(models.Model):
     linha_orcamentaria = models.OneToOneField('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
-    numero_contrato = models.CharField(max_length=100, unique=True,null=True,blank=True)
+    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True)
     data_assinatura = models.DateField(null=True,blank=True)
     data_vencimento = models.DateField(null=True,blank=True)
+    fical_principal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
+    fical_substituto = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
+
+    def save(self, *args, **kwargs):
+        if not self.numero_protocolo:
+            self.numero_protocolo = self.generate_protocolo()
+        super().save(*args, **kwargs)
+
+    def generate_protocolo(self):
+        year_suffix = timezone.now().year % 100  
+        last_protocolo = Contrato.objects.filter(numero_protocolo__endswith=f"/{year_suffix}").order_by('id').last()
+        
+        if last_protocolo:
+            last_sequence = int(last_protocolo.numero_protocolo.split('/')[0])
+            new_sequence = f"{last_sequence + 1:04}"
+        else:
+            new_sequence = "0001"
+
+        return f"{new_sequence}/{year_suffix}"
+
+    def __str__(self):
+        return self.numero_contrato
+    
+# ============================================================================================================
 
 class Aditivo(models.Model):
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='aditivos')
     data = models.DateField(null=True,blank=True)
     valor = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    justificativa = models.CharField(max_length=150)
 
     def __str__(self):
         return f'Aditivo {self.id} - Contrato {self.contrato.numero_contrato}'
