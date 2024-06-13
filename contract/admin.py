@@ -1,72 +1,94 @@
 from django.contrib import admin
-from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo,OrcamentoExterno
+from django.db.models import Sum
+from decimal import Decimal
+from .models import Colaborador, Contrato, Orcamento, CentroDeCusto,Aditivo,OrcamentoExterno,LinhaOrcamentaria,Remanejamento
 
-# ------------------------------------------------
-class ContratoAdmin(admin.ModelAdmin):
-    list_display = ('classe','aviso_fiscal')
-    search_fields = ['classe']
-    readonly_fields = ('aviso_fiscal','elaboracao_tr','abertura_tr','percentual_utilizacao')
+# -------------------------------------------------------------------------------------------------------------------
 
-    def aviso_fiscal(self, obj):
-        return obj.aviso_fiscal
-    aviso_fiscal.short_description = 'Aviso ao Fiscal'
+@admin.register(Colaborador)
+class ColaboradorAdmin(admin.ModelAdmin):
+    list_display = ('nome_completo', 'mat', 'perfil', 'gerencia', 'ramal', 'email')
+    list_filter = ('perfil', 'gerencia')
+    search_fields = ('nome_completo', 'mat', 'email')
+    ordering = ('nome_completo',)
 
-    def elaboracao_tr(self, obj):
-        return obj.elaboracao_tr
-    elaboracao_tr.short_description = 'Elaboração de TR'
+# -------------------------------------------------------------------------------------------------------------------
 
-    def abertura_tr(self, obj):
-        return obj.abertura_tr
-    abertura_tr.short_description = 'Abertura de TR no ECM'
-
-    def percentual_utilizacao_display(self, obj):
-        return obj.percentual_utilizacao
-    percentual_utilizacao_display.short_description = 'Percentual Utilização'
-
-admin.site.register(Contrato, ContratoAdmin)
-# ------------------------------------------------
 class OrcamentoAdmin(admin.ModelAdmin):
-<<<<<<< HEAD
-    list_display = ('ano', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total')
-
-    def valor_adicionado(self, obj):
-        return obj.valor_adicionado
-    valor_adicionado.short_description = 'Valor Adicionado'
-
-    def valor_subtraido(self, obj):
-        return obj.valor_subtraido
-    valor_subtraido.short_description = 'Valor Subtraído'
-
-    def valor_total(self, obj):
-        return obj.valor_total
-    valor_total.short_description = 'Valor Total'
-=======
-    list_display = ('ano', 'valor', 'centro', 'orcamento_dop_geral')
-    readonly_fields = ('orcamento_dop_geral',)
-
-    def orcamento_dop_geral(self, obj):
-        return obj.orcamento_dop_geral
-
-    orcamento_dop_geral.short_description = 'Orçamento DOP Geral'
->>>>>>> 27612efd4233fcea42e06a2f269371776bd31332
+    list_display = ('ano', 'centro', 'valor', 'valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
+    search_fields = ('ano', 'centro')
+    list_filter = ('centro', 'ano')
+    readonly_fields = ('valor_adicionado', 'valor_subtraido', 'valor_total', 'orcamento_dop_geral')
 
 admin.site.register(Orcamento, OrcamentoAdmin)
-# ------------------------------------------------
+
+# -------------------------------------------------------------------------------------------------------------------
+
+class OrcamentoExternoAdmin(admin.ModelAdmin):
+    list_display = ('ano', 'centro', 'valor', 'is_deduction')
+    search_fields = ('ano__ano', 'centro')
+    list_filter = ('centro', 'is_deduction')
+
+admin.site.register(OrcamentoExterno, OrcamentoExternoAdmin)
+
+# -------------------------------------------------------------------------------------------------------------------
+
 class CentroDeCustoAdmin(admin.ModelAdmin):
-    list_display = ('centro_gestor', 'centro_solicitante')
-    search_fields = ['centro_gestor', 'centro_solicitante']
+    list_display = ('diretoria', 'gerencia')
+    search_fields = ('diretoria', 'gerencia')
 
 admin.site.register(CentroDeCusto, CentroDeCustoAdmin)
-# ------------------------------------------------
+
+# -------------------------------------------------------------------------------------------------------------------
+
+class LinhaOrcamentariaAdmin(admin.ModelAdmin):
+    list_display = (
+        'descricao_resumida', 
+        'classe', 
+        'custo_despesa', 
+        'centro_custo', 
+        'tipo_contrato', 
+        'valor_orcado', 
+        'get_valor_utilizado', 
+        'percentual_utilizacao', 
+        'saldo_orcamentario_pos_remanejamento', 
+        'tempo_para_contratacao'
+    )
+    readonly_fields = ('tempo_para_contratacao', )
+
+    def get_valor_utilizado(self, obj):
+        return obj.valor_utilizado
+    get_valor_utilizado.short_description = 'Valor Utilizado'
+
+    def tempo_para_contratacao(self, obj):
+        return obj.tempo_para_contratacao
+    tempo_para_contratacao.short_description = 'Tempo para Contratação'
+
+admin.site.register(LinhaOrcamentaria, LinhaOrcamentariaAdmin)
+
+# -------------------------------------------------------------------------------------------------------------------
+
+class RemanejamentoAdmin(admin.ModelAdmin):
+    list_display = ('valor', 'linha_origem', 'linha_destino', 'data_remanejamento')
+    search_fields = ('linha_origem__nome', 'linha_destino__nome', 'motivo')
+    list_filter = ('data_remanejamento',)
+    date_hierarchy = 'data_remanejamento'
+
+admin.site.register(Remanejamento, RemanejamentoAdmin)
+
+# -------------------------------------------------------------------------------------------------------------------
+
+@admin.register(Contrato)
+class ContratoAdmin(admin.ModelAdmin):
+    list_display = ('numero_contrato', 'linha_orcamentaria', 'data_assinatura', 'data_vencimento')
+    search_fields = ('numero_contrato', 'linha_orcamentaria__nome')
+
+# -------------------------------------------------------------------------------------------------------------------
+
+@admin.register(Aditivo)
 class AditivoAdmin(admin.ModelAdmin):
-    list_display = ('data_aditivo', 'descricao')
-    search_fields = ['data_aditivo', 'descricao']
+    list_display = ('id', 'contrato', 'data', 'valor')
+    search_fields = ('contrato__numero_contrato',)
 
-admin.site.register(Aditivo, AditivoAdmin)
-# ------------------------------------------------
-class OrcamentoExternoAdmin(admin.ModelAdmin):
-    list_display = ('diretoria',)
-    search_fields = ['diretoria']
-
-admin.site.register(OrcamentoExterno,OrcamentoExternoAdmin)
-
+admin.site.site_header = 'Administração do Sistema'
+admin.site.site_title = 'Administração do Sistema'
