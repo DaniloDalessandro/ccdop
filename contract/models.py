@@ -6,29 +6,45 @@ from django.utils import timezone
 
 # ============================================================================================================
 
-class CentroDeCusto(models.Model):
+class CentroDeCustoGestor(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+    
+# ============================================================================================================
+
+class CentroDeCustoSolicitante(models.Model):
+    centro_gestor = models.ForeignKey(CentroDeCustoGestor, on_delete=models.CASCADE, related_name='solicitantes')
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        unique_together = ('centro_gestor', 'nome')
+    
+# ============================================================================================================
+
+class Setores(models.Model):
     diretoria = models.CharField(max_length=10)
     gerencia = models.CharField(max_length=10)
-    setor = models.CharField(max_length=100,verbose_name='Setor')
+    setor = models.CharField(max_length=100,verbose_name='Setor',unique=True)
 
     def __str__(self):
         return f"{self.gerencia} - {self.setor}"
     
+    class Meta:
+        unique_together = ('diretoria','gerencia','setor')
+
 # ============================================================================================================
 
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
-    mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')
-    TIPO_PERFIL = [
-        ('A','DIREÇÃO'),
-        ('B','GERENCIA'),
-        ('C','COORDENAÇÃO'),
-    ]
-    perfil = models.CharField(max_length=50,choices=TIPO_PERFIL)
-    gerencia = models.ForeignKey(CentroDeCusto,on_delete=models.CASCADE)
-    setor = models.CharField(max_length=50)
-    ramal = models.CharField(max_length=11,null=True, blank=True)
-    email = models.EmailField(max_length=100,null=True, blank=True)
+    mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')     
+    setor = models.ForeignKey(Setores,on_delete=models.CASCADE,to_field='setor')
+    ramal = models.CharField(max_length=4,null=True, blank=True)
+    email = models.EmailField(max_length=50,null=True, blank=True)
 
     def __str__(self):
         return self.nome_completo
@@ -45,7 +61,7 @@ class Orcamento(models.Model):
     valor_adicionado = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
     valor_subtraido = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
     
-    centro = models.ForeignKey(CentroDeCusto,on_delete=models.CASCADE)
+    centro = models.ForeignKey(CentroDeCustoGestor,on_delete=models.CASCADE)
     CLASSE_CHOICES = [
         ('A', 'OPEX'),
         ('B', 'CAPEX'),        
@@ -114,7 +130,8 @@ class LinhaOrcamentaria(models.Model):
     ]
     custo_despesa = models.CharField(max_length=100, choices=CUSTODESPESA_CHOICES,verbose_name='CUSTO/DESPESA')
 
-    centro_custo = models.ForeignKey('CentroDeCusto', on_delete=models.PROTECT, related_name='contratos', null=True, blank=True,verbose_name='Centro de custo solicitante')
+    centro_custo_gestor = models.ForeignKey(CentroDeCustoGestor, on_delete=models.SET_NULL, null=True, blank=True)
+    centro_custo_solicitante = models.ForeignKey(CentroDeCustoSolicitante, on_delete=models.SET_NULL, null=True, blank=True)
     descricao_resumida = models.CharField(max_length=255, null=True, blank=True,verbose_name='Finalidade')
 
     CLASSIFICACAO_CHOICES = [
