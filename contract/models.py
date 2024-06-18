@@ -26,23 +26,49 @@ class CentroDeCustoSolicitante(models.Model):
     
 # ============================================================================================================
 
-class Setores(models.Model):
-    diretoria = models.CharField(max_length=10)
-    gerencia = models.CharField(max_length=10)
-    setor = models.CharField(max_length=100,verbose_name='Setor',unique=True)
+class Direcao(models.Model):
+    nome = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.gerencia} - {self.setor}"
+        return self.nome
     
     class Meta:
-        unique_together = ('diretoria','gerencia','setor')
+        verbose_name = 'Direção'
+        verbose_name_plural = 'Direções'
+        
+
+class Gerencia(models.Model):
+    nome = models.CharField(max_length=100)
+    direcao = models.ForeignKey(Direcao, on_delete=models.CASCADE, related_name='gerencias')
+
+    def __str__(self):
+        return self.nome
+    
+    class Meta:
+        verbose_name = 'Gerência'
+        verbose_name_plural = 'Gerências'
+        unique_together = ('direcao','nome')
+
+class Coordenacao(models.Model):
+    nome = models.CharField(max_length=100)
+    gerencia = models.ForeignKey(Gerencia, on_delete=models.CASCADE, related_name='coordenacoes')
+
+    def __str__(self):
+        return self.nome
+    
+    class Meta:
+        verbose_name = 'Coordenação'
+        verbose_name_plural = 'Coordenações'
+        unique_together = ('gerencia','nome')
 
 # ============================================================================================================
 
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
     mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')     
-    setor = models.ForeignKey(Setores,on_delete=models.CASCADE,to_field='setor')
+    direcao = models.ForeignKey(Direcao, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
+    gerencia = models.ForeignKey(Gerencia, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
+    coordenacao = models.ForeignKey(Coordenacao, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
     ramal = models.CharField(max_length=4,null=True, blank=True)
     email = models.EmailField(max_length=50,null=True, blank=True)
 

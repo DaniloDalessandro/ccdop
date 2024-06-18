@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Sum
 from decimal import Decimal
-from .models import CentroDeCustoGestor,CentroDeCustoSolicitante,Setores,Colaborador, Contrato, Orcamento, Aditivo,OrcamentoExterno,LinhaOrcamentaria,Remanejamento
+from .models import CentroDeCustoGestor,CentroDeCustoSolicitante,Colaborador, Contrato, Orcamento, Aditivo,OrcamentoExterno,LinhaOrcamentaria,Remanejamento,Direcao,Gerencia,Coordenacao
 
 # -------------------------------------------------------------------------------------------------------------------
 
@@ -20,19 +20,31 @@ class CentroDeCustoSolicitanteAdmin(admin.ModelAdmin):
 
 # -------------------------------------------------------------------------------------------------------------------
 
-@admin.register(Setores)
-class SetoresAdmin(admin.ModelAdmin):
-    list_display = ('id', 'diretoria', 'gerencia', 'setor')
-    search_fields = ('diretoria', 'gerencia', 'setor')
-    list_filter = ('diretoria', 'gerencia')
+class DirecaoAdmin(admin.ModelAdmin):
+    list_display = ('nome',)
+    search_fields = ('nome',)
+
+class GerenciaAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'direcao')
+    search_fields = ('nome', 'direcao__nome')
+    list_filter = ('direcao',)
+
+class CoordenacaoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'gerencia')
+    search_fields = ('nome', 'gerencia__nome')
+    list_filter = ('gerencia',)
+
+admin.site.register(Direcao, DirecaoAdmin)
+admin.site.register(Gerencia, GerenciaAdmin)
+admin.site.register(Coordenacao, CoordenacaoAdmin)
 
 # -------------------------------------------------------------------------------------------------------------------
-
-@admin.register(Colaborador)
 class ColaboradorAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome_completo', 'mat', 'setor', 'ramal', 'email')
-    search_fields = ('nome_completo', 'mat', 'setor__setor', 'email')
-    list_filter = ('setor',)
+    list_display = ('nome_completo', 'mat', 'ramal', 'email', 'direcao', 'gerencia', 'coordenacao')
+    search_fields = ('nome_completo', 'mat', 'email', 'direcao__nome', 'gerencia__nome', 'coordenacao__nome')
+    list_filter = ('direcao', 'gerencia', 'coordenacao')
+
+admin.site.register(Colaborador, ColaboradorAdmin)
 
 # -------------------------------------------------------------------------------------------------------------------
 
