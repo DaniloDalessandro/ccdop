@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Colaboradores</title>
+    <!-- Inclua o CSS do Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .form-inline .form-group {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Lista de Colaboradores</h1>
+
+        <!-- Botão para adicionar colaborador -->
+        <div class="mb-4">
+            <a href="{% url 'colaborador-create' %}" class="btn btn-success">Adicionar Colaborador</a>
+        </div>
+
+        <form method="get" class="form-inline mb-4">
+            <div class="form-group">
+                <label for="nome" class="sr-only">Nome:</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="{{ request.GET.nome }}">
+            </div>
+            <div class="form-group">
+                <label for="gerencia" class="sr-only">Gerência:</label>
+                <select class="form-control" id="gerencia" name="gerencia">
+                    <option value="">Todas as Gerências</option>
+                    {% for gerencia in gerencias %}
+                        <option value="{{ gerencia.id }}" {% if gerencia.id|stringformat:"s" == request.GET.gerencia %}selected{% endif %}>{{ gerencia.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nome Completo</th>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Direção</th>
+                    <th scope="col">Gerência</th>
+                    <th scope="col">Coordenação</th>
+                    <th scope="col">Ramal</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for colaborador in colaboradores %}
+                    <tr>
+                        <td>{{ colaborador.nome_completo }}</td>
+                        <td>{{ colaborador.mat }}</td>
+                        <td>{% if colaborador.direcao %}{{ colaborador.direcao.nome }}{% else %}N/A{% endif %}</td>
+                        <td>{% if colaborador.gerencia %}{{ colaborador.gerencia.nome }}{% else %}N/A{% endif %}</td>
+                        <td>{% if colaborador.coordenacao %}{{ colaborador.coordenacao.nome }}{% else %}N/A{% endif %}</td>
+                        <td>{{ colaborador.ramal }}</td>
+                        <td>{{ colaborador.email }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">Nenhum colaborador encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inclua o JavaScript do Bootstrap e suas dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
