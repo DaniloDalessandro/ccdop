@@ -103,8 +103,8 @@ class Orcamento(models.Model):
     
     @property
     def orcamento_dop_geral(self):
-        total_orcamento_centros = Orcamento.objects.filter(ano=self.ano).aggregate(total=Sum('valor'))['total'] or 0
-        total_valor_externo = OrcamentoExterno.objects.filter(ano__ano=self.ano).aggregate(total=Sum('valor'))['total'] or 0
+        total_orcamento_centros = Orcamento.objects.filter(ano=self.ano).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
+        total_valor_externo = OrcamentoExterno.objects.filter(ano__ano=self.ano).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
         return Decimal(total_orcamento_centros) + Decimal(total_valor_externo)
 
     class Meta:
@@ -139,7 +139,7 @@ class LinhaOrcamentaria(models.Model):
         ('A', 'OPEX'),
         ('B', 'CAPEX'),        
     ]
-    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
+    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True,verbose_name='Tipo de linha')
 
     CUSTODESPESA_CHOICES = [
         ('A', 'Base Principal'),
@@ -159,6 +159,7 @@ class LinhaOrcamentaria(models.Model):
     centro_custo_gestor = models.ForeignKey(CentroDeCustoGestor, on_delete=models.SET_NULL, null=True, blank=True)
     centro_custo_solicitante = models.ForeignKey(CentroDeCustoSolicitante, on_delete=models.SET_NULL, null=True, blank=True)
     descricao_resumida = models.CharField(max_length=255, null=True, blank=True,verbose_name='Finalidade')
+    objeto = models.CharField(max_length=255,blank=True,null=True,verbose_name='Objeto')
 
     CLASSIFICACAO_CHOICES = [
         ('NOVO', 'NOVO'),
@@ -289,7 +290,7 @@ class Remanejamento(models.Model):
 # ============================================================================================================
 
 class Contrato(models.Model):
-    linha_orcamentaria = models.OneToOneField('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
+    linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT,related_name='contrato')
     numero_protocolo = models.CharField(max_length=7, unique=True, blank=True)
     data_assinatura = models.DateField(null=True,blank=True)
     data_vencimento = models.DateField(null=True,blank=True)

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastrar Linha Orçamentária</title>
+    <!-- Inclua o CSS do Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Cadastrar Linha Orçamentária</h1>
+        
+        <form method="post" class="form">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_classe">Classe:</label>
+                    <select class="form-control" id="id_classe" name="classe">
+                        <option value="">Selecione a Classe</option>
+                        {% for value, display in form.fields.classe.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_custo_despesa">Custo/Despesa:</label>
+                    <select class="form-control" id="id_custo_despesa" name="custo_despesa">
+                        <option value="">Selecione o Custo/Despesa</option>
+                        {% for value, display in form.fields.custo_despesa.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_centro_custo_gestor">Centro de Custo Gestor:</label>
+                    <select class="form-control" id="id_centro_custo_gestor" name="centro_custo_gestor">
+                        <option value="">Selecione o Centro de Custo Gestor</option>
+                        {% for centro in form.fields.centro_custo_gestor.queryset %}
+                            <option value="{{ centro.id }}">{{ centro.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_centro_custo_solicitante">Centro de Custo Solicitante:</label>
+                    <select class="form-control" id="id_centro_custo_solicitante" name="centro_custo_solicitante">
+                        <option value="">Selecione o Centro de Custo Solicitante</option>
+                        {% for centro in form.fields.centro_custo_solicitante.queryset %}
+                            <option value="{{ centro.id }}">{{ centro.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="id_descricao_resumida">Finalidade:</label>
+                    <input type="text" class="form-control" id="id_descricao_resumida" name="descricao_resumida">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_classificacao_orcamento">Classificação do Orçamento:</label>
+                    <select class="form-control" id="id_classificacao_orcamento" name="classificacao_orcamento">
+                        <option value="">Selecione a Classificação do Orçamento</option>
+                        {% for value, display in form.fields.classificacao_orcamento.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_possivel_fiscal">Fiscal:</label>
+                    <select class="form-control" id="id_possivel_fiscal" name="possivel_fiscal">
+                        <option value="">Selecione o Fiscal</option>
+                        {% for colaborador in form.fields.possivel_fiscal.queryset %}
+                            <option value="{{ colaborador.id }}">{{ colaborador.nome_completo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_ano_orcamento">Ano do Orçamento:</label>
+                    <select class="form-control" id="id_ano_orcamento" name="ano_orcamento">
+                        <option value="">Selecione o Ano do Orçamento</option>
+                        {% for orcamento in form.fields.ano_orcamento.queryset %}
+                            <option value="{{ orcamento.id }}">{{ orcamento.ano }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_tipo_contrato">Tipo de Contrato:</label>
+                    <select class="form-control" id="id_tipo_contrato" name="tipo_contrato">
+                        <option value="">Selecione o Tipo de Contrato</option>
+                        {% for value, display in form.fields.tipo_contrato.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_tipo_provavel_contratacao">Tipo Provável de Contratação:</label>
+                    <select class="form-control" id="id_tipo_provavel_contratacao" name="tipo_provavel_contratacao">
+                        <option value="">Selecione o Tipo Provável de Contratação</option>
+                        {% for value, display in form.fields.tipo_provavel_contratacao.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_valor_orcado">Valor Orçado:</label>
+                    <input type="number" class="form-control" id="id_valor_orcado" name="valor_orcado" step="0.01">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_status_elaboracao_tr">Status de Elaboração TR:</label>
+                    <select class="form-control" id="id_status_elaboracao_tr" name="status_elaboracao_tr">
+                        <option value="">Selecione o Status de Elaboração TR</option>
+                        {% for value, display in form.fields.status_elaboracao_tr.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_necessidade_contratacao">Necessidade de Contratação:</label>
+                    <input type="date" class="form-control" id="id_necessidade_contratacao" name="necessidade_contratacao">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_status_processo">Status do Processo:</label>
+                    <select class="form-control" id="id_status_processo" name="status_processo">
+                        <option value="">Selecione o Status do Processo</option>
+                        {% for value, display in form.fields.status_processo.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_status_contratacao">Status da Contratação:</label>
+                    <select class="form-control" id="id_status_contratacao" name="status_contratacao">
+                        <option value="">Selecione o Status da Contratação</option>
+                        {% for value, display in form.fields.status_contratacao.choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_obs_contrato">Observações:</label>
+                    <textarea class="form-control" id="id_obs_contrato" name="obs_contrato" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+    </div>
+
+    <!-- Inclua o JavaScript do Bootstrap e suas dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
