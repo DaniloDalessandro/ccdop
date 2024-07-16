@@ -327,3 +327,18 @@ class Aditivo(models.Model):
 
     def __str__(self):
         return f'Aditivo {self.id} - Contrato {self.contrato.numero_contrato}'
+    
+# ============================================================================================================
+
+class Auxilio(models.Model):
+    descricao = models.CharField(max_length=255, verbose_name='Descrição')
+    demandantes = models.ForeignKey('CentroDeCustoGestor', on_delete=models.CASCADE, related_name='auxilios', verbose_name='Demandantes')
+    valor = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Valor')
+    observacoes = models.TextField(blank=True, null=True, verbose_name='Observações')
+
+    def __str__(self):
+        return self.descricao
+
+    class Meta:
+        verbose_name = 'Auxílio'
+        verbose_name_plural = 'Auxílios'
