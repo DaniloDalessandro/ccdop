@@ -1,5 +1,5 @@
 from django import forms
-from .models import Colaborador
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao
 
 class ColaboradorForm(forms.ModelForm):
     class Meta:
@@ -29,3 +29,81 @@ class ColaboradorForm(forms.ModelForm):
             'ramal': 'Digite o ramal de contato',
             'email': 'Digite o endereço de email',
         }
+
+# =========================================================================================================================
+
+class CentroDeCustoGestorForm(forms.ModelForm):
+    class Meta:
+        model = CentroDeCustoGestor
+        fields = ['nome']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        }
+        labels = {
+            'nome': 'Nome',
+        }
+
+# =========================================================================================================================
+
+class CentroDeCustoSolicitanteForm(forms.ModelForm):
+    class Meta:
+        model = CentroDeCustoSolicitante
+        fields = ['centro_gestor', 'nome']
+        widgets = {
+            'centro_gestor': forms.Select(attrs={'class': 'form-control'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        }
+        labels = {
+            'centro_gestor': 'Centro Gestor',
+            'nome': 'Nome',
+        }
+
+# =========================================================================================================================
+
+class DirecaoForm(forms.ModelForm):
+    class Meta:
+        model = Direcao
+        fields = ['nome']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        }
+        labels = {
+            'nome': 'Nome',
+        }
+
+# =========================================================================================================================
+
+class GerenciaForm(forms.ModelForm):
+    class Meta:
+        model = Gerencia
+        fields = ['direcao', 'nome']
+        widgets = {
+            'direcao': forms.Select(attrs={'class': 'form-control'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        }
+        labels = {
+            'direcao': 'Direção',
+            'nome': 'Nome',
+        }
+
+# =========================================================================================================================
+
+class CoordenacaoForm(forms.ModelForm):
+    class Meta:
+        model = Coordenacao
+        fields = ['gerencia', 'nome']
+        widgets = {
+            'gerencia': forms.Select(attrs={'class': 'form-control'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        }
+        labels = {
+            'gerencia': 'Gerência',
+            'nome': 'Nome',
+        }
+
+# =========================================================================================================================
+
+class ColaboradorForm(forms.ModelForm):
+    class Meta:
+        model = Colaborador
+        fields = ['nome_completo', 'mat', 'direcao', 'gerencia', 'coordenacao', 'ramal', 'email']

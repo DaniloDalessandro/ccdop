@@ -7,8 +7,41 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            display: flex;
+            min-height: 100vh;
             background-color: #f8f9fa;
-            padding-top: 50px;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 60px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 18px;
+            color: #ffffff;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #007bff;
+            text-decoration: none;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
         }
         .table-container {
             background-color: #ffffff;
@@ -37,54 +70,121 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
+        .dropdown-btn {
+            font-size: 18px;
+            border: none;
+            background: none;
+            color: white;
+            padding: 10px 15px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+        }
+        .dropdown-container {
+            display: none;
+            background-color: #414a4c;
+        }
+        .dropdown-container a {
+            padding-left: 30px;
+        }
+        .dropdown-btn:focus {
+            outline: none;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="table-container">
-                <h2 class="mb-4">Lista de Colaboradores</h2>
-                <div class="mb-4">
-                    <a href="{% url 'colaborador_create' %}" class="btn btn-primary">Adicionar Colaborador</a>
-                </div>
-                <div class="mb-4">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
-                </div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nome Completo</th>
-                                                      
-                            <th>Coordenação</th>
-                            
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="colaboradorTable">
-                        {% for colaborador in colaboradores %}
-                        <tr>
-                            <td>{{ colaborador.nome_completo }}</td>
-                                                      
-                            <td>{{ colaborador.coordenacao }}</td>
-                            
-                            <td>
-                                
-                                <a href="{% url 'colaborador_update' colaborador.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="{% url 'colaborador_delete' colaborador.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Dashboard</a>
+</nav>
+<div class="sidebar">
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <button class="dropdown-btn">Direção 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
+        <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+    </div>
+    <button class="dropdown-btn">Gerência 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
+        <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
+    </div>
+    <button class="dropdown-btn">Coordenação 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
+        <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Gestor 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
+        <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Solicitante 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
+        <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
+    </div>
+    <button class="dropdown-btn">Colaboradores 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
+        <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
+    </div>
+</div>
+<div class="content">
+    <div class="table-container">
+        <h2 class="mb-4">Lista de Colaboradores</h2>
+        <div class="mb-4">
+            <a href="{% url 'colaborador_create' %}" class="btn btn-primary">Adicionar Colaborador</a>
         </div>
+        <div class="mb-4">
+            <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome Completo</th>
+                    <th>Matrícula</th>
+                    <th>Direção</th>
+                    <th>Gerência</th>
+                    <th>Coordenação</th>
+                    <th>Ramal</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="colaboradorTable">
+                {% for colaborador in colaboradores %}
+                <tr>
+                    <td>{{ colaborador.nome_completo }}</td>
+                    <td>{{ colaborador.mat }}</td>
+                    <td>{{ colaborador.direcao.nome }}</td>
+                    <td>{{ colaborador.gerencia.nome }}</td>
+                    <td>{{ colaborador.coordenacao.nome }}</td>
+                    <td>{{ colaborador.ramal }}</td>
+                    <td>{{ colaborador.email }}</td>
+                    <td>
+                        <a href="{% url 'colaborador_update' colaborador.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'colaborador_delete' colaborador.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function() {
         var searchValue = this.value.toLowerCase();
@@ -98,6 +198,21 @@
             }
         });
     });
+
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
 </script>
 </body>
 </html>
