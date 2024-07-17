@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from contract.models import Direcao,Gerencia,Coordenacao
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, cpf, password=None, **extra_fields):
@@ -27,6 +28,25 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, cpf, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    PRESIDENCIA = 'presidencia'
+    DIRETOR = 'diretor'
+    GERENTE = 'gerente'
+    COORDENADOR = 'coordenador'
+    ANALISTA = 'analista'
+
+    PERFIL_CHOICES = [
+        (PRESIDENCIA, 'Presidência'),
+        (DIRETOR, 'Diretor'),
+        (GERENTE, 'Gerente'),
+        (COORDENADOR, 'Coordenador'),
+        (ANALISTA, 'Analista'),
+    ]
+
+    perfil = models.CharField(max_length=20, choices=PERFIL_CHOICES)
+    direcao = models.ForeignKey(Direcao, null=True, blank=True, on_delete=models.SET_NULL)
+    gerencia = models.ForeignKey(Gerencia, null=True, blank=True, on_delete=models.SET_NULL)
+    coordenacao = models.ForeignKey(Coordenacao, null=True, blank=True, on_delete=models.SET_NULL)
+
     email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=11, unique=True)
     nome = models.CharField(max_length=255,verbose_name='Nome Completo')

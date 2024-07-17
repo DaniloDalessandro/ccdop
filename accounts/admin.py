@@ -12,14 +12,14 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('email', 'cpf', 'nome', 'telefone', 'is_active', 'is_staff', 'groups', 'user_permissions')
+        fields = ('email', 'cpf', 'nome', 'telefone','perfil','direcao','gerencia','coordenacao', 'is_active', 'is_staff', 'groups', 'user_permissions')
 
 class CustomUserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
 
-    list_display = ('email', 'cpf', 'nome', 'is_staff', 'is_active')
+    list_display = ('email', 'cpf', 'nome','perfil','direcao','gerencia','coordenacao', 'is_staff', 'is_active')
     list_filter = ('is_staff', 'is_active', 'groups')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -30,7 +30,7 @@ class CustomUserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'cpf', 'nome', 'telefone', 'password1', 'password2', 'is_staff', 'is_active')}
+            'fields': ('email', 'cpf', 'nome', 'telefone','perfil','direcao','gerencia','coordenacao', 'password1', 'password2', 'is_staff', 'is_active')}
         ),
     )
     search_fields = ('email', 'cpf', 'nome')
