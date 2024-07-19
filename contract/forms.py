@@ -1,5 +1,5 @@
 from django import forms
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,OrcamentoExterno,Orcamento
 
 class ColaboradorForm(forms.ModelForm):
     class Meta:
@@ -107,3 +107,37 @@ class ColaboradorForm(forms.ModelForm):
     class Meta:
         model = Colaborador
         fields = ['nome_completo', 'mat', 'direcao', 'gerencia', 'coordenacao', 'ramal', 'email']
+
+# =========================================================================================================================
+
+from django import forms
+from .models import Orcamento, OrcamentoExterno
+
+class OrcamentoForm(forms.ModelForm):
+    valores_adicionados = forms.DecimalField(label='Valores Adicionados', max_digits=10, decimal_places=2, required=False, disabled=True)
+    valores_enviados = forms.DecimalField(label='Valores Enviados', max_digits=10, decimal_places=2, required=False, disabled=True)
+    valor_total = forms.DecimalField(label='Valor Total', max_digits=10, decimal_places=2, required=False, disabled=True)
+    orcamento_total = forms.DecimalField(label='Orçamento Total', max_digits=10, decimal_places=2, required=False, disabled=True)
+
+    class Meta:
+        model = Orcamento
+        fields = ['ano', 'centro', 'classe', 'valor', 'valores_adicionados', 'valores_enviados', 'valor_total', 'orcamento_total']
+
+    def __init__(self, *args, **kwargs):
+        super(OrcamentoForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['valores_adicionados'].initial = self.instance.valores_adicionados
+            self.fields['valores_enviados'].initial = self.instance.valores_enviados
+            self.fields['valor_total'].initial = self.instance.valor_total
+            self.fields['orcamento_total'].initial = self.instance.orcamento_total
+
+# =========================================================================================================================
+
+class OrcamentoExternoForm(forms.ModelForm):
+    class Meta:
+        model = OrcamentoExterno
+        fields = ['ano', 'valor', 'centro', 'classe', 'tipo_movimentacao']
+
+
+
+

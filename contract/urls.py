@@ -6,6 +6,11 @@ from .views import ( DirecaoListView,DirecaoCreateView,DirecaoUpdateView,Direcao
 from .views import ( GerenciaListView,GerenciaCreateView,GerenciaUpdateView,GerenciaDeleteView)
 from .views import CoordenacaoListView,CoordenacaoCreateView,CoordenacaoUpdateView,CoordenacaoDeleteView
 from .views import ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView
+from .views import (
+    OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
+    OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView
+)
+
 
 
 urlpatterns = [
@@ -43,6 +48,22 @@ urlpatterns = [
     path('colaboradores/novo/', ColaboradorCreateView.as_view(), name='colaborador_create'),
     path('colaboradores/<int:pk>/editar/', ColaboradorUpdateView.as_view(), name='colaborador_update'),
     path('colaboradores/<int:pk>/deletar/', ColaboradorDeleteView.as_view(), name='colaborador_delete'),
+    # ==============================================================================================
+  
+    path('orcamentos/', OrcamentoListView.as_view(), name='orcamento_list'),
+    path('orcamentos/<int:pk>/', OrcamentoDetailView.as_view(), name='orcamento_detail'),
+    path('orcamentos/create/', OrcamentoCreateView.as_view(), name='orcamento_create'),
+    path('orcamentos/<int:pk>/update/', OrcamentoUpdateView.as_view(), name='orcamento_update'),
+    path('orcamentos/<int:pk>/delete/', OrcamentoDeleteView.as_view(), name='orcamento_delete'),
+
+    # ==============================================================================================
+    path('orcamentos_externos/', OrcamentoExternoListView.as_view(), name='orcamentoexterno_list'),
+    path('orcamentos_externos/<int:pk>/', OrcamentoExternoDetailView.as_view(), name='orcamentoexterno_detail'),
+    path('orcamentos_externos/create/', OrcamentoExternoCreateView.as_view(), name='orcamentoexterno_create'),
+    path('orcamentos_externos/<int:pk>/update/', OrcamentoExternoUpdateView.as_view(), name='orcamentoexterno_update'),
+    path('orcamentos_externos/<int:pk>/delete/', OrcamentoExternoDeleteView.as_view(), name='orcamentoexterno_delete'),
+
+
 
     
 

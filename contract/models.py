@@ -83,54 +83,109 @@ class Colaborador(models.Model):
 
 class Orcamento(models.Model):
     ano = models.IntegerField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2,default=Decimal('0.00'))
-    valor_adicionado = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
-    valor_subtraido = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), editable=False)
-    
-    centro = models.ForeignKey(CentroDeCustoGestor,on_delete=models.CASCADE)
+    centro = models.ForeignKey(CentroDeCustoGestor, on_delete=models.CASCADE)
     CLASSE_CHOICES = [
         ('A', 'OPEX'),
-        ('B', 'CAPEX'),        
+        ('B', 'CAPEX'),
     ]
     classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    @property
+    def valores_adicionados(self):
+        if self.pk:
+            return self.orcamentos_externos.filter(tipo_movimentacao='entrada').aggregate(total=Sum('valor'))['total'] or 0
+        return 0
+
+    @property
+    def valores_enviados(self):
+        if self.pk:
+            return self.orcamentos_externos.filter(tipo_movimentacao='retirada').aggregate(total=Sum('valor'))['total'] or 0
+        return 0
+
+    @property
+    def valor_total(self):
+        if self.pk:
+            return self.valor + self.valores_adicionados - self.valores_enviados
+        return self.valor
+
+    @property
+    def orcamento_total(self):
+        if self.pk:
+            orcamentos_internos = Orcamento.objects.filter(ano=self.ano, centro=self.centro).aggregate(total=Sum('valor'))['total'] or 0
+            orcamentos_externos = OrcamentoExterno.objects.filter(ano=self).aggregate(total=Sum('valor'))['total'] or 0
+            return orcamentos_internos + orcamentos_externos
+        return self.valor
 
     def __str__(self):
         return f"{self.ano} - {self.centro}"
-            
-    @property
-    def valor_total(self):
-        return self.valor + self.valor_adicionado - self.valor_subtraido
-    
-    @property
-    def orcamento_dop_geral(self):
-        total_orcamento_centros = Orcamento.objects.filter(ano=self.ano).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
-        total_valor_externo = OrcamentoExterno.objects.filter(ano__ano=self.ano).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
-        return Decimal(total_orcamento_centros) + Decimal(total_valor_externo)
 
     class Meta:
         verbose_name = 'Orçamento'
         verbose_name_plural = 'Orçamentos'
         unique_together = ('ano', 'centro', 'classe')
 
+
 # ============================================================================================================
 
 class OrcamentoExterno(models.Model):
-    ano = models.ForeignKey('Orcamento', on_delete=models.CASCADE, related_name='orcamentos_externos')
+    ENTRADA_RETIRADA_CHOICES = [
+        ('entrada', 'Entrada'),
+        ('retirada', 'Retirada'),
+    ]
+
+    ano = models.ForeignKey(Orcamento, on_delete=models.CASCADE, related_name='orcamentos_externos')
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     centro = models.CharField(max_length=20)
     CLASSE_CHOICES = [
         ('OPEX', 'OPEX'),
-        ('CAPEX', 'CAPEX'),        
+        ('CAPEX', 'CAPEX'),
     ]
     classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
-    is_deduction = models.BooleanField(default=False, verbose_name='Envio de Orçamento')
+    tipo_movimentacao = models.CharField(max_length=8, choices=ENTRADA_RETIRADA_CHOICES)
 
-    def __str__(self):
-        return f"{self.ano} - {self.centro} - {'Dedução' if self.is_deduction else 'Adição'}"
+    def save(self, *args, **kwargs):
+        # Verifica se o orçamento principal já foi salvo
+        if not self.ano.pk:
+            self.ano.save()
+
+        if not self.pk:
+            # Novo objeto, adicionar valor ao orçamento
+            if self.tipo_movimentacao == 'entrada':
+                self.ano.valor += self.valor
+            elif self.tipo_movimentacao == 'retirada':
+                self.ano.valor -= self.valor
+        else:
+            # Objeto existente, atualizar orçamento com a diferença
+            old_obj = OrcamentoExterno.objects.get(pk=self.pk)
+            if old_obj.tipo_movimentacao == 'entrada':
+                self.ano.valor -= old_obj.valor
+            elif old_obj.tipo_movimentacao == 'retirada':
+                self.ano.valor += old_obj.valor
+
+            if self.tipo_movimentacao == 'entrada':
+                self.ano.valor += self.valor
+            elif self.tipo_movimentacao == 'retirada':
+                self.ano.valor -= self.valor
+
+        self.ano.save()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Atualizar orçamento ao deletar
+        if self.tipo_movimentacao == 'entrada':
+            self.ano.valor -= self.valor
+        elif self.tipo_movimentacao == 'retirada':
+            self.ano.valor += self.valor
+        self.ano.save()
+        super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Orçamento Externo'
         verbose_name_plural = 'Orçamentos Externos'
+
+    def __str__(self):
+        return f"{self.ano} - {self.centro} - {self.get_tipo_movimentacao_display()}"
 
 # ============================================================================================================
 
