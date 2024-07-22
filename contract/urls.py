@@ -63,9 +63,7 @@ urlpatterns = [
     path('orcamentos_externos/<int:pk>/update/', OrcamentoExternoUpdateView.as_view(), name='orcamentoexterno_update'),
     path('orcamentos_externos/<int:pk>/delete/', OrcamentoExternoDeleteView.as_view(), name='orcamentoexterno_delete'),
 
-
-
-    
+  
 
     
 

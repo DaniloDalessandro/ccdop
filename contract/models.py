@@ -125,7 +125,6 @@ class Orcamento(models.Model):
         verbose_name_plural = 'Orçamentos'
         unique_together = ('ano', 'centro', 'classe')
 
-
 # ============================================================================================================
 
 class OrcamentoExterno(models.Model):
@@ -149,27 +148,29 @@ class OrcamentoExterno(models.Model):
         if not self.ano.pk:
             self.ano.save()
 
-        if not self.pk:
-            # Novo objeto, adicionar valor ao orçamento
-            if self.tipo_movimentacao == 'entrada':
-                self.ano.valor += self.valor
-            elif self.tipo_movimentacao == 'retirada':
-                self.ano.valor -= self.valor
-        else:
-            # Objeto existente, atualizar orçamento com a diferença
-            old_obj = OrcamentoExterno.objects.get(pk=self.pk)
-            if old_obj.tipo_movimentacao == 'entrada':
-                self.ano.valor -= old_obj.valor
-            elif old_obj.tipo_movimentacao == 'retirada':
-                self.ano.valor += old_obj.valor
+        # Armazena valores antigos antes de salvar
+        old_valor = None
+        old_tipo_movimentacao = None
+        if self.pk:
+            old_instance = OrcamentoExterno.objects.get(pk=self.pk)
+            old_valor = old_instance.valor
+            old_tipo_movimentacao = old_instance.tipo_movimentacao
 
-            if self.tipo_movimentacao == 'entrada':
-                self.ano.valor += self.valor
-            elif self.tipo_movimentacao == 'retirada':
-                self.ano.valor -= self.valor
+        super().save(*args, **kwargs)
+
+        # Atualiza o valor do orçamento principal
+        if old_valor is not None and old_tipo_movimentacao is not None:
+            if old_tipo_movimentacao == 'entrada':
+                self.ano.valor -= old_valor
+            elif old_tipo_movimentacao == 'retirada':
+                self.ano.valor += old_valor
+
+        if self.tipo_movimentacao == 'entrada':
+            self.ano.valor += self.valor
+        elif self.tipo_movimentacao == 'retirada':
+            self.ano.valor -= self.valor
 
         self.ano.save()
-        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         # Atualizar orçamento ao deletar

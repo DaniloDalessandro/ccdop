@@ -206,7 +206,9 @@ class OrcamentoExternoCreateView(CreateView):
 
     def form_valid(self, form):
         orcamento_externo = form.save(commit=False)
+        # Salva a instância do orçamento principal antes de associar o orçamento externo
         orcamento_externo.ano.save()
+        orcamento_externo.save()
         return redirect(self.success_url)
 
 class OrcamentoExternoUpdateView(UpdateView):
@@ -215,7 +217,18 @@ class OrcamentoExternoUpdateView(UpdateView):
     template_name = 'orcamentoexterno_form.html'
     success_url = reverse_lazy('orcamentoexterno_list')
 
+    def form_valid(self, form):
+        orcamento_externo = form.save(commit=False)
+        orcamento_externo.ano.save()
+        orcamento_externo.save()
+        return redirect(self.success_url)
+
 class OrcamentoExternoDeleteView(DeleteView):
     model = OrcamentoExterno
     template_name = 'orcamentoexterno_confirm_delete.html'
     success_url = reverse_lazy('orcamentoexterno_list')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return redirect(self.success_url)
