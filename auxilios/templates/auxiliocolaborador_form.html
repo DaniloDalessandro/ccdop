@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Auxílio Colaborador</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .sidebar a, .dropdown-btn {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 18px;
+            color: white;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover, .dropdown-btn:hover {
+            background-color: #007bff;
+        }
+        .dropdown-container {
+            display: none;
+            background-color: #414a4c;
+            padding-left: 20px;
+        }
+        .dropdown-btn {
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#">Dashboard</a>
+    <button class="dropdown-btn">Direção 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Direção</a>
+        <a href="#">Lista de Direções</a>
+    </div>
+    <button class="dropdown-btn">Gerência 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Gerência</a>
+        <a href="#">Lista de Gerências</a>
+    </div>
+    <button class="dropdown-btn">Coordenação 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Coordenação</a>
+        <a href="#">Lista de Coordenações</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Gestor 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Centro de Custo Gestor</a>
+        <a href="#">Lista de Centros de Custo Gestor</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Solicitante 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Centro de Custo Solicitante</a>
+        <a href="#">Lista de Centros de Custo Solicitante</a>
+    </div>
+    <button class="dropdown-btn">Colaboradores 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Adicionar Colaborador</a>
+        <a href="#">Lista de Colaboradores</a>
+    </div>
+</div>
+
+<div class="content">
+    <h1 class="text-center">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Auxílio Colaborador</h1>
+
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="baneficiado">Beneficiado</label>
+                {{ form.baneficiado }}
+            </div>
+            <div class="form-group">
+                <label for="orcamento">Orçamento</label>
+                {{ form.orcamento }}
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo de Auxílio</label>
+                {{ form.tipo }}
+            </div>
+            <div class="form-group">
+                <label for="valor_parcela">Valor por Parcela</label>
+                {{ form.valor_parcela }}
+            </div>
+            <div class="form-group">
+                <label for="qtd_parcelas">Quantidade de Parcelas</label>
+                {{ form.qtd_parcelas }}
+            </div>
+            <div class="form-group">
+                <label for="obs">Observações</label>
+                {{ form.obs }}
+            </div>
+            <div class="form-group">
+                <label for="mes_inicio">Mês de Início</label>
+                {{ form.mes_inicio }}
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url 'auxiliocolaborador_list' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

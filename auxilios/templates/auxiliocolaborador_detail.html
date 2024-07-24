@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Auxílio</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .sidebar a, .dropdown-btn {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 18px;
+            color: white;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover, .dropdown-btn:hover {
+            background-color: #007bff;
+        }
+        .dropdown-container {
+            display: none;
+            background-color: #414a4c;
+            padding-left: 20px;
+        }
+        .dropdown-btn {
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+        .detail-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Dashboard</a>
+    </nav>
+    
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <button class="dropdown-btn">Direção 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
+            <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+        </div>
+        <button class="dropdown-btn">Gerência 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
+            <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
+        </div>
+        <button class="dropdown-btn">Coordenação 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
+            <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
+        </div>
+        <button class="dropdown-btn">Centro de Custo Gestor 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
+            <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
+        </div>
+        <button class="dropdown-btn">Centro de Custo Solicitante 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
+            <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
+        </div>
+        <button class="dropdown-btn">Colaboradores 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
+            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
+        </div>
+    </div>
+
+<div class="content">
+    <h1 class="text-center">Detalhes do Auxílio Colaborador</h1>
+
+    <div class="detail-container">
+        <p><strong>Beneficiado:</strong> {{ auxilio_colaborador.baneficiado.nome_completo }}</p>
+        <p><strong>Orçamento:</strong> {{ auxilio_colaborador.orcamento }}</p>
+        <p><strong>Tipo de Auxílio:</strong> {{ auxilio_colaborador.get_tipo_display }}</p>
+        <p><strong>Valor por Parcela:</strong> R$ {{ auxilio_colaborador.valor_parcela }}</p>
+        <p><strong>Quantidade de Parcelas:</strong> {{ auxilio_colaborador.qtd_parcelas }}</p>
+        <p><strong>Valor Total:</strong> R$ {{ auxilio_colaborador.valor_total }}</p>
+        <p><strong>Observações:</strong> {{ auxilio_colaborador.obs }}</p>
+        <p><strong>Mês de Início:</strong> {{ auxilio_colaborador.mes_inicio }}</p>
+        <p><strong>Mês de Término:</strong> {{ auxilio_colaborador.mes_fim }}</p>
+        
+        <a href="{% url 'auxiliocolaborador_update' auxilio_colaborador.pk %}" class="btn btn-warning">Editar</a>
+        <a href="{% url 'auxiliocolaborador_list' %}" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>
+
+<script>
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

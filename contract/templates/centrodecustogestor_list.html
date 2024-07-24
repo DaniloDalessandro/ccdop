@@ -101,12 +101,16 @@
 
 <div class="sidebar">
     <a href="{% url 'dashboard' %}">Dashboard</a>
-    <button class="dropdown-btn">Direção 
+    <button class="dropdown-btn">SETORES 
         <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-container">
         <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
         <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+        <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
+        <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
+        <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
+        <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
     </div>
     <button class="dropdown-btn">Gerência 
         <i class="fa fa-caret-down"></i>
@@ -142,6 +146,13 @@
     <div class="dropdown-container">
         <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
         <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
+    </div>
+    <button class="dropdown-btn">Auxilios 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilio</a>
+        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
     </div>
 </div>
 
