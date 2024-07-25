@@ -8,27 +8,21 @@ class AuxilioColaboradorListView(ListView):
     model = AuxilioColaborador
     template_name = 'auxiliocolaborador_list.html'
     context_object_name = 'auxilios_colaboradores'
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('search', '')
-        orcamento_id = self.request.GET.get('orcamento', '')
-
-        if search_query:
-            queryset = queryset.filter(baneficiado__nome_completo__icontains=search_query)
+        orcamento_id = self.request.GET.get('orcamento_id')
         
         if orcamento_id:
             queryset = queryset.filter(orcamento_id=orcamento_id)
         
-        return queryset
+        return queryset.order_by('id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Calcular o valor total dos auxílios
         total_auxilios = self.get_queryset().aggregate(total=Sum('valor_total'))['total'] or 0
         context['valor_total_auxilios'] = total_auxilios
-
-        # Passar os orçamentos para os filtros
         context['orcamentos'] = Orcamento.objects.all()
         return context
 

@@ -2,7 +2,7 @@ from django.db import models
 from contract.models import Colaborador,Orcamento
 from django.db.models import F
 from datetime import date
-from dateutil.relativedelta import relativedelta # type: ignore
+from dateutil.relativedelta import relativedelta
 
 # Create your models here.
 
