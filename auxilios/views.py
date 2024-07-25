@@ -3,6 +3,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import AuxilioColaborador,Orcamento
 from .forms import AuxilioColaboradorForm
 from django.db.models import Sum
+from datetime import date
+from auxilios import models
 
 class AuxilioColaboradorListView(ListView):
     model = AuxilioColaborador
@@ -13,13 +15,22 @@ class AuxilioColaboradorListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         orcamento_id = self.request.GET.get('orcamento_id')
-        orcamento_id = self.request.GET.get('orcamento_id')
-        
+
+        # Filtro por orcamento_id, se fornecido
         if orcamento_id:
             queryset = queryset.filter(orcamento_id=orcamento_id)
         
-        return queryset
-    
+        # Atualiza o campo status baseado nas datas mes_inicio e mes_fim
+        hoje = date.today()
+        for auxilio in queryset:
+            if hoje < auxilio.mes_inicio:
+                auxilio.status = 'aguardando'
+            elif auxilio.mes_inicio <= hoje <= auxilio.mes_fim:
+                auxilio.status = 'ativo'
+            else:
+                auxilio.status = 'finalizado'
+            auxilio.save(update_fields=['status'])
+        
         return queryset.order_by('id')
 
     def get_context_data(self, **kwargs):
@@ -28,7 +39,6 @@ class AuxilioColaboradorListView(ListView):
         context['valor_total_auxilios'] = total_auxilios
         context['orcamentos'] = Orcamento.objects.all()
         return context
-
 class AuxilioColaboradorDetailView(DetailView):
     model = AuxilioColaborador
     template_name = 'auxiliocolaborador_detail.html'

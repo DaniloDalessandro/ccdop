@@ -12,6 +12,7 @@ class AuxilioColaboradorForm(forms.ModelForm):
             'qtd_parcelas',
             'obs',
             'mes_inicio',
+            'status',
         ]
         labels = {
             'baneficiado': 'Beneficiado',
@@ -21,6 +22,7 @@ class AuxilioColaboradorForm(forms.ModelForm):
             'qtd_parcelas': 'Quantidade de Parcelas',
             'obs': 'Observações',
             'mes_inicio': 'Mês de Início',
+            'status': 'Status',
         }
         widgets = {
             'mes_inicio': forms.DateInput(attrs={'type': 'date'}),

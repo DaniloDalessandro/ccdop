@@ -1,10 +1,8 @@
 from django.db import models
 from contract.models import Colaborador,Orcamento
-from django.db.models import F
+from django.db.models import F,Case, When, BooleanField
 from datetime import date
 from dateutil.relativedelta import relativedelta
-
-# Create your models here.
 
 class AuxilioColaborador(models.Model):
     baneficiado = models.ForeignKey(Colaborador, on_delete=models.PROTECT)
@@ -21,11 +19,12 @@ class AuxilioColaborador(models.Model):
     mes_inicio = models.DateField()
     qtd_parcelas = models.PositiveIntegerField()
     mes_fim = models.DateField(editable=False)
-
-    @property
-    def valor_total_auxilios(self):
-        total_auxilios = AuxilioColaborador.objects.aggregate(total=Sum('valor_total'))['total']
-        return total_auxilios or 0
+    status_choices = [
+        ('aguardando', 'Aguardando'),
+        ('ativo', 'Ativo'),
+        ('finalizado', 'Finalizado'),
+    ]
+    status = models.CharField(max_length=10, choices=status_choices, default='aguardando')
 
     def save(self, *args, **kwargs):
         # Calcular valor_total como a soma de todas as parcelas
@@ -36,6 +35,15 @@ class AuxilioColaborador(models.Model):
         if self.mes_inicio and self.qtd_parcelas:
             mes_fim_date = self.mes_inicio + relativedelta(months=self.qtd_parcelas)
             self.mes_fim = mes_fim_date
+        
+        # Atualizar o status com base nas datas
+        hoje = date.today()
+        if hoje < self.mes_inicio:
+            self.status = 'aguardando'
+        elif self.mes_inicio <= hoje <= self.mes_fim:
+            self.status = 'ativo'
+        else:
+            self.status = 'finalizado'
 
         if not self.pk:
             # Novo objeto, subtrai o valor do orçamento
@@ -55,7 +63,3 @@ class AuxilioColaborador(models.Model):
             self.orcamento.valor = F('valor') + self.valor_total
             self.orcamento.save()
         super().delete(*args, **kwargs)
-
-    class Meta:
-        verbose_name = 'Auxílio Colaborador'
-        verbose_name_plural = 'Auxílios Colaboradores'
