@@ -59,51 +59,48 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#">Dashboard</a>
     </nav>
-    
-    <div class="sidebar">
-        <a href="{% url 'dashboard' %}">Dashboard</a>
-        <button class="dropdown-btn">Direção 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
-            <a href="{% url 'direcao_list' %}">Lista de Direções</a>
-        </div>
-        <button class="dropdown-btn">Gerência 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
-            <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
-        </div>
-        <button class="dropdown-btn">Coordenação 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
-            <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
-        </div>
-        <button class="dropdown-btn">Centro de Custo Gestor 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
-            <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
-        </div>
-        <button class="dropdown-btn">Centro de Custo Solicitante 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
-            <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
-        </div>
-        <button class="dropdown-btn">Colaboradores 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-        </div>
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <button class="dropdown-btn">Direção 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
+        <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+    </div>
+    <button class="dropdown-btn">Gerência 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
+        <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
+    </div>
+    <button class="dropdown-btn">Coordenação 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
+        <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Gestor 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
+        <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
+    </div>
+    <button class="dropdown-btn">Centro de Custo Solicitante 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
+        <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
+    </div>
+    <button class="dropdown-btn">Colaboradores 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
+        <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
     </div>
 </div>
 
@@ -119,13 +116,15 @@
     <div class="table-container">
         <form method="get" action="{% url 'auxiliocolaborador_list' %}">
             <div class="form-group row">
-                <label for="tipo" class="col-sm-2 col-form-label">Filtrar por Tipo</label>
+                <label for="orcamento" class="col-sm-2 col-form-label">Filtrar por Orçamento</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="tipo" name="tipo">
+                    <select class="form-control" id="orcamento" name="orcamento_id">
                         <option value="">Todos</option>
-                        <option value="solido">Sólido</option>
-                        <option value="liquido">Líquido</option>
-                        <option value="vazio">Vazio</option>
+                        {% for orcamento in orcamentos %}
+                            <option value="{{ orcamento.id }}" {% if request.GET.orcamento_id == orcamento.id|stringformat:"s" %}selected{% endif %}>
+                                {{ orcamento.nome }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -137,35 +136,36 @@
                     <th>Beneficiado</th>
                     <th>Orçamento</th>
                     <th>Tipo</th>
+                    <th>Valor Parcela</th>
+                    <th>Qtd Parcelas</th>
                     <th>Valor Total</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-    {% for auxilio in auxilios_colaboradores %}
-    <tr>
-        <td>{{ auxilio.beneficiado.nome_completo }}</td>
-        <td>{{ auxilio.orcamento }}</td>
-        <td>{{ auxilio.get_tipo_display }}</td>
-        <td>{{ auxilio.valor_parcela }}</td>
-        <td>{{ auxilio.qtd_parcelas }}</td>
-        <td>{{ auxilio.valor_total }}</td>
-        <td>
-            <a href="{% url 'auxiliocolaborador_detail' auxilio.pk %}" class="btn btn-info btn-sm">Detalhes</a>
-            <a href="{% url 'auxiliocolaborador_update' auxilio.pk %}" class="btn btn-warning btn-sm">Editar</a>
-            <a href="{% url 'auxiliocolaborador_delete' auxilio.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="7" class="text-center">Nenhum auxílio encontrado.</td>
-    </tr>
-    {% endfor %}
-</tbody>
-
+                {% for auxilio in auxilios_colaboradores %}
+                <tr>
+                    <td>{{ auxilio.beneficiado.nome_completo }}</td>
+                    <td>{{ auxilio.orcamento.nome }}</td>
+                    <td>{{ auxilio.get_tipo_display }}</td>
+                    <td>{{ auxilio.valor_parcela }}</td>
+                    <td>{{ auxilio.qtd_parcelas }}</td>
+                    <td>{{ auxilio.valor_total }}</td>
+                    <td>
+                        <a href="{% url 'auxiliocolaborador_detail' auxilio.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                        <a href="{% url 'auxiliocolaborador_update' auxilio.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'auxiliocolaborador_delete' auxilio.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">Nenhum auxílio encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         <div class="text-right mt-4">
-            <strong>Valor Total dos Auxílios: R$ {{ total_auxilios }}</strong>
+            <strong>Valor Total dos Auxílios: R$ {{ valor_total_auxilios }}</strong>
         </div>
     </div>
 </div>

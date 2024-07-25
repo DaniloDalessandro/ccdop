@@ -11,17 +11,13 @@ class AuxilioColaboradorListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('search', '')
-        orcamento_id = self.request.GET.get('orcamento', '')
-
-        if search_query:
-            queryset = queryset.filter(baneficiado__nome_completo__icontains=search_query)
+        orcamento_id = self.request.GET.get('orcamento_id')
         
         if orcamento_id:
             queryset = queryset.filter(orcamento_id=orcamento_id)
         
         return queryset
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Calcular o valor total dos auxílios
