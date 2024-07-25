@@ -13,10 +13,13 @@ class AuxilioColaboradorListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         orcamento_id = self.request.GET.get('orcamento_id')
+        orcamento_id = self.request.GET.get('orcamento_id')
         
         if orcamento_id:
             queryset = queryset.filter(orcamento_id=orcamento_id)
         
+        return queryset
+    
         return queryset.order_by('id')
 
     def get_context_data(self, **kwargs):
