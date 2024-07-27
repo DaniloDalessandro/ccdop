@@ -16,7 +16,6 @@ class AuxilioColaboradorListView(ListView):
         queryset = super().get_queryset()
         orcamento_id = self.request.GET.get('orcamento_id')
 
-        # Filtro por orcamento_id, se fornecido
         if orcamento_id:
             queryset = queryset.filter(orcamento_id=orcamento_id)
         
@@ -39,6 +38,7 @@ class AuxilioColaboradorListView(ListView):
         context['valor_total_auxilios'] = total_auxilios
         context['orcamentos'] = Orcamento.objects.all()
         return context
+    
 class AuxilioColaboradorDetailView(DetailView):
     model = AuxilioColaborador
     template_name = 'auxiliocolaborador_detail.html'

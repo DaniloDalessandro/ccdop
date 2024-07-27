@@ -147,12 +147,20 @@
                 {% for auxilio in auxilios_colaboradores %}
                 <tr>
                     <td>{{ auxilio.baneficiado.nome_completo }}</td>
-                    <td>{{ auxilio.orcamento.nome }}</td>
+                    <td>{{ auxilio.orcamento }}</td>
                     <td>{{ auxilio.get_tipo_display }}</td>
                     <td>{{ auxilio.valor_parcela }}</td>
                     <td>{{ auxilio.qtd_parcelas }}</td>
                     <td>{{ auxilio.valor_total }}</td>
-                    <td>{{ auxilio.ativo|yesno:"Ativo,Finalizado" }}</td>
+                    <td>
+                        {% if auxilio.status == 'ativo' %}
+                            Ativo
+                        {% elif auxilio.status == 'finalizado' %}
+                            Finalizado
+                        {% else %}
+                            Aguardando
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{% url 'auxiliocolaborador_detail' auxilio.pk %}" class="btn btn-info btn-sm">Detalhes</a>
                         <a href="{% url 'auxiliocolaborador_update' auxilio.pk %}" class="btn btn-warning btn-sm">Editar</a>

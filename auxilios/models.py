@@ -33,8 +33,7 @@ class AuxilioColaborador(models.Model):
         
         # Calcular mes_fim com base em mes_inicio e qtd_parcelas
         if self.mes_inicio and self.qtd_parcelas:
-            mes_fim_date = self.mes_inicio + relativedelta(months=self.qtd_parcelas)
-            self.mes_fim = mes_fim_date
+            self.mes_fim = self.mes_inicio + relativedelta(months=self.qtd_parcelas)
         
         # Atualizar o status com base nas datas
         hoje = date.today()
@@ -51,7 +50,6 @@ class AuxilioColaborador(models.Model):
         else:
             # Objeto existente, ajustar orçamento
             old_instance = AuxilioColaborador.objects.get(pk=self.pk)
-            # Revertendo o efeito da instância antiga e aplicando o da nova instância
             self.orcamento.valor = F('valor') + old_instance.valor_total - self.valor_total
         
         self.orcamento.save()
@@ -59,7 +57,6 @@ class AuxilioColaborador(models.Model):
 
     def delete(self, *args, **kwargs):
         if self.orcamento:
-            # Reverter o valor do orçamento ao deletar
             self.orcamento.valor = F('valor') + self.valor_total
             self.orcamento.save()
         super().delete(*args, **kwargs)
