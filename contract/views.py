@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno
-from .forms import ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria
+from .forms import ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm
 from django.shortcuts import redirect
+
 
 class ColaboradorListView(ListView):
     model = Colaborador
@@ -230,3 +231,46 @@ class OrcamentoExternoDeleteView(DeleteView):
         self.object = self.get_object()
         self.object.delete()
         return redirect(self.success_url)
+    
+class LinhaOrcamentariaListView(ListView):
+    model = LinhaOrcamentaria
+    template_name = 'linhaorcamentaria_list.html'
+    context_object_name = 'linhaorcamentarias'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for linha in context['linhaorcamentarias']:
+            linha.tempo_para_contratacao = linha.tempo_para_contratacao
+            linha.saldo_orcamentario_pos_remanejamento = linha.saldo_orcamentario_pos_remanejamento
+            # Removendo qualquer referência a 'percentual_utilizacao' se não existir mais
+        return context
+
+class LinhaOrcamentariaDetailView(DetailView):
+    model = LinhaOrcamentaria
+    template_name = 'linhaorcamentaria_detail.html'
+    context_object_name = 'linhaorcamentaria'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        linha = self.get_object()
+        context['tempo_para_contratacao'] = linha.tempo_para_contratacao
+        context['saldo_orcamentario_pos_remanejamento'] = linha.saldo_orcamentario_pos_remanejamento
+        return context
+
+class LinhaOrcamentariaCreateView(CreateView):
+    model = LinhaOrcamentaria
+    template_name = 'linhaorcamentaria_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('linhaorcamentaria_list')
+
+class LinhaOrcamentariaUpdateView(UpdateView):
+    model = LinhaOrcamentaria
+    template_name = 'linhaorcamentaria_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('linhaorcamentaria_list')
+
+class LinhaOrcamentariaDeleteView(DeleteView):
+    model = LinhaOrcamentaria
+    template_name = 'linhaorcamentaria_confirm_delete.html'
+    success_url = reverse_lazy('linhaorcamentaria_list')

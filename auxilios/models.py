@@ -11,8 +11,10 @@ class AuxilioColaborador(models.Model):
         ('A', 'Graduação'),
         ('B', 'Pós-Graduação'),
         ('C', 'Auxilio creche escola'),
+        ('D', 'Língua estrangeira'),
     ]
     tipo = models.CharField(max_length=100, choices=tipo_choices, null=True, blank=True)
+    beneficio = models.CharField(max_length=100, blank=False)
     valor_parcela = models.FloatField(null=True, blank=True)
     valor_total = models.FloatField(null=True, blank=True, editable=False)
     obs = models.CharField(max_length=200, null=True, blank=True)

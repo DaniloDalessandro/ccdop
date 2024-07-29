@@ -294,23 +294,17 @@ class LinhaOrcamentaria(models.Model):
     ]
     status_contratacao = models.CharField(max_length=100, choices=STATUSCONTRATACAO_CHOICES, blank=True, null=True)
     obs_contrato = models.TextField(max_length=400, blank=True, null=True)
-    @property
-    def percentual_utilizacao(self):
-        if self.valor_orcado > 0:
-            percentual = (self.valor_utilizado / self.valor_orcado) * 100
-            return f"{percentual:.2f}%"
-        return "0.00%"
-    
+        
     @property
     def valor_remanejado_total(self):
-        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0)
-        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0)
+        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
         return remanejamentos_origem + remanejamentos_destino
     
     @property
     def saldo_orcamentario_pos_remanejamento(self):
-        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0)
-        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0)
+        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
         saldo = self.valor_orcado + valor_remanejado_destino - valor_remanejado_origem - self.valor_utilizado
         return saldo
     

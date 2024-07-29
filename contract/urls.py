@@ -10,7 +10,13 @@ from .views import (
     OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
     OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView
 )
-
+from .views import (
+    LinhaOrcamentariaListView,
+    LinhaOrcamentariaDetailView,
+    LinhaOrcamentariaCreateView,
+    LinhaOrcamentariaUpdateView,
+    LinhaOrcamentariaDeleteView,
+)
 
 
 urlpatterns = [
@@ -63,7 +69,12 @@ urlpatterns = [
     path('orcamentos_externos/<int:pk>/update/', OrcamentoExternoUpdateView.as_view(), name='orcamentoexterno_update'),
     path('orcamentos_externos/<int:pk>/delete/', OrcamentoExternoDeleteView.as_view(), name='orcamentoexterno_delete'),
 
-  
+    # ==============================================================================================
+    path('linhaorcamentaria/', LinhaOrcamentariaListView.as_view(), name='linhaorcamentaria_list'),
+    path('linhaorcamentaria/nova/', LinhaOrcamentariaCreateView.as_view(), name='linhaorcamentaria_create'),
+    path('linhaorcamentaria/<int:pk>/', LinhaOrcamentariaDetailView.as_view(), name='linhaorcamentaria_detail'),
+    path('linhaorcamentaria/<int:pk>/editar/', LinhaOrcamentariaUpdateView.as_view(), name='linhaorcamentaria_update'),
+    path('linhaorcamentaria/<int:pk>/deletar/', LinhaOrcamentariaDeleteView.as_view(), name='linhaorcamentaria_delete'),
 
     
 
