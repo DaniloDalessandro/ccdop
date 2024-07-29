@@ -44,19 +44,30 @@ class AuxilioColaborador(models.Model):
         else:
             self.status = 'finalizado'
 
-        if not self.pk:
-            # Novo objeto, subtrai o valor do orçamento
-            self.orcamento.valor = F('valor') - self.valor_total
+        # Ajustar orçamento apenas se a classe for CAPEX
+        if self.orcamento.classe == 'CAPEX':
+            if not self.pk:
+                # Novo objeto, subtrai o valor do orçamento
+                self.orcamento.valor = F('valor') - self.valor_total
+            else:
+                # Objeto existente, ajustar orçamento
+                old_instance = AuxilioColaborador.objects.get(pk=self.pk)
+                self.orcamento.valor = F('valor') + old_instance.valor_total - self.valor_total
+            self.orcamento.save()
         else:
-            # Objeto existente, ajustar orçamento
-            old_instance = AuxilioColaborador.objects.get(pk=self.pk)
-            self.orcamento.valor = F('valor') + old_instance.valor_total - self.valor_total
+            print("Orçamento não é do tipo CAPEX. Nenhuma subtração foi realizada.")
         
-        self.orcamento.save()
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.orcamento:
+        if self.orcamento.classe == 'CAPEX':
+            # Reverter o valor do orçamento ao deletar
             self.orcamento.valor = F('valor') + self.valor_total
             self.orcamento.save()
+        else:
+            print("Orçamento não é do tipo CAPEX. Nenhuma subtração foi revertida.")
         super().delete(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Auxílio Colaborador'
+        verbose_name_plural = 'Auxílios Colaboradores'

@@ -66,9 +66,9 @@ class Coordenacao(models.Model):
 class Colaborador(models.Model):
     nome_completo = models.CharField(max_length=100, null=True)
     mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')     
-    direcao = models.ForeignKey(Direcao, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
-    gerencia = models.ForeignKey(Gerencia, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
-    coordenacao = models.ForeignKey(Coordenacao, on_delete=models.SET_NULL, related_name='colaboradores', null=True, blank=True)
+    direcao = models.ForeignKey(Direcao, on_delete=models.CASCADE,null=True)
+    gerencia = models.ForeignKey(Gerencia, on_delete=models.SET_NULL,null=True)
+    coordenacao = models.ForeignKey(Coordenacao, on_delete=models.SET_NULL,null=True)
     ramal = models.CharField(max_length=4,null=True, blank=True)
     email = models.EmailField(max_length=50,null=True, blank=True)
 
