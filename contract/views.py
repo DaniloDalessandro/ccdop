@@ -16,25 +16,11 @@ class ColaboradorCreateView(CreateView):
     template_name = 'colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['direcoes'] = Direcao.objects.all()
-        context['gerencias'] = Gerencia.objects.all()
-        context['coordenacoes'] = Coordenacao.objects.all()
-        return context
-
 class ColaboradorUpdateView(UpdateView):
     model = Colaborador
     form_class = ColaboradorForm
     template_name = 'colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['direcoes'] = Direcao.objects.all()
-        context['gerencias'] = Gerencia.objects.all()
-        context['coordenacoes'] = Coordenacao.objects.all()
-        return context
 
 class ColaboradorDeleteView(DeleteView):
     model = Colaborador
@@ -172,8 +158,6 @@ class ColaboradorDeleteView(DeleteView):
     model = Colaborador
     template_name = 'colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
-
-from django.shortcuts import get_object_or_404, redirect
 
 class OrcamentoListView(ListView):
     model = Orcamento

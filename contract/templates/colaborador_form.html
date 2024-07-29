@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cadastro de Colaborador{% endblock %}</title>
+    <title>{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Colaborador</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -24,19 +24,29 @@
             left: 0;
             width: 250px;
             background-color: #343a40;
-            padding-top: 60px;
+            padding-top: 20px;
         }
-        .sidebar a {
+        .sidebar a, .dropdown-btn {
             padding: 10px 15px;
             text-align: left;
             font-size: 18px;
-            color: #ffffff;
+            color: white;
             display: block;
             text-decoration: none;
         }
-        .sidebar a:hover {
+        .sidebar a:hover, .dropdown-btn:hover {
             background-color: #007bff;
-            text-decoration: none;
+        }
+        .dropdown-container {
+            display: none;
+            background-color: #414a4c;
+            padding-left: 20px;
+        }
+        .dropdown-btn {
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
         }
         .content {
             margin-left: 250px;
@@ -59,6 +69,9 @@
             margin-bottom: 20px;
             text-align: center;
         }
+        .form-group label {
+            font-weight: bold;
+        }
         .btn-primary {
             background-color: #007bff;
             border: none;
@@ -73,33 +86,27 @@
         .btn-secondary:hover {
             background-color: #5a6268;
         }
-        .dropdown-btn {
-            font-size: 18px;
-            border: none;
-            background: none;
-            color: white;
-            padding: 10px 15px;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            outline: none;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-        }
-        .dropdown-container a {
-            padding-left: 30px;
-        }
-        .dropdown-btn:focus {
-            outline: none;
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .sidebar a, .dropdown-btn {
+                text-align: center;
+            }
+            .content {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">Dashboard</a>
 </nav>
+
 <div class="sidebar">
     <a href="{% url 'dashboard' %}">Dashboard</a>
     <button class="dropdown-btn">Direção 
@@ -144,70 +151,64 @@
         <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
         <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
     </div>
-    <button class="dropdown-btn">Auxilios 
+    <button class="dropdown-btn">Auxílios 
         <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-container">
-        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxílios</a>
         <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxílio</a>
+        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxílios</a>
     </div>
 </div>
+
 <div class="content">
     <div class="form-container">
         <h2 class="form-title">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Colaborador</h2>
         <form method="post">
             {% csrf_token %}
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="nome_completo">Nome Completo</label>
-                    <input type="text" class="form-control" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value }}">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="id_nome_completo">Nome Completo</label>
+                    {{ form.nome_completo }}
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="mat">Matrícula</label>
-                    <input type="number" class="form-control" id="mat" name="mat" value="{{ form.mat.value }}">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="direcao">Direção</label>
-                    <select class="form-control" id="direcao" name="direcao">
-                        <option value="">Selecione...</option>
-                        {% for direcao in direcoes %}
-                            <option value="{{ direcao.id }}" {% if form.direcao.value == direcao.id %}selected{% endif %}>{{ direcao.nome }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="gerencia">Gerência</label>
-                    <select class="form-control" id="gerencia" name="gerencia">
-                        <option value="">Selecione...</option>
-                        {% for gerencia in gerencias %}
-                            <option value="{{ gerencia.id }}" {% if form.gerencia.value == gerencia.id %}selected{% endif %}>{{ gerencia.nome }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="coordenacao">Coordenação</label>
-                    <select class="form-control" id="coordenacao" name="coordenacao">
-                        <option value="">Selecione...</option>
-                        {% for coordenacao in coordenacoes %}
-                            <option value="{{ coordenacao.id }}" {% if form.coordenacao.value == coordenacao.id %}selected{% endif %}>{{ coordenacao.nome }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-md-6">
+                    <label for="id_mat">Matrícula</label>
+                    {{ form.mat }}
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="ramal">Ramal</label>
-                    <input type="text" class="form-control" id="ramal" name="ramal" value="{{ form.ramal.value }}">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="id_direcao">Direção</label>
+                    {{ form.direcao }}
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ form.email.value }}">
+                <div class="col-md-6">
+                    <label for="id_gerencia">Gerência</label>
+                    {{ form.gerencia }}
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <a href="{% url 'colaborador_list' %}" class="btn btn-secondary">Cancelar</a>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="id_coordenacao">Coordenação</label>
+                    {{ form.coordenacao }}
+                </div>
+                <div class="col-md-6">
+                    <label for="id_ramal">Ramal</label>
+                    {{ form.ramal }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'colaborador_list' %}" class="btn btn-secondary btn-block">Cancelar</a>
+                </div>
+            </div>
         </form>
     </div>
 </div>
