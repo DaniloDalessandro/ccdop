@@ -238,6 +238,16 @@ class LinhaOrcamentaria(models.Model):
     ]
     tipo_contrato = models.CharField(max_length=100, choices=TIPOCONTRATO_CHOICES, blank=True, null=True)
 
+    STATUS_LINHA_ORCAMENTARIA_CHOICES = [
+        ('I', 'SERVIÇO'),
+        ('II', 'FORNECIMENTO'),
+        ('III', 'ASSINATURA'), 
+        ('IV', 'FORNECIMENTO/SERVIÇO'),                 
+    ]
+    status_linha_orcamentaria = models.CharField(max_length=100, choices=STATUS_LINHA_ORCAMENTARIA_CHOICES, blank=True, null=True)
+
+    valor_aprovisionado =models.FloatField(default=0.0)
+
     TIPOCONTRATACAOPROVAVEL_CHOICES = [
         ('A', 'LICITAÇÃO'),
         ('B', 'DISPENSA EM RAZÃO DO VALOR'),

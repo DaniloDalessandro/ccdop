@@ -55,51 +55,58 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <a href="#">Dashboard</a>
-    <button class="dropdown-btn">Direção 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Direção</a>
-        <a href="#">Lista de Direções</a>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <button class="dropdown-btn">Direção 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
+            <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+        </div>
+        <button class="dropdown-btn">Gerência 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
+            <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
+        </div>
+        <button class="dropdown-btn">Coordenação 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
+            <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
+        </div>
+        <button class="dropdown-btn">Centro de Custo Gestor 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
+            <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
+        </div>
+        <button class="dropdown-btn">Centro de Custo Solicitante 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
+            <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
+        </div>
+        <button class="dropdown-btn">Colaboradores 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
+            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
+        </div>
+        <button class="dropdown-btn">Auxilios 
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Colaborador</a>
+            <a href="{% url 'auxiliocolaborador_list' %}">Lista de Colaboradores</a>
+        </div>
     </div>
-    <button class="dropdown-btn">Gerência 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Gerência</a>
-        <a href="#">Lista de Gerências</a>
-    </div>
-    <button class="dropdown-btn">Coordenação 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Coordenação</a>
-        <a href="#">Lista de Coordenações</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Gestor 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Centro de Custo Gestor</a>
-        <a href="#">Lista de Centros de Custo Gestor</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Solicitante 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Centro de Custo Solicitante</a>
-        <a href="#">Lista de Centros de Custo Solicitante</a>
-    </div>
-    <button class="dropdown-btn">Colaboradores 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="#">Adicionar Colaborador</a>
-        <a href="#">Lista de Colaboradores</a>
-    </div>
-</div>
 
 <div class="content">
     <h1 class="text-center">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Auxílio Colaborador</h1>
