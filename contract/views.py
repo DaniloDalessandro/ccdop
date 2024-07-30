@@ -238,13 +238,8 @@ class LinhaOrcamentariaListView(ListView):
     context_object_name = 'linhaorcamentarias'
     paginate_by = 10
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        for linha in context['linhaorcamentarias']:
-            linha.tempo_para_contratacao = linha.tempo_para_contratacao
-            linha.saldo_orcamentario_pos_remanejamento = linha.saldo_orcamentario_pos_remanejamento
-            # Removendo qualquer referência a 'percentual_utilizacao' se não existir mais
-        return context
+    def get_queryset(self):
+        return LinhaOrcamentaria.objects.all()
 
 class LinhaOrcamentariaDetailView(DetailView):
     model = LinhaOrcamentaria
@@ -254,8 +249,10 @@ class LinhaOrcamentariaDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         linha = self.get_object()
-        context['tempo_para_contratacao'] = linha.tempo_para_contratacao
+        # Não é necessário atribuir as propriedades; apenas acessá-las
+        context['valor_remanejado_total'] = linha.valor_remanejado_total
         context['saldo_orcamentario_pos_remanejamento'] = linha.saldo_orcamentario_pos_remanejamento
+        context['tempo_para_contratacao'] = linha.tempo_para_contratacao
         return context
 
 class LinhaOrcamentariaCreateView(CreateView):

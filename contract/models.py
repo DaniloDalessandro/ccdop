@@ -297,17 +297,18 @@ class LinhaOrcamentaria(models.Model):
         
     @property
     def valor_remanejado_total(self):
-        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
-        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
+        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
         return remanejamentos_origem + remanejamentos_destino
-    
+
     @property
     def saldo_orcamentario_pos_remanejamento(self):
-        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
-        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
-        saldo = self.valor_orcado + valor_remanejado_destino - valor_remanejado_origem - self.valor_utilizado
+        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
+        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
+        valor_orcado_decimal = Decimal(self.valor_orcado)
+        saldo = valor_orcado_decimal + valor_remanejado_destino - valor_remanejado_origem
         return saldo
-    
+
     @property
     def tempo_para_contratacao(self):
         if self.necessidade_contratacao:
