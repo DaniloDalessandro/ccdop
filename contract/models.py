@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db.models import Sum
 from decimal import Decimal
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 # ============================================================================================================
 
@@ -190,32 +191,30 @@ class OrcamentoExterno(models.Model):
 
 # ============================================================================================================
 
+from django.db import models
+from django.db.models import Sum
+from decimal import Decimal
+from datetime import datetime
+
 class LinhaOrcamentaria(models.Model):
     CLASSE_CHOICES = [
         ('A', 'OPEX'),
-        ('B', 'CAPEX'),        
+        ('B', 'CAPEX'),
     ]
-    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True,verbose_name='Tipo de linha')
+    classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True, verbose_name='Tipo de linha')
 
     CUSTODESPESA_CHOICES = [
         ('A', 'Base Principal'),
         ('B', 'Serviços Especializados'),
-        ('C', 'Despesas Compartilhadas'), 
-        ('D', 'Máquinas e Equipamentos'),
-        ('E', 'Equip. de Informática'), 
-        ('F', 'Software e Licenças'),
-        ('G', 'Input da Base Principal'),
-        ('H', 'Contribuições em Geral'), 
-        ('I', 'Locação de Bens e Móveis'),  
-        ('J', 'Fardamento e EPI'),
-        ('L', 'Assinaturas e Publicações'),     
+        ('C', 'Despesas Compartilhadas'),
+        # Outros valores...
     ]
-    custo_despesa = models.CharField(max_length=100, choices=CUSTODESPESA_CHOICES,verbose_name='CUSTO/DESPESA')
+    custo_despesa = models.CharField(max_length=100, choices=CUSTODESPESA_CHOICES, verbose_name='CUSTO/DESPESA')
 
     centro_custo_gestor = models.ForeignKey(CentroDeCustoGestor, on_delete=models.SET_NULL, null=True, blank=True)
     centro_custo_solicitante = models.ForeignKey(CentroDeCustoSolicitante, on_delete=models.SET_NULL, null=True, blank=True)
-    descricao_resumida = models.CharField(max_length=255, null=True, blank=True,verbose_name='Finalidade')
-    objeto = models.CharField(max_length=255,blank=True,null=True,verbose_name='Objeto')
+    descricao_resumida = models.CharField(max_length=255, null=True, blank=True, verbose_name='Finalidade')
+    objeto = models.CharField(max_length=255, blank=True, null=True, verbose_name='Objeto')
 
     CLASSIFICACAO_CHOICES = [
         ('NOVO', 'NOVO'),
@@ -227,86 +226,98 @@ class LinhaOrcamentaria(models.Model):
     classificacao_orcamento = models.CharField(max_length=100, choices=CLASSIFICACAO_CHOICES, null=True, blank=True)
 
     possivel_fiscal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_possivel', verbose_name='Fiscal')
-    
+
     ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
- 
+
     TIPOCONTRATO_CHOICES = [
         ('I', 'SERVIÇO'),
         ('II', 'FORNECIMENTO'),
-        ('III', 'ASSINATURA'), 
-        ('IV', 'FORNECIMENTO/SERVIÇO'),                 
+        ('III', 'ASSINATURA'),
+        ('IV', 'FORNECIMENTO/SERVIÇO'),
     ]
     tipo_contrato = models.CharField(max_length=100, choices=TIPOCONTRATO_CHOICES, blank=True, null=True)
 
     STATUS_LINHA_ORCAMENTARIA_CHOICES = [
         ('I', 'SERVIÇO'),
         ('II', 'FORNECIMENTO'),
-        ('III', 'ASSINATURA'), 
-        ('IV', 'FORNECIMENTO/SERVIÇO'),                 
+        ('III', 'ASSINATURA'),
+        ('IV', 'FORNECIMENTO/SERVIÇO'),
     ]
     status_linha_orcamentaria = models.CharField(max_length=100, choices=STATUS_LINHA_ORCAMENTARIA_CHOICES, blank=True, null=True)
 
-    valor_aprovisionado =models.FloatField(default=0.0)
+    # Removendo o valor_aprovisionado do formulário de edição
+    _valor_aprovisionado = models.FloatField(default=0.0)
 
     TIPOCONTRATACAOPROVAVEL_CHOICES = [
         ('A', 'LICITAÇÃO'),
         ('B', 'DISPENSA EM RAZÃO DO VALOR'),
-        ('C', 'CONVÊNIO'),  
-        ('D', 'FUNDO FIXO'),  
+        ('C', 'CONVÊNIO'),
+        ('D', 'FUNDO FIXO'),
         ('E', 'INEXIGIBILIDADE'),
-        ('F', 'ATA DE REGISTRO DE PREÇO'), 
-        ('H', 'ACORDO DE COOPERAÇÃO'), 
-        ('I', 'APOSTILAMENTO'),                  
+        ('F', 'ATA DE REGISTRO DE PREÇO'),
+        ('H', 'ACORDO DE COOPERAÇÃO'),
+        ('I', 'APOSTILAMENTO'),
     ]
-    tipo_provavel_contratacao = models.CharField(max_length=100,choices=TIPOCONTRATACAOPROVAVEL_CHOICES)
+    tipo_provavel_contratacao = models.CharField(max_length=100, choices=TIPOCONTRATACAOPROVAVEL_CHOICES)
     valor_orcado = models.FloatField(default=0, blank=True, null=True)
-           
+
     STATUSELABORACAOTR_CHOICES = [
         ('I', 'VENCIDO'),
         ('II', 'DENTRO DO PRAZO'),
-        ('III', 'ELABORADO COM ATRASO'), 
-        ('IV', 'ELABORADO NO PRAZO'),  
+        ('III', 'ELABORADO COM ATRASO'),
+        ('IV', 'ELABORADO NO PRAZO'),
     ]
     status_elaboracao_tr = models.CharField(max_length=100, choices=STATUSELABORACAOTR_CHOICES, blank=True, null=True)
-    
+
     necessidade_contratacao = models.DateField(blank=True, null=True)
 
     STATUSPROCESSO_CHOICES = [
         ('I', 'PLANEJAMENTO'),
         ('II', 'Execução'),
-        ('III', 'Elaboração de TR'), 
+        ('III', 'Elaboração de TR'),
         ('IV', 'Cotação'),
-        ('V', 'Em proc. aditivo'),           
+        ('V', 'Em proc. aditivo'),
     ]
     status_processo = models.CharField(max_length=100, choices=STATUSPROCESSO_CHOICES, blank=True, null=True)
 
     STATUSCONTRATACAO_CHOICES = [
         ('A', 'DENTRO DO PRAZO'),
         ('B', 'CONTRATADO NO PRAZO'),
-        ('C', 'CONTRATADO COM ATRASO'), 
-        ('D', 'PRAZO VENCIDO'),   
+        ('C', 'CONTRATADO COM ATRASO'),
+        ('D', 'PRAZO VENCIDO'),
         ('E', 'LINHA TOTALMENTE REMANEJADA'),
-        ('F', 'LINHA TOTALMENTE EXECUTADA'),   
-        ('G', 'LINHA DE PAGAMENTO'),    
-        ('H', 'LINHA PARCIALMENTE REMANEJADA'), 
-        ('I', 'LINHA PARCIALMENTE EXECUTADA'),  
-        ('J', 'N/A'), 
+        ('F', 'LINHA TOTALMENTE EXECUTADA'),
+        ('G', 'LINHA DE PAGAMENTO'),
+        ('H', 'LINHA PARCIALMENTE REMANEJADA'),
+        ('I', 'LINHA PARCIALMENTE EXECUTADA'),
+        ('J', 'N/A'),
     ]
     status_contratacao = models.CharField(max_length=100, choices=STATUSCONTRATACAO_CHOICES, blank=True, null=True)
     obs_contrato = models.TextField(max_length=400, blank=True, null=True)
-        
+
+    def update_valor_aprovisionado(self):
+        self._valor_aprovisionado = self.contrato.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
+        self.save(update_fields=['_valor_aprovisionado'])
+
+    @property
+    def valor_aprovisionado(self):
+        return self._valor_aprovisionado
+
+    @property
+    def valor_utilizado(self):
+        return self.valor_aprovisionado
+
     @property
     def valor_remanejado_total(self):
-        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
-        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
+        remanejamentos_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        remanejamentos_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
         return remanejamentos_origem + remanejamentos_destino
 
     @property
     def saldo_orcamentario_pos_remanejamento(self):
-        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
-        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal('0.0')
-        valor_orcado_decimal = Decimal(self.valor_orcado)
-        saldo = valor_orcado_decimal + valor_remanejado_destino - valor_remanejado_origem
+        valor_remanejado_origem = self.remanejamentos_origem.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        valor_remanejado_destino = self.remanejamentos_destino.aggregate(total=Sum('valor'))['total'] or Decimal(0.0)
+        saldo = Decimal(self.valor_orcado) + valor_remanejado_destino - valor_remanejado_origem - Decimal(self.valor_utilizado)
         return saldo
 
     @property
@@ -315,13 +326,14 @@ class LinhaOrcamentaria(models.Model):
             dias_restantes = (self.necessidade_contratacao - datetime.now().date()).days
             return max(dias_restantes, 0)
         return None
-    
+
     def __str__(self):
         return self.descricao_resumida or "Contrato sem descrição"
 
     class Meta:
         verbose_name = 'Linha Orçamentária'
         verbose_name_plural = 'Linhas Orçamentárias'
+
 
 # ============================================================================================================
 
@@ -332,36 +344,50 @@ class Remanejamento(models.Model):
     data_remanejamento = models.DateTimeField(default=timezone.now)
     motivo = models.TextField()
 
+    def clean(self):
+        saldo_disponivel = Decimal(self.linha_origem.valor_orcado) - Decimal(self.linha_origem.valor_aprovisionado)
+        if self.valor > saldo_disponivel:
+            raise ValidationError(f"O valor do remanejamento ({self.valor}) não pode exceder o saldo disponível ({saldo_disponivel}).")
+
+    def save(self, *args, **kwargs):
+        # Executar validações antes de salvar
+        self.clean()
+        
+        if not self.pk:  # Novo remanejamento
+            self.linha_origem.valor_orcado -= self.valor
+            self.linha_origem.save()
+            
+            self.linha_destino.valor_orcado += self.valor
+            self.linha_destino.save()
+        
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Remanejamento de {self.valor} de {self.linha_origem} para {self.linha_destino} em {self.data_remanejamento}"
     
     class Meta:
         verbose_name = 'Remanejamento'
         verbose_name_plural = 'Remanejamentos'
-    
-    def save(self, *args, **kwargs):
-        if not self.pk:  
-            self.linha_origem.valor_orcado -= self.valor
-            self.linha_origem.save()
-            
-            self.linha_destino.valor_orcado += self.valor
-            self.linha_destino.save()
-        super().save(*args, **kwargs)
+
         
 # ============================================================================================================
 
 class Contrato(models.Model):
-    linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT,related_name='contrato')
+    linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
     numero_protocolo = models.CharField(max_length=7, unique=True, blank=True)
-    data_assinatura = models.DateField(null=True,blank=True)
-    data_vencimento = models.DateField(null=True,blank=True)
+    data_assinatura = models.DateField(null=True, blank=True)
+    data_vencimento = models.DateField(null=True, blank=True)
     fical_principal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
     fical_substituto = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
+    valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
-        if not self.numero_protocolo:
-            self.numero_protocolo = self.generate_protocolo()
         super().save(*args, **kwargs)
+        self.linha_orcamentaria.update_valor_aprovisionado()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.linha_orcamentaria.update_valor_aprovisionado()
 
     def generate_protocolo(self):
         year_suffix = timezone.now().year % 100  
@@ -376,8 +402,8 @@ class Contrato(models.Model):
         return f"{new_sequence}/{year_suffix}"
 
     def __str__(self):
-        return self.numero_contrato
-    
+        return self.numero_protocolo
+
 # ============================================================================================================
 
 class Aditivo(models.Model):
@@ -387,7 +413,7 @@ class Aditivo(models.Model):
     justificativa = models.CharField(max_length=150)
 
     def __str__(self):
-        return f'Aditivo {self.id} - Contrato {self.contrato.numero_contrato}'
+        return f'Aditivo {self.id} - Contrato {self.contrato.numero_protocolo}'
     
 # ============================================================================================================
 

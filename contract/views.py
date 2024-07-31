@@ -238,8 +238,12 @@ class LinhaOrcamentariaListView(ListView):
     context_object_name = 'linhaorcamentarias'
     paginate_by = 10
 
-    def get_queryset(self):
-        return LinhaOrcamentaria.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for linha in context['linhaorcamentarias']:
+            # Cálculo de propriedades adicionais, se necessário
+            linha.saldo_disponivel = linha.valor_orcado - linha.valor_aprovisionado
+        return context
 
 class LinhaOrcamentariaDetailView(DetailView):
     model = LinhaOrcamentaria
@@ -249,22 +253,21 @@ class LinhaOrcamentariaDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         linha = self.get_object()
-        # Não é necessário atribuir as propriedades; apenas acessá-las
-        context['valor_remanejado_total'] = linha.valor_remanejado_total
-        context['saldo_orcamentario_pos_remanejamento'] = linha.saldo_orcamentario_pos_remanejamento
+        # Calcular propriedades adicionais para exibição
+        context['saldo_disponivel'] = linha.valor_orcado - linha.valor_aprovisionado
         context['tempo_para_contratacao'] = linha.tempo_para_contratacao
         return context
 
 class LinhaOrcamentariaCreateView(CreateView):
     model = LinhaOrcamentaria
+    form_class = LinhaOrcamentariaForm
     template_name = 'linhaorcamentaria_form.html'
-    fields = '__all__'
     success_url = reverse_lazy('linhaorcamentaria_list')
 
 class LinhaOrcamentariaUpdateView(UpdateView):
     model = LinhaOrcamentaria
+    form_class = LinhaOrcamentariaForm
     template_name = 'linhaorcamentaria_form.html'
-    fields = '__all__'
     success_url = reverse_lazy('linhaorcamentaria_list')
 
 class LinhaOrcamentariaDeleteView(DeleteView):
