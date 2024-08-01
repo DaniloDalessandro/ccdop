@@ -157,7 +157,6 @@ class ContratoForm(forms.ModelForm):
         model = Contrato
         fields = [
             'linha_orcamentaria',
-            'numero_protocolo',
             'data_assinatura',
             'data_vencimento',
             'fical_principal',
@@ -170,6 +169,5 @@ class ContratoForm(forms.ModelForm):
             'linha_orcamentaria': forms.Select(attrs={'class': 'form-control'}),
             'fical_principal': forms.Select(attrs={'class': 'form-control'}),
             'fical_substituto': forms.Select(attrs={'class': 'form-control'}),
-            'numero_protocolo': forms.TextInput(attrs={'class': 'form-control'}),
             'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
         }

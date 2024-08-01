@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Contratos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Contratos</h1>
+    <a href="{% url 'contrato_create' %}" class="btn btn-success mb-3">Adicionar Novo Contrato</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número do Protocolo</th>
+                <th>Linha Orçamentária</th>
+                <th>Fiscal Principal</th>
+                <th>Fiscal Substituto</th>
+                <th>Valor do Contrato</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contrato in object_list %}
+                <tr>
+                    <td>{{ contrato.numero_protocolo }}</td>
+                    <td>{{ contrato.linha_orcamentaria.descricao_resumida }}</td>
+                    <td>{{ contrato.fical_principal.nome_completo }}</td>
+                    <td>{{ contrato.fical_substituto.nome_completo }}</td>
+                    <td>{{ contrato.valor_contrato }}</td>
+                    <td>
+                        <a href="{% url 'contrato_detail' contrato.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                        <a href="{% url 'contrato_update' contrato.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'contrato_delete' contrato.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

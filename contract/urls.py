@@ -11,22 +11,13 @@ from .views import ColaboradorListView, ColaboradorCreateView, ColaboradorUpdate
 from .views import (
     OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
     OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView,ContratoListView,
-    ContratoCreateView,
-    ContratoDetailView,
-    ContratoUpdateView,
-    ContratoDeleteView,
 )
 from .views import (
     LinhaOrcamentariaListView,
     LinhaOrcamentariaDetailView,
     LinhaOrcamentariaCreateView,
     LinhaOrcamentariaUpdateView,
-    LinhaOrcamentariaDeleteView,
-    ContratoListView,
-    ContratoCreateView,
-    ContratoDetailView,
-    ContratoUpdateView,
-    ContratoDeleteView,
+    LinhaOrcamentariaDeleteView,    
 )
 
 from .views import (
@@ -95,11 +86,11 @@ urlpatterns = [
     path('linhaorcamentaria/<int:pk>/editar/', LinhaOrcamentariaUpdateView.as_view(), name='linhaorcamentaria_update'),
     path('linhaorcamentaria/<int:pk>/deletar/', LinhaOrcamentariaDeleteView.as_view(), name='linhaorcamentaria_delete'),
 
-    path('contra/', views.ContratoListView.as_view(), name='contrato_list'),
-    path('contra/novo/', views.ContratoCreateView.as_view(), name='contrato_create'),
-    path('contra/<int:pk>/', views.ContratoDetailView.as_view(), name='contrato_detail'),
-    path('contra/<int:pk>/editar/', views.ContratoUpdateView.as_view(), name='contrato_update'),
-    path('contra/<int:pk>/excluir/', views.ContratoDeleteView.as_view(), name='contrato_delete'),
+    path('contra/', ContratoListView.as_view(), name='contrato_list'),
+    path('contra/novo/', ContratoCreateView.as_view(), name='contrato_create'),
+    path('contra/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
+    path('contra/<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato_update'),
+    path('contra/<int:pk>/excluir/', ContratoDeleteView.as_view(), name='contrato_delete'),
 
 ]
 

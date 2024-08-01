@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Contrato</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Detalhes do Contrato</h1>
+    <div class="card">
+        <div class="card-header">
+            Número do Protocolo: {{ contrato.numero_protocolo }}
+        </div>
+        <div class="card-body">
+            <p><strong>Linha Orçamentária:</strong> {{ contrato.linha_orcamentaria.descricao_resumida }}</p>
+            <p><strong>Fiscal Principal:</strong> {{ contrato.fical_principal.nome_completo }}</p>
+            <p><strong>Fiscal Substituto:</strong> {{ contrato.fical_substituto.nome_completo }}</p>
+            <p><strong>Valor do Contrato:</strong> {{ contrato.valor_contrato }}</p>
+            <p><strong>Data de Assinatura:</strong> {{ contrato.data_assinatura }}</p>
+            <p><strong>Data de Vencimento:</strong> {{ contrato.data_vencimento }}</p>
+            <a href="{% url 'contrato_update' contrato.pk %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'contrato_list' %}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -372,9 +372,12 @@ class Remanejamento(models.Model):
         
 # ============================================================================================================
 
+from django.db import models
+from django.utils import timezone
+
 class Contrato(models.Model):
     linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
-    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True)
+    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False)
     data_assinatura = models.DateField(null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
     fical_principal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
@@ -382,6 +385,8 @@ class Contrato(models.Model):
     valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
+        if not self.numero_protocolo:  # Apenas gera se o protocolo não existir
+            self.numero_protocolo = self.generate_protocolo()
         super().save(*args, **kwargs)
         self.linha_orcamentaria.update_valor_aprovisionado()
 
@@ -403,6 +408,7 @@ class Contrato(models.Model):
 
     def __str__(self):
         return self.numero_protocolo
+
 
 # ============================================================================================================
 
