@@ -415,7 +415,7 @@ class Contrato(models.Model):
 class Aditivo(models.Model):
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='aditivos')
     data = models.DateField(null=True,blank=True)
-    valor = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True,default=0.0)
     justificativa = models.CharField(max_length=150)
 
     def __str__(self):
