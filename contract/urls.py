@@ -1,4 +1,6 @@
 from django.urls import path
+
+from auxilios import views
 from .views import ( ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView)
 from .views import ( CentroDeCustoGestorListView, CentroDeCustoGestorCreateView, CentroDeCustoGestorUpdateView, CentroDeCustoGestorDeleteView)
 from .views import ( CentroDeCustoSolicitanteListView, CentroDeCustoSolicitanteCreateView, CentroDeCustoSolicitanteUpdateView, CentroDeCustoSolicitanteDeleteView)
@@ -8,7 +10,11 @@ from .views import CoordenacaoListView,CoordenacaoCreateView,CoordenacaoUpdateVi
 from .views import ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView
 from .views import (
     OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
-    OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView
+    OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView,ContratoListView,
+    ContratoCreateView,
+    ContratoDetailView,
+    ContratoUpdateView,
+    ContratoDeleteView,
 )
 from .views import (
     LinhaOrcamentariaListView,
@@ -16,6 +22,19 @@ from .views import (
     LinhaOrcamentariaCreateView,
     LinhaOrcamentariaUpdateView,
     LinhaOrcamentariaDeleteView,
+    ContratoListView,
+    ContratoCreateView,
+    ContratoDetailView,
+    ContratoUpdateView,
+    ContratoDeleteView,
+)
+
+from .views import (
+    ContratoListView,
+    ContratoCreateView,
+    ContratoDetailView,
+    ContratoUpdateView,
+    ContratoDeleteView,
 )
 
 
@@ -76,7 +95,11 @@ urlpatterns = [
     path('linhaorcamentaria/<int:pk>/editar/', LinhaOrcamentariaUpdateView.as_view(), name='linhaorcamentaria_update'),
     path('linhaorcamentaria/<int:pk>/deletar/', LinhaOrcamentariaDeleteView.as_view(), name='linhaorcamentaria_delete'),
 
-    
+    path('contra/', views.ContratoListView.as_view(), name='contrato_list'),
+    path('contra/novo/', views.ContratoCreateView.as_view(), name='contrato_create'),
+    path('contra/<int:pk>/', views.ContratoDetailView.as_view(), name='contrato_detail'),
+    path('contra/<int:pk>/editar/', views.ContratoUpdateView.as_view(), name='contrato_update'),
+    path('contra/<int:pk>/excluir/', views.ContratoDeleteView.as_view(), name='contrato_delete'),
 
 ]
 

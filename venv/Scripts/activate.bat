@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\danilo.ecopel\Documents\PROJETOS\PYTHON\CCDOP\venv
+set VIRTUAL_ENV=C:\Users\Kyra\Documents\Projetos\PYTHON\ccdop\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

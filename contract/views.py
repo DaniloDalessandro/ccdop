@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria
-from .forms import ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato
+from .forms import (ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,
+                    GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm,ContratoForm)
 from django.shortcuts import redirect
 
 
@@ -238,13 +239,6 @@ class LinhaOrcamentariaListView(ListView):
     context_object_name = 'linhaorcamentarias'
     paginate_by = 10
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        for linha in context['linhaorcamentarias']:
-            # Cálculo de propriedades adicionais, se necessário
-            linha.saldo_disponivel = linha.valor_orcado - linha.valor_aprovisionado
-        return context
-
 class LinhaOrcamentariaDetailView(DetailView):
     model = LinhaOrcamentaria
     template_name = 'linhaorcamentaria_detail.html'
@@ -252,9 +246,10 @@ class LinhaOrcamentariaDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        linha = self.get_object()
-        # Calcular propriedades adicionais para exibição
-        context['saldo_disponivel'] = linha.valor_orcado - linha.valor_aprovisionado
+        linha = self.object
+        context['valor_aprovisionado'] = linha.valor_aprovisionado
+        context['valor_remanejado_total'] = linha.valor_remanejado_total
+        context['saldo_orcamentario_pos_remanejamento'] = linha.saldo_orcamentario_pos_remanejamento
         context['tempo_para_contratacao'] = linha.tempo_para_contratacao
         return context
 
@@ -274,3 +269,31 @@ class LinhaOrcamentariaDeleteView(DeleteView):
     model = LinhaOrcamentaria
     template_name = 'linhaorcamentaria_confirm_delete.html'
     success_url = reverse_lazy('linhaorcamentaria_list')
+
+class ContratoListView(ListView):
+    model = Contrato
+    template_name = 'contrato_list.html'
+    context_object_name = 'contratos'
+    paginate_by = 10  # Se desejar adicionar paginação
+
+class ContratoDetailView(DetailView):
+    model = Contrato
+    template_name = 'contrato_detail.html'
+    context_object_name = 'contrato'
+
+class ContratoCreateView(CreateView):
+    model = Contrato
+    form_class = ContratoForm
+    template_name = 'contrato_form.html'
+    success_url = reverse_lazy('contrato_list')
+
+class ContratoUpdateView(UpdateView):
+    model = Contrato
+    form_class = ContratoForm
+    template_name = 'contrato_form.html'
+    success_url = reverse_lazy('contrato_list')
+
+class ContratoDeleteView(DeleteView):
+    model = Contrato
+    template_name = 'contrato_confirm_delete.html'
+    success_url = reverse_lazy('contrato_list')

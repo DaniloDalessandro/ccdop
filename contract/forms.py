@@ -1,6 +1,5 @@
 from django import forms
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,OrcamentoExterno,Orcamento,LinhaOrcamentaria
-
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,OrcamentoExterno,Orcamento,LinhaOrcamentaria,Contrato
 # =========================================================================================================================
 
 class CentroDeCustoGestorForm(forms.ModelForm):
@@ -118,7 +117,6 @@ class OrcamentoExternoForm(forms.ModelForm):
 
 # =========================================================================================================================
 
-from django import forms
 from .models import LinhaOrcamentaria
 
 class LinhaOrcamentariaForm(forms.ModelForm):
@@ -154,4 +152,24 @@ class LinhaOrcamentariaForm(forms.ModelForm):
         }
 
 
-
+class ContratoForm(forms.ModelForm):
+    class Meta:
+        model = Contrato
+        fields = [
+            'linha_orcamentaria',
+            'numero_protocolo',
+            'data_assinatura',
+            'data_vencimento',
+            'fical_principal',
+            'fical_substituto',
+            'valor_contrato'
+        ]
+        widgets = {
+            'data_assinatura': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'data_vencimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'linha_orcamentaria': forms.Select(attrs={'class': 'form-control'}),
+            'fical_principal': forms.Select(attrs={'class': 'form-control'}),
+            'fical_substituto': forms.Select(attrs={'class': 'form-control'}),
+            'numero_protocolo': forms.TextInput(attrs={'class': 'form-control'}),
+            'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
+        }

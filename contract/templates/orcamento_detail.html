@@ -3,172 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Orçamento</title>
+    <title>Detalhes da Linha Orçamentária</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: #007bff;
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 60px;
-        }
-        .sidebar a {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 18px;
-            color: #ffffff;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007bff;
-            text-decoration: none;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-        }
-        .table-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        .dropdown-btn {
-            font-size: 18px;
-            border: none;
-            background: none;
-            color: white;
-            padding: 10px 15px;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            outline: none;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-        }
-        .dropdown-container a {
-            padding-left: 30px;
-        }
-        .dropdown-btn:focus {
-            outline: none;
-        }
+        body { display: flex; min-height: 100vh; background-color: #f8f9fa; }
+        .sidebar { width: 250px; background-color: #343a40; height: 100vh; position: fixed; padding-top: 20px; }
+        .sidebar a, .dropdown-btn { padding: 10px 15px; text-align: left; font-size: 18px; color: white; display: block; text-decoration: none; }
+        .sidebar a:hover, .dropdown-btn:hover { background-color: #007bff; }
+        .dropdown-container { display: none; background-color: #414a4c; padding-left: 20px; }
+        .dropdown-btn { border: none; background: none; outline: none; cursor: pointer; }
+        .content { margin-left: 250px; padding: 20px; flex: 1; }
+        .details-container { background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .details-header { display: flex; justify-content: space-between; align-items: center; }
+        .btn-primary { background-color: #007bff; border: none; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary { background-color: #6c757d; border: none; }
+        .btn-secondary:hover { background-color: #5a6268; }
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">Dashboard</a>
-</nav>
-
 <div class="sidebar">
     <a href="{% url 'dashboard' %}">Dashboard</a>
-    <!-- Adicione os botões dropdown conforme necessário -->
-    <button class="dropdown-btn">Orçamentos 
-        <i class="fa fa-caret-down"></i>
-    </button>
+    <button class="dropdown-btn">Direção <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-container">
-        <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-        <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
+        <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
+        <a href="{% url 'direcao_list' %}">Lista de Direções</a>
     </div>
+    <!-- Adicionar mais itens do menu conforme necessário -->
 </div>
 
 <div class="content">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="table-container">
-                    <h2 class="mb-4">Detalhes do Orçamento</h2>
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>Ano</th>
-                                <td>{{ orcamento.ano }}</td>
-                            </tr>
-                            <tr>
-                                <th>Centro</th>
-                                <td>{{ orcamento.centro }}</td>
-                            </tr>
-                            <tr>
-                                <th>Classe</th>
-                                <td>{{ orcamento.get_classe_display }}</td>
-                            </tr>
-                            <tr>
-                                <th>Valor</th>
-                                <td>{{ orcamento.valor }}</td>
-                            </tr>
-                            <tr>
-                                <th>Valores Adicionados</th>
-                                <td>{{ orcamento.valores_adicionados }}</td>
-                            </tr>
-                            <tr>
-                                <th>Valores Enviados</th>
-                                <td>{{ orcamento.valores_enviados }}</td>
-                            </tr>
-                            <tr>
-                                <th>Valor Total</th>
-                                <td>{{ orcamento.valor_total }}</td>
-                            </tr>
-                            <tr>
-                                <th>Orçamento Total</th>
-                                <td>{{ orcamento.orcamento_total }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <a href="{% url 'orcamento_update' orcamento.pk %}" class="btn btn-warning mt-3">Editar</a>
-                    <a href="{% url 'orcamento_list' %}" class="btn btn-secondary mt-3">Voltar</a>
-                </div>
+    <div class="details-container">
+        <div class="details-header">
+            <h2>Detalhes da Linha Orçamentária</h2>
+            <a href="{% url 'linhaorcamentaria_update' linhaorcamentaria.pk %}" class="btn btn-primary">Editar</a>
+        </div>
+        <div class="details-body mt-4">
+            <div class="form-group">
+                <p><strong>Classe:</strong> {{ linhaorcamentaria.get_classe_display }}</p>
             </div>
+            <div class="form-group">
+                <p><strong>Custo/Despesa:</strong> {{ linhaorcamentaria.get_custo_despesa_display }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Centro Custo Gestor:</strong> {{ linhaorcamentaria.centro_custo_gestor }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Centro Custo Solicitante:</strong> {{ linhaorcamentaria.centro_custo_solicitante }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Descrição Resumida:</strong> {{ linhaorcamentaria.descricao_resumida }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Objeto:</strong> {{ linhaorcamentaria.objeto }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Valor Orçado:</strong> {{ linhaorcamentaria.valor_orcado }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Status da Linha Orçamentária:</strong> {{ linhaorcamentaria.get_status_linha_orcamentaria_display }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Status da Contratação:</strong> {{ linhaorcamentaria.get_status_contratacao_display }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Observações:</strong> {{ linhaorcamentaria.obs_contrato }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Valor Remanejado Total:</strong> {{ linhaorcamentaria.valor_remanejado_total }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Saldo Orçamentário Pós-Remanejamento:</strong> {{ linhaorcamentaria.saldo_orcamentario_pos_remanejamento }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Tempo para Contratação:</strong> {{ linhaorcamentaria.tempo_para_contratacao }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>Valor Aprovisionado:</strong> {{ linhaorcamentaria.valor_aprovisionado }}</p>
+            </div>
+        </div>
+        <div class="details-footer mt-4">
+            <a href="{% url 'linhaorcamentaria_list' %}" class="btn btn-secondary">Voltar</a>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     var dropdowns = document.getElementsByClassName("dropdown-btn");
-    var i;
-
-    for (i = 0; i < dropdowns.length; i++) {
+    for (var i = 0; i < dropdowns.length; i++) {
         dropdowns[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var dropdownContent = this.nextElementSibling;
@@ -180,5 +102,8 @@
         });
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
