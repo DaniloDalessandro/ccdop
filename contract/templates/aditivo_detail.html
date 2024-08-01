@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Aditivo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Detalhes do Aditivo</h1>
+    <p><strong>ID:</strong> {{ aditivo.id }}</p>
+    <p><strong>Contrato:</strong> {{ aditivo.contrato.numero_protocolo }}</p>
+    <p><strong>Data:</strong> {{ aditivo.data }}</p>
+    <p><strong>Valor:</strong> {{ aditivo.valor }}</p>
+    <p><strong>Justificativa:</strong> {{ aditivo.justificativa }}</p>
+    <a href="{% url 'aditivo_list' %}" class="btn btn-secondary">Voltar</a>
+    <a href="{% url 'aditivo_update' aditivo.pk %}" class="btn btn-warning">Editar</a>
+    <a href="{% url 'aditivo_delete' aditivo.pk %}" class="btn btn-danger">Excluir</a>
+</div>
+</body>
+</html>

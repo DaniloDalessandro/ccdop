@@ -28,6 +28,15 @@ from .views import (
     ContratoDeleteView,
 )
 
+from .views import (
+    RemanejamentoListView,
+    RemanejamentoDetailView,
+    RemanejamentoCreateView,
+    RemanejamentoUpdateView,
+    RemanejamentoDeleteView
+)
+
+from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
 
 urlpatterns = [
     path('listarcolaboradores/', ColaboradorListView.as_view(), name='colaborador_list'),
@@ -91,6 +100,18 @@ urlpatterns = [
     path('contra/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
     path('contra/<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato_update'),
     path('contra/<int:pk>/excluir/', ContratoDeleteView.as_view(), name='contrato_delete'),
+
+    path('remanejamentos/', RemanejamentoListView.as_view(), name='remanejamento_list'),
+    path('remanejamentos/<int:pk>/', RemanejamentoDetailView.as_view(), name='remanejamento_detail'),
+    path('remanejamentos/novo/', RemanejamentoCreateView.as_view(), name='remanejamento_create'),
+    path('remanejamentos/<int:pk>/editar/', RemanejamentoUpdateView.as_view(), name='remanejamento_update'),
+    path('remanejamentos/<int:pk>/deletar/', RemanejamentoDeleteView.as_view(), name='remanejamento_delete'),
+
+    path('aditivos/', AditivoListView.as_view(), name='aditivo_list'),
+    path('aditivos/<int:pk>/', AditivoDetailView.as_view(), name='aditivo_detail'),
+    path('aditivos/novo/', AditivoCreateView.as_view(), name='aditivo_create'),
+    path('aditivos/<int:pk>/editar/', AditivoUpdateView.as_view(), name='aditivo_update'),
+    path('aditivos/<int:pk>/excluir/', AditivoDeleteView.as_view(), name='aditivo_delete'),
 
 ]
 

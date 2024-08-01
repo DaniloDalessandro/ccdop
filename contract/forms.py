@@ -1,5 +1,6 @@
 from django import forms
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,OrcamentoExterno,Orcamento,LinhaOrcamentaria,Contrato
+from .models import (Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,
+                     OrcamentoExterno,Orcamento,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo)
 # =========================================================================================================================
 
 class CentroDeCustoGestorForm(forms.ModelForm):
@@ -170,4 +171,39 @@ class ContratoForm(forms.ModelForm):
             'fical_principal': forms.Select(attrs={'class': 'form-control'}),
             'fical_substituto': forms.Select(attrs={'class': 'form-control'}),
             'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class RemanejamentoForm(forms.ModelForm):
+    class Meta:
+        model = Remanejamento
+        fields = [
+            'valor',
+            'linha_origem',
+            'linha_destino',
+            'motivo',
+        ]
+        widgets = {
+            'linha_origem': forms.Select(attrs={'class': 'form-control'}),
+            'linha_destino': forms.Select(attrs={'class': 'form-control'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
+            'motivo': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
+class AditivoForm(forms.ModelForm):
+    class Meta:
+        model = Aditivo
+        fields = ['contrato', 'data', 'valor', 'justificativa']
+        widgets = {
+            'contrato': forms.Select(attrs={'class': 'form-control'}),
+            'data': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
+            'justificativa': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'contrato': 'Contrato',
+            'data': 'Data do Aditivo',
+            'valor': 'Valor do Aditivo',
+            'justificativa': 'Justificativa',
         }

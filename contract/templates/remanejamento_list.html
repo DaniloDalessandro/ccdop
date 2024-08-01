@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Remanejamentos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Lista de Remanejamentos</h1>
+    <a href="{% url 'remanejamento_create' %}" class="btn btn-success mb-3">Novo Remanejamento</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Valor</th>
+                <th>Linha Origem</th>
+                <th>Linha Destino</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for remanejamento in object_list %}
+                <tr>
+                    <td>{{ remanejamento.valor }}</td>
+                    <td>{{ remanejamento.linha_origem }}</td>
+                    <td>{{ remanejamento.linha_destino }}</td>
+                    <td>{{ remanejamento.data_remanejamento }}</td>
+                    <td>
+                        <a href="{% url 'remanejamento_detail' remanejamento.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                        <a href="{% url 'remanejamento_update' remanejamento.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'remanejamento_delete' remanejamento.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Nenhum remanejamento encontrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

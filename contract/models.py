@@ -377,7 +377,7 @@ from django.utils import timezone
 
 class Contrato(models.Model):
     linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
-    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False)
+    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False,verbose_name='Contrato')
     data_assinatura = models.DateField(null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
     fical_principal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')

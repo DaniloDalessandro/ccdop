@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
-from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato
+from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo
 from .forms import (ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,
-                    GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm,ContratoForm)
+                    GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm,ContratoForm,RemanejamentoForm,AditivoForm)
 from django.shortcuts import redirect
 
 
@@ -297,3 +297,67 @@ class ContratoDeleteView(DeleteView):
     model = Contrato
     template_name = 'contrato_confirm_delete.html'
     success_url = reverse_lazy('contrato_list')
+
+class RemanejamentoListView(ListView):
+    model = Remanejamento
+    template_name = 'remanejamento_list.html'
+    context_object_name = 'remanejamentos'
+
+class RemanejamentoDetailView(DetailView):
+    model = Remanejamento
+    template_name = 'remanejamento_detail.html'
+    context_object_name = 'remanejamento'
+
+class RemanejamentoCreateView(CreateView):
+    model = Remanejamento
+    form_class = RemanejamentoForm
+    template_name = 'remanejamento_form.html'
+    success_url = reverse_lazy('remanejamento_list')
+
+    def form_valid(self, form):
+        remanejamento = form.save(commit=False)
+        remanejamento.clean()  # Validação antes de salvar
+        return super().form_valid(form)
+
+class RemanejamentoUpdateView(UpdateView):
+    model = Remanejamento
+    form_class = RemanejamentoForm
+    template_name = 'remanejamento_form.html'
+    success_url = reverse_lazy('remanejamento_list')
+
+    def form_valid(self, form):
+        remanejamento = form.save(commit=False)
+        remanejamento.clean()  # Validação antes de salvar
+        return super().form_valid(form)
+
+class RemanejamentoDeleteView(DeleteView):
+    model = Remanejamento
+    template_name = 'remanejamento_confirm_delete.html'
+    success_url = reverse_lazy('remanejamento_list')
+
+class AditivoListView(ListView):
+    model = Aditivo
+    template_name = 'aditivo_list.html'
+    context_object_name = 'aditivos'
+
+class AditivoDetailView(DetailView):
+    model = Aditivo
+    template_name = 'aditivo_detail.html'
+    context_object_name = 'aditivo'
+
+class AditivoCreateView(CreateView):
+    model = Aditivo
+    form_class = AditivoForm
+    template_name = 'aditivo_form.html'
+    success_url = reverse_lazy('aditivo_list')
+
+class AditivoUpdateView(UpdateView):
+    model = Aditivo
+    form_class = AditivoForm
+    template_name = 'aditivo_form.html'
+    success_url = reverse_lazy('aditivo_list')
+
+class AditivoDeleteView(DeleteView):
+    model = Aditivo
+    template_name = 'aditivo_confirm_delete.html'
+    success_url = reverse_lazy('aditivo_list')
