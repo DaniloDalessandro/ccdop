@@ -361,3 +361,31 @@ class AditivoDeleteView(DeleteView):
     model = Aditivo
     template_name = 'aditivo_confirm_delete.html'
     success_url = reverse_lazy('aditivo_list')
+
+from django.views.generic import TemplateView
+class CentroDeCustoManageView(TemplateView):
+    template_name = 'centrodecusto_manage.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['gestor_form'] = CentroDeCustoGestorForm(prefix='gestor')
+        context['solicitante_form'] = CentroDeCustoSolicitanteForm(prefix='solicitante')
+        context['gestores'] = CentroDeCustoGestor.objects.all()
+        context['solicitantes'] = CentroDeCustoSolicitante.objects.all()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        gestor_form = CentroDeCustoGestorForm(request.POST, prefix='gestor')
+        solicitante_form = CentroDeCustoSolicitanteForm(request.POST, prefix='solicitante')
+        
+        if gestor_form.is_valid():
+            gestor_form.save()
+            return redirect('centrodecusto_manage')
+        elif solicitante_form.is_valid():
+            solicitante_form.save()
+            return redirect('centrodecusto_manage')
+        
+        context = self.get_context_data()
+        context['gestor_form'] = gestor_form
+        context['solicitante_form'] = solicitante_form
+        return self.render_to_response(context)

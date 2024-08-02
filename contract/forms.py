@@ -207,3 +207,16 @@ class AditivoForm(forms.ModelForm):
             'valor': 'Valor do Aditivo',
             'justificativa': 'Justificativa',
         }
+
+from django import forms
+from .models import CentroDeCustoGestor, CentroDeCustoSolicitante
+
+class CentroDeCustoGestorForm(forms.ModelForm):
+    class Meta:
+        model = CentroDeCustoGestor
+        fields = '__all__'
+
+class CentroDeCustoSolicitanteForm(forms.ModelForm):
+    class Meta:
+        model = CentroDeCustoSolicitante
+        fields = '__all__'
