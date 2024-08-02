@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-container h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-container .form-group {
+            margin-bottom: 15px;
+        }
+
+        .login-container .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .login-container .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .login-container .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .login-container .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .login-container .btn-outline-primary {
+            border-color: #007bff;
+        }
+
+        .login-container .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .text-center a {
+            color: #007bff;
+        }
+
+        .text-center a:hover {
+            text-decoration: none;
+            color: #0056b3;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>Sign In</h1>
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_login">Email:</label>
+                <input type="email" name="login" class="form-control" id="id_login" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" class="form-control" id="id_password" required>
+            </div>
+            <input type="hidden" name="next" value="{{ redirect_field.value }}">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+        <div class="text-center mt-3">
+            <p>If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.</p>
+        </div>
+        {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+        <hr class="my-4">
+        <div class="d-flex flex-column">
+            {% if PASSKEY_LOGIN_ENABLED %}
+            <button type="submit" form="mfa_login" id="passkey_login" class="btn btn-outline-primary mb-2">
+                Sign in with a passkey
+            </button>
+            {% endif %}
+            {% if LOGIN_BY_CODE_ENABLED %}
+            <a href="{{ request_login_code_url }}" class="btn btn-outline-primary mb-2">
+                Mail me a sign-in code
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if SOCIALACCOUNT_ENABLED %}
+        <hr class="my-4">
+        <div class="text-center">
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
