@@ -389,3 +389,37 @@ class CentroDeCustoManageView(TemplateView):
         context['gestor_form'] = gestor_form
         context['solicitante_form'] = solicitante_form
         return self.render_to_response(context)
+    
+# views.py
+
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from .models import Direcao, Gerencia, Coordenacao
+from .forms import DirecaoForm, GerenciaForm, CoordenacaoForm
+
+class SetorManageView(TemplateView):
+    template_name = 'setor_manage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['direcoes'] = Direcao.objects.all()
+        context['gerencias'] = Gerencia.objects.select_related('direcao').all()
+        context['coordenacoes'] = Coordenacao.objects.select_related('gerencia').all()
+        context['direcao_form'] = DirecaoForm(prefix='direcao')
+        context['gerencia_form'] = GerenciaForm(prefix='gerencia')
+        context['coordenacao_form'] = CoordenacaoForm(prefix='coordenacao')
+        return context
+
+    def post(self, request, *args, **kwargs):
+        direcao_form = DirecaoForm(request.POST, prefix='direcao')
+        gerencia_form = GerenciaForm(request.POST, prefix='gerencia')
+        coordenacao_form = CoordenacaoForm(request.POST, prefix='coordenacao')
+
+        if 'direcao' in request.POST and direcao_form.is_valid():
+            direcao_form.save()
+        elif 'gerencia' in request.POST and gerencia_form.is_valid():
+            gerencia_form.save()
+        elif 'coordenacao' in request.POST and coordenacao_form.is_valid():
+            coordenacao_form.save()
+
+        return redirect('setor_manage')

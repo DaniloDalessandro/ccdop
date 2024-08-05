@@ -37,7 +37,7 @@ from .views import (
 )
 
 from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
-from .views import CentroDeCustoManageView
+from .views import CentroDeCustoManageView,SetorManageView
 
 urlpatterns = [
     path('listarcolaboradores/', ColaboradorListView.as_view(), name='colaborador_list'),
@@ -45,12 +45,10 @@ urlpatterns = [
     path('<int:pk>/editarcolaborador/', ColaboradorUpdateView.as_view(), name='colaborador_update'),
     path('<int:pk>/deletarcolaborador/', ColaboradorDeleteView.as_view(), name='colaborador_delete'),
     # ==============================================================================================
-    path('listarcentrosdecusto/', CentroDeCustoGestorListView.as_view(), name='centrodecustogestor_list'),
     path('novocentrodecusto/', CentroDeCustoGestorCreateView.as_view(), name='centrodecustogestor_create'),
     path('<int:pk>/editarcentrodecusto/', CentroDeCustoGestorUpdateView.as_view(), name='centrodecustogestor_update'),
     path('<int:pk>/deletarcentrodecusto/', CentroDeCustoGestorDeleteView.as_view(), name='centrodecustogestor_delete'),
     # ==============================================================================================
-    path('listarcentrossolicitantes/', CentroDeCustoSolicitanteListView.as_view(), name='centrodeustosolicitante_list'),
     path('novosolicitante/', CentroDeCustoSolicitanteCreateView.as_view(), name='centrodeustosolicitante_create'),
     path('<int:pk>/editarsolicitante/', CentroDeCustoSolicitanteUpdateView.as_view(), name='centrodeustosolicitante_update'),
     path('<int:pk>/deletarsolicitante/', CentroDeCustoSolicitanteDeleteView.as_view(), name='centrodeustosolicitante_delete'),
@@ -115,6 +113,9 @@ urlpatterns = [
     path('aditivos/<int:pk>/excluir/', AditivoDeleteView.as_view(), name='aditivo_delete'),
 
     path('centros_de_custo/manage/', CentroDeCustoManageView.as_view(), name='centrodecusto_manage'),
+
+    path('centros/manage/', CentroDeCustoManageView.as_view(), name='centrodecusto_manage'),
+    path('setores/manage/', SetorManageView.as_view(), name='setor_manage'),
 
 ]
 

@@ -109,40 +109,11 @@
 
 <div class="sidebar">
     <a href="{% url 'dashboard' %}">Dashboard</a>
-    <button class="dropdown-btn">Direção 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
-        <a href="{% url 'direcao_list' %}">Lista de Direções</a>
+    <div>
+        <a href="{% url 'setor_manage' %}">Setores</a>       
     </div>
-    <button class="dropdown-btn">Gerência 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
-        <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
-    </div>
-    <button class="dropdown-btn">Coordenação 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
-        <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Gestor 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
-        <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Solicitante 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
-        <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
+    <div>
+        <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
     </div>
     <button class="dropdown-btn">Colaboradores 
         <i class="fa fa-caret-down"></i>
@@ -151,13 +122,50 @@
         <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
         <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
     </div>
-    <button class="dropdown-btn">Auxílios 
+    <button class="dropdown-btn">Auxilios 
         <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-container">
-        <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxílio</a>
-        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxílios</a>
+        <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
+        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
+    </div>  
+    <button class="dropdown-btn">Orçamentos 
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
+        <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
+        <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
+        <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
+    </div>  
+    <button class="dropdown-btn">Linhas Orçamentárias
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
+        <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
     </div>
+    <button class="dropdown-btn">Contratos
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
+        <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
+    </div>
+    <button class="dropdown-btn">Remanejamentos
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
+        <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
+    </div>
+    <button class="dropdown-btn">Aditivos
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
+        <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
+    </div>   
 </div>
 
 <div class="content">
