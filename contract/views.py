@@ -82,18 +82,18 @@ class DirecaoCreateView(CreateView):
     model = Direcao
     form_class = DirecaoForm
     template_name = 'direcao_form.html'
-    success_url = reverse_lazy('direcao_list')
+    success_url = reverse_lazy('setor_manage')
 
 class DirecaoUpdateView(UpdateView):
     model = Direcao
     form_class = DirecaoForm
     template_name = 'direcao_form.html'
-    success_url = reverse_lazy('direcao_list')
+    success_url = reverse_lazy('setor_manage')
 
 class DirecaoDeleteView(DeleteView):
     model = Direcao
     template_name = 'direcao_confirm_delete.html'
-    success_url = reverse_lazy('direcao_list')
+    success_url = reverse_lazy('setor_manage')
 
 class GerenciaListView(ListView):
     model = Gerencia
