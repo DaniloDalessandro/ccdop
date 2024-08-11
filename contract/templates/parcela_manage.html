@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="container mt-4">
+    <h2>Gerenciar Parcelas do Contrato {{ contrato.numero_protocolo }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Número da Parcela</th>
+                    <th>Valor</th>
+                    <th>Data de Vencimento</th>
+                    <th>Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parcela in parcelas %}
+                <tr>
+                    <td>{{ parcela.numero_parcela }}</td>
+                    <td>{{ parcela.valor_parcela }}</td>
+                    <td>{{ parcela.data_vencimento }}</td>
+                    <td>
+                        <input type="checkbox" name="parcela_{{ parcela.id }}" {% if parcela.paga %} checked {% endif %}>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}
