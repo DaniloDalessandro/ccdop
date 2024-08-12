@@ -191,11 +191,6 @@ class OrcamentoExterno(models.Model):
 
 # ============================================================================================================
 
-from django.db import models
-from django.db.models import Sum
-from decimal import Decimal
-from datetime import datetime
-
 class LinhaOrcamentaria(models.Model):
     CLASSE_CHOICES = [
         ('A', 'OPEX'),
@@ -371,9 +366,6 @@ class Remanejamento(models.Model):
 
         
 # ============================================================================================================
-
-from django.db import models
-from django.utils import timezone
 
 class Contrato(models.Model):
     linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')

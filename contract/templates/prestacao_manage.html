@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Prestações</title>
+</head>
+<body>
+    <h1>Gerenciar Prestações para o Contrato {{ contrato.numero_protocolo }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for prestacao in prestacoes %}
+        <div>
+            <h3>Prestação {{ prestacao.numero }}</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ forms[prestacao.id].as_p }}
+                <input type="hidden" name="prestacao_id" value="{{ prestacao.id }}">
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+        {% endfor %}
+    </form>
+    <a href="{% url 'contratos_list' %}">Voltar à Lista de Contratos</a>
+</body>
+</html>
