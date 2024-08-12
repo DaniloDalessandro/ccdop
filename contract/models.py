@@ -368,12 +368,12 @@ class Remanejamento(models.Model):
 # ============================================================================================================
 
 class Contrato(models.Model):
-    linha_orcamentaria = models.ForeignKey('LinhaOrcamentaria', on_delete=models.PROTECT, related_name='contrato')
+    linha_orcamentaria = models.ForeignKey(LinhaOrcamentaria, on_delete=models.PROTECT, related_name='contrato')
     numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False,verbose_name='Contrato')
     data_assinatura = models.DateField(null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
-    fical_principal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
-    fical_substituto = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
+    fical_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
+    fical_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
     valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
