@@ -423,3 +423,19 @@ class SetorManageView(TemplateView):
             coordenacao_form.save()
 
         return redirect('setor_manage')
+
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from .models import Contrato
+from .forms import ContratoForm
+
+class ContratoCreateView(CreateView):
+    model = Contrato
+    form_class = ContratoForm
+    template_name = 'create_contrato.html'  # Especifique o caminho do seu template
+    success_url = reverse_lazy('nome-da-url-para-redirecionar-após-criar')  # Substitua pelo nome da URL de sucesso
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.create_prestacoes()  # Chama a função de criar prestações quando o contrato é salvo
+        return response

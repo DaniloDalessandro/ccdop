@@ -4,6 +4,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from dateutil.relativedelta import relativedelta
 
 # ============================================================================================================
 
@@ -368,18 +369,22 @@ class Remanejamento(models.Model):
 # ============================================================================================================
 
 class Contrato(models.Model):
-    linha_orcamentaria = models.ForeignKey(LinhaOrcamentaria, on_delete=models.PROTECT, related_name='contrato')
-    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False,verbose_name='Contrato')
+    linha_orcamentaria = models.ForeignKey(LinhaOrcamentaria, on_delete=models.PROTECT, related_name='contratos')
+    numero_protocolo = models.CharField(max_length=7, unique=True, blank=True, editable=False, verbose_name='Contrato')
     data_assinatura = models.DateField(null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
-    fical_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
-    fical_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
+    fiscal_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
+    fiscal_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
     valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
+    num_prestacoes = models.PositiveIntegerField()
 
     def save(self, *args, **kwargs):
-        if not self.numero_protocolo:  # Apenas gera se o protocolo não existir
+        if not self.numero_protocolo:
             self.numero_protocolo = self.generate_protocolo()
+        if not self.data_vencimento and self.data_assinatura:
+            self.data_vencimento = self.data_assinatura + relativedelta(months=self.num_prestacoes)
         super().save(*args, **kwargs)
+        self.create_prestacoes()
         self.linha_orcamentaria.update_valor_aprovisionado()
 
     def delete(self, *args, **kwargs):
@@ -387,7 +392,7 @@ class Contrato(models.Model):
         self.linha_orcamentaria.update_valor_aprovisionado()
 
     def generate_protocolo(self):
-        year_suffix = timezone.now().year % 100  
+        year_suffix = timezone.now().year % 100
         last_protocolo = Contrato.objects.filter(numero_protocolo__endswith=f"/{year_suffix}").order_by('id').last()
         
         if last_protocolo:
@@ -398,8 +403,37 @@ class Contrato(models.Model):
 
         return f"{new_sequence}/{year_suffix}"
 
+    def create_prestacoes(self):
+        if not self.prestacao_set.exists():  # Apenas cria se não existirem prestações
+            valor_parcela = self.valor_contrato / self.num_prestacoes
+            for i in range(self.num_prestacoes):
+                data_parcela = self.data_assinatura + relativedelta(months=i)
+                Prestacao.objects.create(
+                    contrato=self,
+                    numero=i+1,
+                    valor_parcela=valor_parcela,
+                    data_vencimento=data_parcela
+                )
+
     def __str__(self):
         return self.numero_protocolo
+
+
+class Prestacao(models.Model):
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE)
+    numero = models.PositiveIntegerField()
+    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    data_vencimento = models.DateField()
+    data_pagamento = models.DateField(null=True, blank=True)
+    status_pagamento = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.status_pagamento and not self.data_pagamento:
+            self.data_pagamento = timezone.now().date()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Parcela {self.numero} do Contrato {self.contrato.numero_protocolo}"
 
 
 # ============================================================================================================

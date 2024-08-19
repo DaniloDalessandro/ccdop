@@ -152,25 +152,25 @@ class LinhaOrcamentariaForm(forms.ModelForm):
             # Adicione outros widgets personalizados conforme necessário
         }
 
+from django import forms
+from .models import Contrato, Prestacao
 
 class ContratoForm(forms.ModelForm):
     class Meta:
         model = Contrato
-        fields = [
-            'linha_orcamentaria',
-            'data_assinatura',
-            'data_vencimento',
-            'fical_principal',
-            'fical_substituto',
-            'valor_contrato'
-        ]
+        fields = '__all__'
         widgets = {
-            'data_assinatura': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'data_vencimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'linha_orcamentaria': forms.Select(attrs={'class': 'form-control'}),
-            'fical_principal': forms.Select(attrs={'class': 'form-control'}),
-            'fical_substituto': forms.Select(attrs={'class': 'form-control'}),
-            'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
+            'data_assinatura': forms.DateInput(attrs={'type': 'date'}),
+            'data_vencimento': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class PrestacaoForm(forms.ModelForm):
+    class Meta:
+        model = Prestacao
+        fields = '__all__'
+        widgets = {
+            'data_vencimento': forms.DateInput(attrs={'type': 'date'}),
+            'data_pagamento': forms.DateInput(attrs={'type': 'date'}),
         }
 
 

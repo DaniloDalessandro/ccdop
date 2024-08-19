@@ -38,6 +38,7 @@ from .views import (
 
 from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
 from .views import CentroDeCustoManageView,SetorManageView
+from .views import ContratoCreateView
 
 urlpatterns = [
     path('listarcolaboradores/', ColaboradorListView.as_view(), name='colaborador_list'),
@@ -116,6 +117,8 @@ urlpatterns = [
 
     path('centros/manage/', CentroDeCustoManageView.as_view(), name='centrodecusto_manage'),
     path('setores/manage/', SetorManageView.as_view(), name='setor_manage'),
+
+    path('novo-contrato/', ContratoCreateView.as_view(), name='novo-contrato'),
 
 ]
 
