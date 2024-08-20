@@ -376,13 +376,14 @@ class Contrato(models.Model):
     fiscal_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
     fiscal_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
     valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
-    num_prestacoes = models.PositiveIntegerField()
+    num_prestacoes = models.PositiveIntegerField(editable=False)  # Agora calculado automaticamente
 
     def save(self, *args, **kwargs):
         if not self.numero_protocolo:
             self.numero_protocolo = self.generate_protocolo()
-        if not self.data_vencimento and self.data_assinatura:
-            self.data_vencimento = self.data_assinatura + relativedelta(months=self.num_prestacoes)
+        if self.data_assinatura and self.data_vencimento:
+            # Calcula o número de prestações com base na diferença de meses entre a assinatura e o vencimento
+            self.num_prestacoes = self.calculate_num_prestacoes()
         super().save(*args, **kwargs)
         self.create_prestacoes()
         self.linha_orcamentaria.update_valor_aprovisionado()
@@ -402,6 +403,11 @@ class Contrato(models.Model):
             new_sequence = "0001"
 
         return f"{new_sequence}/{year_suffix}"
+
+    def calculate_num_prestacoes(self):
+        # Calcula o número de meses entre a data de assinatura e a data de vencimento
+        delta = relativedelta(self.data_vencimento, self.data_assinatura)
+        return delta.years * 12 + delta.months + 1  # Adiciona 1 para incluir o mês de início
 
     def create_prestacoes(self):
         if not self.prestacao_set.exists():  # Apenas cria se não existirem prestações
@@ -425,15 +431,26 @@ class Prestacao(models.Model):
     valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     data_vencimento = models.DateField()
     data_pagamento = models.DateField(null=True, blank=True)
-    status_pagamento = models.BooleanField(default=False)
+    status_pagamento = models.BooleanField(default=False)  # True se paga, False se não paga
 
     def save(self, *args, **kwargs):
+        # Se a parcela foi paga, mas não tem data de pagamento, define a data de pagamento como hoje
         if self.status_pagamento and not self.data_pagamento:
             self.data_pagamento = timezone.now().date()
         super().save(*args, **kwargs)
 
+    @property
+    def is_atrasada(self):
+        """
+        Retorna True se a prestação está atrasada (data de vencimento ultrapassada e não foi paga)
+        """
+        if not self.status_pagamento and self.data_vencimento < timezone.now().date():
+            return True
+        return False
+
     def __str__(self):
-        return f"Parcela {self.numero} do Contrato {self.contrato.numero_protocolo}"
+        status = "Atrasada" if self.is_atrasada else "Paga" if self.status_pagamento else "Pendente"
+        return f"Parcela {self.numero} do Contrato {self.contrato.numero_protocolo} - {status}"
 
 
 # ============================================================================================================

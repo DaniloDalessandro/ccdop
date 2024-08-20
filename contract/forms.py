@@ -158,19 +158,31 @@ from .models import Contrato, Prestacao
 class ContratoForm(forms.ModelForm):
     class Meta:
         model = Contrato
-        fields = '__all__'
+        fields = [
+            'linha_orcamentaria',
+            'data_assinatura',
+            'data_vencimento',
+            'fiscal_principal',
+            'fiscal_substituto',
+            'valor_contrato',
+        ]
         widgets = {
-            'data_assinatura': forms.DateInput(attrs={'type': 'date'}),
-            'data_vencimento': forms.DateInput(attrs={'type': 'date'}),
+            'data_assinatura': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'data_vencimento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'linha_orcamentaria': forms.Select(attrs={'class': 'form-select'}),
+            'fiscal_principal': forms.Select(attrs={'class': 'form-select'}),
+            'fiscal_substituto': forms.Select(attrs={'class': 'form-select'}),
+            'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 class PrestacaoForm(forms.ModelForm):
     class Meta:
         model = Prestacao
-        fields = '__all__'
+        fields = ['data_vencimento', 'data_pagamento', 'status_pagamento']
         widgets = {
-            'data_vencimento': forms.DateInput(attrs={'type': 'date'}),
-            'data_pagamento': forms.DateInput(attrs={'type': 'date'}),
+            'data_vencimento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'data_pagamento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'status_pagamento': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
 

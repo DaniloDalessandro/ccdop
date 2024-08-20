@@ -1,16 +1,59 @@
 {% extends 'index.html' %}
 
 {% block 'conteudo' %}
-
-<div class="container mt-5">
-    <h2 class="mb-4">Cadastrar Novo Contrato</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Salvar Contrato</button>
-    </form>
+<div class="container">
+  <div class="page-inner">
+   
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Formulário de Contrato</h4>
+          </div>
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="linha_orcamentaria">Linha Orçamentária</label>
+                    {{ form.linha_orcamentaria }}
+                  </div>
+                  <div class="form-group">
+                    <label for="data_assinatura">Data de Assinatura</label>
+                    {{ form.data_assinatura }}
+                  </div>
+                  <div class="form-group">
+                    <label for="data_vencimento">Data de Vencimento</label>
+                    {{ form.data_vencimento }}
+                  </div>
+                  <div class="form-group">
+                    <label for="fiscal_principal">Fiscal Principal</label>
+                    {{ form.fiscal_principal }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="fiscal_substituto">Fiscal Substituto</label>
+                    {{ form.fiscal_substituto }}
+                  </div>
+                  <div class="form-group">
+                    <label for="valor_contrato">Valor do Contrato</label>
+                    {{ form.valor_contrato }}
+                  </div>
+                </div>
+              </div>
+              <div class="card-action mt-3">
+                <button type="submit" class="btn btn-success">Salvar Contrato</button>
+                <a href="" class="btn btn-danger">Cancelar</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
 {% endblock %}
 
 
