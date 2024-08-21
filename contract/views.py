@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
 from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo
 from .forms import (ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,
                     GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm,ContratoForm,RemanejamentoForm,AditivoForm)
-from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from .models import Contrato, Prestacao
+from .forms import ContratoForm, PrestacaoForm
+from django.utils import timezone
 
 
 class ColaboradorListView(ListView):
@@ -272,31 +275,41 @@ class LinhaOrcamentariaDeleteView(DeleteView):
 
 class ContratoListView(ListView):
     model = Contrato
-    template_name = 'contrato_list.html'
+    template_name = 'contratos/contrato_list.html'
     context_object_name = 'contratos'
-    paginate_by = 10  # Se desejar adicionar paginação
-
-class ContratoDetailView(DetailView):
-    model = Contrato
-    template_name = 'contrato_detail.html'
-    context_object_name = 'contrato'
 
 class ContratoCreateView(CreateView):
     model = Contrato
     form_class = ContratoForm
-    template_name = 'contrato_form.html'
-    success_url = reverse_lazy('contrato_list')
+    template_name = 'contratos/contrato_form.html'
+    success_url = reverse_lazy('contrato-list')
 
 class ContratoUpdateView(UpdateView):
     model = Contrato
     form_class = ContratoForm
-    template_name = 'contrato_form.html'
-    success_url = reverse_lazy('contrato_list')
+    template_name = 'contratos/contrato_form.html'
+    success_url = reverse_lazy('contrato-list')
 
 class ContratoDeleteView(DeleteView):
     model = Contrato
-    template_name = 'contrato_confirm_delete.html'
-    success_url = reverse_lazy('contrato_list')
+    template_name = 'contratos/contrato_confirm_delete.html'
+    success_url = reverse_lazy('contrato-list')
+
+class ContratoDetailView(DetailView):
+    model = Contrato
+    template_name = 'contratos/contrato_detail.html'
+    context_object_name = 'contrato'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['today'] = timezone.now().date()
+        return context
+
+def marcar_prestacao_como_paga(request, pk):
+    prestacao = get_object_or_404(Prestacao, pk=pk)
+    prestacao.status_pagamento = True
+    prestacao.save()
+    return redirect('contratos/contrato-detail', pk=prestacao.contrato.pk)
 
 class RemanejamentoListView(ListView):
     model = Remanejamento
@@ -424,18 +437,6 @@ class SetorManageView(TemplateView):
 
         return redirect('setor_manage')
 
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from .models import Contrato
-from .forms import ContratoForm
 
-class ContratoCreateView(CreateView):
-    model = Contrato
-    form_class = ContratoForm
-    template_name = 'create_contrato.html'  # Especifique o caminho do seu template
-    success_url = reverse_lazy('nome-da-url-para-redirecionar-após-criar')  # Substitua pelo nome da URL de sucesso
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        self.object.create_prestacoes()  # Chama a função de criar prestações quando o contrato é salvo
-        return response
+

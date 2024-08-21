@@ -38,7 +38,7 @@ from .views import (
 
 from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
 from .views import CentroDeCustoManageView,SetorManageView
-from .views import ContratoCreateView
+from .views import ContratoCreateView, marcar_prestacao_como_paga
 
 urlpatterns = [
     path('listarcolaboradores/', ColaboradorListView.as_view(), name='colaborador_list'),
@@ -95,11 +95,11 @@ urlpatterns = [
     path('linhaorcamentaria/<int:pk>/editar/', LinhaOrcamentariaUpdateView.as_view(), name='linhaorcamentaria_update'),
     path('linhaorcamentaria/<int:pk>/deletar/', LinhaOrcamentariaDeleteView.as_view(), name='linhaorcamentaria_delete'),
 
-    path('contra/', ContratoListView.as_view(), name='contrato_list'),
-    path('contra/novo/', ContratoCreateView.as_view(), name='contrato_create'),
-    path('contra/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
-    path('contra/<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato_update'),
-    path('contra/<int:pk>/excluir/', ContratoDeleteView.as_view(), name='contrato_delete'),
+    # path('contra/', ContratoListView.as_view(), name='contrato_list'),
+    # path('contra/novo/', ContratoCreateView.as_view(), name='contrato_create'),
+    # path('contra/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
+    # path('contra/<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato_update'),
+    # path('contra/<int:pk>/excluir/', ContratoDeleteView.as_view(), name='contrato_delete'),
 
     path('remanejamentos/', RemanejamentoListView.as_view(), name='remanejamento_list'),
     path('remanejamentos/<int:pk>/', RemanejamentoDetailView.as_view(), name='remanejamento_detail'),
@@ -119,6 +119,11 @@ urlpatterns = [
     path('setores/manage/', SetorManageView.as_view(), name='setor_manage'),
 
     path('novo-contrato/', ContratoCreateView.as_view(), name='novo-contrato'),
+    path('list-contrato/', ContratoListView.as_view(), name='contrato-list'),
+    path('<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato-update'),
+    path('<int:pk>/deletar/', ContratoDeleteView.as_view(), name='contrato-delete'),
+    path('<int:pk>/', ContratoDetailView.as_view(), name='contrato-detail'),
+    path('prestacao/<int:pk>/pagar/', marcar_prestacao_como_paga, name='prestacao-pagar'),
 
 ]
 
