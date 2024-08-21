@@ -14,39 +14,63 @@
                             {% csrf_token %}
                             {{ form.non_field_errors }}
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    {{ form.ano.label_tag }} {{ form.ano }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.ano.id_for_label }}">{{ form.ano.label }}</label>
+                                        <input type="text" name="{{ form.ano.name }}" id="{{ form.ano.id_for_label }}" class="form-control" value="{{ form.ano.value }}" placeholder="Ano">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    {{ form.centro.label_tag }} {{ form.centro }}
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    {{ form.classe.label_tag }} {{ form.classe }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    {{ form.valor.label_tag }} {{ form.valor }}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.centro.id_for_label }}">{{ form.centro.label }}</label>
+                                        <input type="text" name="{{ form.centro.name }}" id="{{ form.centro.id_for_label }}" class="form-control" value="{{ form.centro.value }}">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6 readonly-field">
-                                    Valores Adicionados: {{ form.instance.valores_adicionados }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.classe.id_for_label }}">{{ form.classe.label }}</label>
+                                        <input type="text" name="{{ form.classe.name }}" id="{{ form.classe.id_for_label }}" class="form-control" value="{{ form.classe.value }}">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 readonly-field">
-                                    Valores Enviados: {{ form.instance.valores_enviados }}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                                        <input type="text" name="{{ form.valor.name }}" id="{{ form.valor.id_for_label }}" class="form-control" value="{{ form.valor.value }}">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6 readonly-field">
-                                    Valor Total: {{ form.instance.valor_total }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group readonly-field">
+                                        <label>Valores Adicionados</label>
+                                        <input type="text" value="{{ form.instance.valores_adicionados }}" class="form-control" readonly>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 readonly-field">
-                                    Orçamento Total: {{ form.instance.orcamento_total }}
+                                <div class="col-md-6">
+                                    <div class="form-group readonly-field">
+                                        <label>Valores Enviados</label>
+                                        <input type="text" value="{{ form.instance.valores_enviados }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group readonly-field">
+                                        <label>Valor Total</label>
+                                        <input type="text" value="{{ form.instance.valor_total }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group readonly-field">
+                                        <label>Orçamento Total</label>
+                                        <input type="text" value="{{ form.instance.orcamento_total }}" class="form-control" readonly>
+                                    </div>
                                 </div>
                             </div>
 

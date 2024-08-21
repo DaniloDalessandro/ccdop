@@ -235,13 +235,23 @@
                 <div class="collapse" id="maps">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="maps/googlemaps.html">
+                      <a href="{% url 'orcamento_list' %}">
                         <span class="sub-item">Listar Orçamentos</span>
                       </a>
                     </li>
                     <li>
-                      <a href="maps/jsvectormap.html">
+                      <a href="{% url 'orcamento_create' %}">
                         <span class="sub-item">Adicionar Orçamento</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'orcamentoexterno_list' %}">
+                        <span class="sub-item">Listar Orçamento Externos</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'orcamentoexterno_create' %}">
+                        <span class="sub-item">Adicionar Orçamento Externo</span>
                       </a>
                     </li>
                   </ul>
