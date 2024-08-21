@@ -1,263 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auxílios Colaboradores</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #343a40;
-            height: 100vh;
-            position: fixed;
-            padding-top: 20px;
-        }
-        .sidebar a, .dropdown-btn {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 18px;
-            color: white;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover, .dropdown-btn:hover {
-            background-color: #007bff;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-            padding-left: 20px;
-        }
-        .dropdown-btn {
-            border: none;
-            background: none;
-            outline: none;
-            cursor: pointer;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-        }
-        .table-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-<body>
+{% extends 'index.html' %}
 
-    <div class="sidebar">
-        <a href="{% url 'dashboard' %}">Dashboard</a>     
-        <div>
-            <a href="{% url 'setor_manage' %}">Setores</a>       
-        </div>
-        <div>
-            <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
-        </div>
-        <button class="dropdown-btn">Colaboradores 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-        </div>
-        <button class="dropdown-btn">Auxilios 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
-            <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
-        </div>  
-        <button class="dropdown-btn">Orçamentos 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-            <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
-            <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
-            <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
-        </div>  
-        <button class="dropdown-btn">Linhas Orçamentárias
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
-            <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
-        </div>
-        <button class="dropdown-btn">Contratos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
-            <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
-        </div>
-        <button class="dropdown-btn">Remanejamentos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
-            <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
-        </div>
-        <button class="dropdown-btn">Aditivos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
-            <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
-        </div>   
-    </div>
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Lista de Auxílios</h4>
+                        <a href="{% url 'auxiliocolaborador_create' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Adicionar Auxílio
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <form method="GET" action="{% url 'auxiliocolaborador_list' %}">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="search" placeholder="Buscar auxílio...">
+                                <button class="btn btn-primary" type="submit">Buscar</button>
+                            </div>
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Beneficiado</th>
+                                    <th>Orçamento</th>
+                                    <th>Tipo</th>
+                                    <th>Benefício</th>
+                                    <th>Valor Parcela</th>
+                                    <th>Qtd Parcelas</th>
+                                    <th>Valor Total</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for auxilio in auxilios_colaboradores %}
+                                <tr>
+                                    <td>{{ auxilio.beneficiado.nome_completo }}</td>
+                                    <td>{{ auxilio.orcamento }}</td>
+                                    <td>{{ auxilio.get_tipo_display }}</td>
+                                    <td>{{ auxilio.beneficio }}</td>
+                                    <td>{{ auxilio.valor_parcela }}</td>
+                                    <td>{{ auxilio.qtd_parcelas }}</td>
+                                    <td>{{ auxilio.valor_total }}</td>
+                                    <td>
+                                        {% if auxilio.status == 'ativo' %}
+                                            Ativo
+                                        {% elif auxilio.status == 'finalizado' %}
+                                            Finalizado
+                                        {% else %}
+                                            Aguardando
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'auxiliocolaborador_detail' auxilio.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                                        <a href="{% url 'auxiliocolaborador_update' auxilio.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <form action="{% url 'auxiliocolaborador_delete' auxilio.pk %}" method="POST" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" class="text-center">Nenhum auxílio encontrado.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
 
-<div class="content">
-    <h1 class="text-center">Auxílios Colaboradores</h1>
-    <div class="d-flex justify-content-between mb-4">
-        <a href="{% url 'auxiliocolaborador_create' %}" class="btn btn-success">Adicionar Auxílio</a>
-        <form class="form-inline" method="get" action="{% url 'auxiliocolaborador_list' %}">
-            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
-    </div>
-    <div class="table-container">
-        <form method="get" action="{% url 'auxiliocolaborador_list' %}">
-            <div class="form-group row">
-                <label for="orcamento" class="col-sm-2 col-form-label">Filtrar por Orçamento</label>
-                <div class="col-sm-10">
-                    <select class="form-control" id="orcamento" name="orcamento_id">
-                        <option value="">Todos</option>
-                        {% for orcamento in orcamentos %}
-                            <option value="{{ orcamento.id }}" {% if request.GET.orcamento_id == orcamento.id|stringformat:"s" %}selected{% endif %}>
-                                {{ orcamento.nome }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                        <!-- Paginação -->
+                        <div class="d-flex justify-content-center">
+                            {% if is_paginated %}
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Primeira">
+                                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                                    <span class="sr-only">Primeira</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Anterior">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Anterior</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% for num in paginator.page_range %}
+                                            {% if num == page_obj.number %}
+                                                <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
+                                            {% else %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Próxima">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Próxima</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Última">
+                                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                                    <span class="sr-only">Última</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                        </div>
+
+                        <div class="text-right mt-4">
+                            <strong>Valor Total dos Auxílios: R$ {{ valor_total_auxilios }}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-        </form>
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Beneficiado</th>
-                    <th>Orçamento</th>
-                    <th>Tipo</th>
-                    <th>Beneficio</th>
-                    <th>Valor Parcela</th>
-                    <th>Qtd Parcelas</th>
-                    <th>Valor Total</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for auxilio in auxilios_colaboradores %}
-                <tr>
-                    <td>{{ auxilio.baneficiado.nome_completo }}</td>
-                    <td>{{ auxilio.orcamento }}</td>
-                    <td>{{ auxilio.get_tipo_display }}</td>
-                    <td>{{ auxilio.beneficio }}</td>
-                    <td>{{ auxilio.valor_parcela }}</td>
-                    <td>{{ auxilio.qtd_parcelas }}</td>
-                    <td>{{ auxilio.valor_total }}</td>
-                    <td>
-                        {% if auxilio.status == 'ativo' %}
-                            Ativo
-                        {% elif auxilio.status == 'finalizado' %}
-                            Finalizado
-                        {% else %}
-                            Aguardando
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'auxiliocolaborador_detail' auxilio.pk %}" class="btn btn-info btn-sm">Detalhes</a>
-                        <a href="{% url 'auxiliocolaborador_update' auxilio.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="{% url 'auxiliocolaborador_delete' auxilio.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">Nenhum auxílio encontrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Paginação -->
-        <div class="d-flex justify-content-center">
-            {% if is_paginated %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1{% if request.GET.orcamento_id %}&orcamento_id={{ request.GET.orcamento_id }}{% endif %}" aria-label="Primeira">
-                                    <span aria-hidden="true">&laquo;&laquo;</span>
-                                    <span class="sr-only">Primeira</span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.orcamento_id %}&orcamento_id={{ request.GET.orcamento_id }}{% endif %}" aria-label="Anterior">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Anterior</span>
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        {% for num in paginator.page_range %}
-                            {% if num == page_obj.number %}
-                                <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
-                            {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.orcamento_id %}&orcamento_id={{ request.GET.orcamento_id }}{% endif %}">{{ num }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.orcamento_id %}&orcamento_id={{ request.GET.orcamento_id }}{% endif %}" aria-label="Próxima">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Próxima</span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.orcamento_id %}&orcamento_id={{ request.GET.orcamento_id }}{% endif %}" aria-label="Última">
-                                    <span aria-hidden="true">&raquo;&raquo;</span>
-                                    <span class="sr-only">Última</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
-        </div>
-
-        <div class="text-right mt-4">
-            <strong>Valor Total dos Auxílios: R$ {{ valor_total_auxilios }}</strong>
         </div>
     </div>
 </div>
-
-<script>
-    var dropdown = document.getElementsByClassName("dropdown-btn");
-    for (var i = 0; i < dropdown.length; i++) {
-        dropdown[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var dropdownContent = this.nextElementSibling;
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-            } else {
-                dropdownContent.style.display = "block";
-            }
-        });
-    }
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}

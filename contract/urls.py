@@ -95,12 +95,6 @@ urlpatterns = [
     path('linhaorcamentaria/<int:pk>/editar/', LinhaOrcamentariaUpdateView.as_view(), name='linhaorcamentaria_update'),
     path('linhaorcamentaria/<int:pk>/deletar/', LinhaOrcamentariaDeleteView.as_view(), name='linhaorcamentaria_delete'),
 
-    # path('contra/', ContratoListView.as_view(), name='contrato_list'),
-    # path('contra/novo/', ContratoCreateView.as_view(), name='contrato_create'),
-    # path('contra/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
-    # path('contra/<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato_update'),
-    # path('contra/<int:pk>/excluir/', ContratoDeleteView.as_view(), name='contrato_delete'),
-
     path('remanejamentos/', RemanejamentoListView.as_view(), name='remanejamento_list'),
     path('remanejamentos/<int:pk>/', RemanejamentoDetailView.as_view(), name='remanejamento_detail'),
     path('remanejamentos/novo/', RemanejamentoCreateView.as_view(), name='remanejamento_create'),

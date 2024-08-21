@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Orçamento</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    {{ form.ano.label_tag }} {{ form.ano }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    {{ form.centro.label_tag }} {{ form.centro }}
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    {{ form.classe.label_tag }} {{ form.classe }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    {{ form.valor.label_tag }} {{ form.valor }}
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6 readonly-field">
+                                    Valores Adicionados: {{ form.instance.valores_adicionados }}
+                                </div>
+                                <div class="form-group col-md-6 readonly-field">
+                                    Valores Enviados: {{ form.instance.valores_enviados }}
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6 readonly-field">
+                                    Valor Total: {{ form.instance.valor_total }}
+                                </div>
+                                <div class="form-group col-md-6 readonly-field">
+                                    Orçamento Total: {{ form.instance.orcamento_total }}
+                                </div>
+                            </div>
+
+                            <div class="card-action mt-4">
+                                <button type="submit" class="btn btn-success">Salvar</button>
+                                <a href="{% url 'orcamento_list' %}" class="btn btn-danger">Voltar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -156,55 +156,55 @@ class ColaboradorCreateView(CreateView):
 class ColaboradorUpdateView(UpdateView):
     model = Colaborador
     form_class = ColaboradorForm
-    template_name = 'colaborador_form.html'
+    template_name = 'orcamentos/colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
 class ColaboradorDeleteView(DeleteView):
     model = Colaborador
-    template_name = 'colaborador_confirm_delete.html'
+    template_name = 'orcamentos/colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
 
 class OrcamentoListView(ListView):
     model = Orcamento
-    template_name = 'orcamento_list.html'
+    template_name = 'orcamentos/orcamento_list.html'
     context_object_name = 'orcamentos'
 
 class OrcamentoDetailView(DetailView):
     model = Orcamento
-    template_name = 'orcamento_detail.html'
+    template_name = 'orcamentos/orcamento_detail.html'
     context_object_name = 'orcamento'
 
 class OrcamentoCreateView(CreateView):
     model = Orcamento
     form_class = OrcamentoForm
-    template_name = 'orcamento_form.html'
+    template_name = 'orcamentos/orcamento_form.html'
     success_url = reverse_lazy('orcamento_list')
 
 class OrcamentoUpdateView(UpdateView):
     model = Orcamento
     form_class = OrcamentoForm
-    template_name = 'orcamento_form.html'
+    template_name = 'orcamentos/orcamento_form.html'
     success_url = reverse_lazy('orcamento_list')
 
 class OrcamentoDeleteView(DeleteView):
     model = Orcamento
-    template_name = 'orcamento_confirm_delete.html'
+    template_name = 'orcamentos/orcamento_confirm_delete.html'
     success_url = reverse_lazy('orcamento_list')
 
 class OrcamentoExternoListView(ListView):
     model = OrcamentoExterno
-    template_name = 'orcamentoexterno_list.html'
+    template_name = 'orcamentos/orcamentoexterno_list.html'
     context_object_name = 'orcamentos_externos'
 
 class OrcamentoExternoDetailView(DetailView):
     model = OrcamentoExterno
-    template_name = 'orcamentoexterno_detail.html'
+    template_name = 'orcamentos/orcamentoexterno_detail.html'
     context_object_name = 'orcamento_externo'
 
 class OrcamentoExternoCreateView(CreateView):
     model = OrcamentoExterno
     form_class = OrcamentoExternoForm
-    template_name = 'orcamentoexterno_form.html'
+    template_name = 'orcamentos/orcamentoexterno_form.html'
     success_url = reverse_lazy('orcamentoexterno_list')
 
     def form_valid(self, form):
@@ -217,7 +217,7 @@ class OrcamentoExternoCreateView(CreateView):
 class OrcamentoExternoUpdateView(UpdateView):
     model = OrcamentoExterno
     form_class = OrcamentoExternoForm
-    template_name = 'orcamentoexterno_form.html'
+    template_name = 'orcamentos/orcamentoexterno_form.html'
     success_url = reverse_lazy('orcamentoexterno_list')
 
     def form_valid(self, form):
@@ -228,7 +228,7 @@ class OrcamentoExternoUpdateView(UpdateView):
 
 class OrcamentoExternoDeleteView(DeleteView):
     model = OrcamentoExterno
-    template_name = 'orcamentoexterno_confirm_delete.html'
+    template_name = 'orcamentos/orcamentoexterno_confirm_delete.html'
     success_url = reverse_lazy('orcamentoexterno_list')
 
     def delete(self, request, *args, **kwargs):

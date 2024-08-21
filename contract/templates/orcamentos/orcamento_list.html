@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Lista de Orçamentos</h4>
+                        <a href="{% url 'orcamento_create' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Adicionar Orçamento
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ano</th>
+                                    <th>Centro</th>
+                                    <th>Classe</th>
+                                    <th>Valor Original</th>
+                                    <th>Valor Pós Remanejamentos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for orcamento in orcamentos %}
+                                <tr>
+                                    <td>{{ orcamento.ano }}</td>
+                                    <td>{{ orcamento.centro }}</td>
+                                    <td>{{ orcamento.get_classe_display }}</td>
+                                    <td>{{ orcamento.valor }}</td>
+                                    <td>{{ orcamento.valor_total }}</td>
+                                    <td>
+                                        <a href="{% url 'orcamento_update' orcamento.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'orcamento_delete' orcamento.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        <a href="{% url 'orcamento_detail' orcamento.pk %}" class="btn btn-secondary btn-sm">Detalhes</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
