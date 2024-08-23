@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white text-center">
+                    <h4 class="card-title mb-0">Confirmar Deleção</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="mb-4">Você tem certeza que deseja deletar "{{ object.nome }}"?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mr-2">Deletar</button>
+                        <a href="{% url 'gerencia_list' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

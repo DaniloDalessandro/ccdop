@@ -14,32 +14,42 @@
                             {% csrf_token %}
                             {{ form.non_field_errors }}
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.ano.id_for_label }}">{{ form.ano.label }}</label>
-                                    {{ form.ano }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.ano.id_for_label }}">{{ form.ano.label }}</label>
+                                        {{ form.ano }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.centro.id_for_label }}">{{ form.centro.label }}</label>
-                                    {{ form.centro }}
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.classe.id_for_label }}">{{ form.classe.label }}</label>
-                                    {{ form.classe }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
-                                    {{ form.valor }}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.centro.id_for_label }}">{{ form.centro.label }}</label>
+                                        {{ form.centro }}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.tipo_movimentacao.id_for_label }}">{{ form.tipo_movimentacao.label }}</label>
-                                    {{ form.tipo_movimentacao }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.classe.id_for_label }}">{{ form.classe.label }}</label>
+                                        {{ form.classe }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                                        {{ form.valor }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.tipo_movimentacao.id_for_label }}">{{ form.tipo_movimentacao.label }}</label>
+                                        {{ form.tipo_movimentacao }}
+                                    </div>
                                 </div>
                             </div>
 

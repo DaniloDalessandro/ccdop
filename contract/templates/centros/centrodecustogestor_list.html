@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Gerências</title>
+    <title>Lista de Centros de Custo Gestor</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -95,64 +95,14 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">Dashboard</a>
-</nav>
-
-<div class="sidebar">
-    <a href="{% url 'dashboard' %}">Dashboard</a>
-    <button class="dropdown-btn">Direção 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'direcao_create' %}">Adicionar Direção</a>
-        <a href="{% url 'direcao_list' %}">Lista de Direções</a>
-    </div>
-    <button class="dropdown-btn">Gerência 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'gerencia_create' %}">Adicionar Gerência</a>
-        <a href="{% url 'gerencia_list' %}">Lista de Gerências</a>
-    </div>
-    <button class="dropdown-btn">Coordenação 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'coordenacao_create' %}">Adicionar Coordenação</a>
-        <a href="{% url 'coordenacao_list' %}">Lista de Coordenações</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Gestor 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'centrodecustogestor_create' %}">Adicionar Centro de Custo Gestor</a>
-        <a href="{% url 'centrodecustogestor_list' %}">Lista de Centros de Custo Gestor</a>
-    </div>
-    <button class="dropdown-btn">Centro de Custo Solicitante 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'centrodeustosolicitante_create' %}">Adicionar Centro de Custo Solicitante</a>
-        <a href="{% url 'centrodeustosolicitante_list' %}">Lista de Centros de Custo Solicitante</a>
-    </div>
-    <button class="dropdown-btn">Colaboradores 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-        <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-    </div>
-</div>
-
 <div class="content">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="table-container">
-                    <h2 class="mb-4">Lista de Gerências</h2>
+                    <h2 class="mb-4">Lista de Centros de Custo Gestor</h2>
                     <div class="mb-4">
-                        <a href="{% url 'gerencia_create' %}" class="btn btn-primary">Adicionar Gerência</a>
+                        <a href="{% url 'centrodecustogestor_create' %}" class="btn btn-primary">Adicionar Centro de Custo Gestor</a>
                     </div>
                     <div class="mb-4">
                         <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
@@ -160,19 +110,17 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Direção</th>
                                 <th>Nome</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="gerenciaTable">
-                            {% for gerencia in gerencias %}
+                        <tbody id="centrodecustogestorTable">
+                            {% for centro in centros %}
                             <tr>
-                                <td>{{ gerencia.direcao.nome }}</td>
-                                <td>{{ gerencia.nome }}</td>
+                                <td>{{ centro.nome }}</td>
                                 <td>
-                                    <a href="{% url 'gerencia_update' gerencia.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                    <a href="{% url 'gerencia_delete' gerencia.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    <a href="{% url 'centrodecustogestor_update' centro.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="{% url 'centrodecustogestor_delete' centro.pk %}" class="btn btn-danger btn-sm">Deletar</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -190,9 +138,9 @@
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function() {
         var searchValue = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#gerenciaTable tr');
+        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
         rows.forEach(function(row) {
-            var nome = row.cells[1].textContent.toLowerCase();
+            var nome = row.cells[0].textContent.toLowerCase();
             if (nome.includes(searchValue)) {
                 row.style.display = '';
             } else {

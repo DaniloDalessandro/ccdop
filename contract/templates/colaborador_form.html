@@ -1,242 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Colaborador</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: #007bff;
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
-        .sidebar a, .dropdown-btn {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 18px;
-            color: white;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover, .dropdown-btn:hover {
-            background-color: #007bff;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-            padding-left: 20px;
-        }
-        .dropdown-btn {
-            border: none;
-            background: none;
-            outline: none;
-            cursor: pointer;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .form-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
-        }
-        .form-title {
-            color: #007bff;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .form-group label {
-            font-weight: bold;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        @media (max-width: 767.98px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            .sidebar a, .dropdown-btn {
-                text-align: center;
-            }
-            .content {
-                margin-left: 0;
-            }
-        }
-    </style>
-</head>
-<body>
+{% extends 'index.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">Dashboard</a>
-</nav>
+{% block 'conteudo' %}
+<div class="container-fluid">
+    <div class="page-inner">
+        <div class="row">
+            <!-- Gestão de Centros de Custo Gestor -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">Centros de Custo Gestor</h4>
+                        <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#formGestor" aria-expanded="false" aria-controls="formGestor">
+                            Novo
+                        </button>
+                    </div>
+                    <div class="collapse" id="formGestor">
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        <label for="id_nome_gestor">Nome do Centro Gestor</label>
+                                        <input type="text" class="form-control" id="id_nome_gestor" name="nome" placeholder="Nome do Centro de Custo Gestor">
+                                    </div>
+                                    <div class="form-group col-md-4 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-success w-100">Adicionar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="searchInputGestor" class="form-control mb-4" placeholder="Pesquisar por nome...">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centrodecustogestorTable">
+                                {% for gestor in gestores %}
+                                <tr>
+                                    <td>{{ gestor.nome }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'centrodecustogestor_update' gestor.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'centrodecustogestor_delete' gestor.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-<div class="sidebar">
-    <a href="{% url 'dashboard' %}">Dashboard</a>
-    <div>
-        <a href="{% url 'setor_manage' %}">Setores</a>       
-    </div>
-    <div>
-        <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
-    </div>
-    <button class="dropdown-btn">Colaboradores 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-        <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-    </div>
-    <button class="dropdown-btn">Auxilios 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
-        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
-    </div>  
-    <button class="dropdown-btn">Orçamentos 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-        <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
-        <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
-        <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
-    </div>  
-    <button class="dropdown-btn">Linhas Orçamentárias
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
-        <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
-    </div>
-    <button class="dropdown-btn">Contratos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
-        <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
-    </div>
-    <button class="dropdown-btn">Remanejamentos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
-        <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
-    </div>
-    <button class="dropdown-btn">Aditivos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
-        <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
-    </div>   
-</div>
-
-<div class="content">
-    <div class="form-container">
-        <h2 class="form-title">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Colaborador</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <label for="id_nome_completo">Nome Completo</label>
-                    {{ form.nome_completo }}
-                </div>
-                <div class="col-md-6">
-                    <label for="id_mat">Matrícula</label>
-                    {{ form.mat }}
+            <!-- Gestão de Centros de Custo Solicitante -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">Centros de Custo Solicitante</h4>
+                        <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#formSolicitante" aria-expanded="false" aria-controls="formSolicitante">
+                            Novo
+                        </button>
+                    </div>
+                    <div class="collapse" id="formSolicitante">
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="id_nome_solicitante">Nome do Centro Solicitante</label>
+                                        <input type="text" class="form-control" id="id_nome_solicitante" name="nome" placeholder="Nome do Centro Solicitante">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="id_centro_gestor">Centro Gestor</label>
+                                        <select class="form-control" id="id_centro_gestor" name="centro_gestor">
+                                            {% for gestor in gestores %}
+                                            <option value="{{ gestor.pk }}">{{ gestor.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-12 d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-success w-100">Adicionar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="searchInputSolicitante" class="form-control mb-4" placeholder="Pesquisar por nome...">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Centro Gestor</th>
+                                    <th>Centro Solicitante</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centrodeustosolicitanteTable">
+                                {% for solicitante in solicitantes %}
+                                <tr>
+                                    <td>{{ solicitante.centro_gestor.nome }}</td>
+                                    <td>{{ solicitante.nome }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'centrodeustosolicitante_update' solicitante.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'centrodeustosolicitante_delete' solicitante.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <label for="id_direcao">Direção</label>
-                    {{ form.direcao }}
-                </div>
-                <div class="col-md-6">
-                    <label for="id_gerencia">Gerência</label>
-                    {{ form.gerencia }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <label for="id_coordenacao">Coordenação</label>
-                    {{ form.coordenacao }}
-                </div>
-                <div class="col-md-6">
-                    <label for="id_ramal">Ramal</label>
-                    {{ form.ramal }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-12">
-                    <label for="id_email">Email</label>
-                    {{ form.email }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-                </div>
-                <div class="col-md-6">
-                    <a href="{% url 'colaborador_list' %}" class="btn btn-secondary btn-block">Cancelar</a>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    var dropdowns = document.getElementsByClassName("dropdown-btn");
-    for (var i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var dropdownContent = this.nextElementSibling;
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
+    document.getElementById('searchInputGestor').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[0].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
             } else {
-                dropdownContent.style.display = "block";
+                row.style.display = 'none';
             }
         });
-    }
+    });
+
+    document.getElementById('searchInputSolicitante').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#centrodeustosolicitanteTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[1].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
 </script>
-</body>
-</html>
+{% endblock %}

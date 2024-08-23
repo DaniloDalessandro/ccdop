@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container-fluid">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">Gestão de Centros de Custo</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Header with Title and Add Button -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Centros de Custo Gestor</h5>
+                            <form method="post" class="form-inline">
+                                {% csrf_token %}
+                                <div class="form-group mb-2">
+                                    <label for="id_nome" class="sr-only">Nome</label>
+                                    <input type="text" class="form-control mr-2" name="nome" id="id_nome" placeholder="Nome do Centro de Custo Gestor">
+                                </div>
+                                <button type="submit" class="btn btn-success mb-2">Adicionar</button>
+                            </form>
+                        </div>
+                        <!-- Search Input -->
+                        <input type="text" id="searchInputGestor" class="form-control mb-4" placeholder="Pesquisar por nome...">
+                        <!-- Table for Gestores -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centrodecustogestorTable">
+                                {% for gestor in gestores %}
+                                <tr>
+                                    <td>{{ gestor.nome }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'centrodecustogestor_update' gestor.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'centrodecustogestor_delete' gestor.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- Header with Title and Add Button -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Centros de Custo Solicitante</h5>
+                            <form method="post" class="form-inline">
+                                {% csrf_token %}
+                                <div class="form-group mb-2">
+                                    <label for="id_nome" class="sr-only">Nome</label>
+                                    <input type="text" class="form-control mr-2" name="nome" id="id_nome" placeholder="Nome do Centro Solicitante">
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label for="id_centro_gestor" class="sr-only">Centro Gestor</label>
+                                    <input type="text" class="form-control mr-2" name="centro_gestor" id="id_centro_gestor" placeholder="Centro Gestor">
+                                </div>
+                                <button type="submit" class="btn btn-success mb-2">Adicionar</button>
+                            </form>
+                        </div>
+                        <!-- Search Input -->
+                        <input type="text" id="searchInputSolicitante" class="form-control mb-4" placeholder="Pesquisar por nome...">
+                        <!-- Table for Solicitantes -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Centro Gestor</th>
+                                    <th>Centro Solicitante</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centrodeustosolicitanteTable">
+                                {% for solicitante in solicitantes %}
+                                <tr>
+                                    <td>{{ solicitante.centro_gestor.nome }}</td>
+                                    <td>{{ solicitante.nome }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'centrodeustosolicitante_update' solicitante.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'centrodeustosolicitante_delete' solicitante.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('searchInputGestor').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[0].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('searchInputSolicitante').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#centrodeustosolicitanteTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[1].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

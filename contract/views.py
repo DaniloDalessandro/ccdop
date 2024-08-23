@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
 from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo
 from .forms import (ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicitanteForm,DirecaoForm,
@@ -8,7 +7,9 @@ from django.urls import reverse_lazy
 from .models import Contrato, Prestacao
 from .forms import ContratoForm, PrestacaoForm
 from django.utils import timezone
-
+from django.views.generic import TemplateView
+from .forms import DirecaoForm, GerenciaForm, CoordenacaoForm
+from django.views.generic import TemplateView
 
 class ColaboradorListView(ListView):
     model = Colaborador
@@ -18,18 +19,18 @@ class ColaboradorListView(ListView):
 class ColaboradorCreateView(CreateView):
     model = Colaborador
     form_class = ColaboradorForm
-    template_name = 'colaborador_form.html'
+    template_name = 'colaborador/colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
 class ColaboradorUpdateView(UpdateView):
     model = Colaborador
     form_class = ColaboradorForm
-    template_name = 'colaborador_form.html'
+    template_name = 'colaborador/colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
 class ColaboradorDeleteView(DeleteView):
     model = Colaborador
-    template_name = 'colaborador_confirm_delete.html'
+    template_name = 'colaborador/colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
 
 class CentroDeCustoGestorListView(ListView):
@@ -78,69 +79,70 @@ class CentroDeCustoSolicitanteDeleteView(DeleteView):
 
 class DirecaoListView(ListView):
     model = Direcao
-    template_name = 'direcao_list.html'
+    template_name = 'setores/direcao_list.html'
     context_object_name = 'direcoes'
 
 class DirecaoCreateView(CreateView):
     model = Direcao
     form_class = DirecaoForm
-    template_name = 'direcao_form.html'
+    template_name = 'setores/direcao_form.html'
     success_url = reverse_lazy('setor_manage')
 
 class DirecaoUpdateView(UpdateView):
     model = Direcao
     form_class = DirecaoForm
-    template_name = 'direcao_form.html'
+    template_name = 'setores/direcao_form.html'
     success_url = reverse_lazy('setor_manage')
 
 class DirecaoDeleteView(DeleteView):
     model = Direcao
-    template_name = 'direcao_confirm_delete.html'
+    template_name = 'setores/direcao_confirm_delete.html'
     success_url = reverse_lazy('setor_manage')
 
 class GerenciaListView(ListView):
     model = Gerencia
-    template_name = 'gerencia_list.html'
+    template_name = 'setores/gerencia_list.html'
     context_object_name = 'gerencias'
+
 
 class GerenciaCreateView(CreateView):
     model = Gerencia
     form_class = GerenciaForm
-    template_name = 'gerencia_form.html'
-    success_url = reverse_lazy('gerencia_list')
+    template_name = 'setores/gerencia_form.html'
+    success_url = reverse_lazy('setor_manage')
 
 class GerenciaUpdateView(UpdateView):
     model = Gerencia
     form_class = GerenciaForm
     template_name = 'gerencia_form.html'
-    success_url = reverse_lazy('gerencia_list')
+    success_url = reverse_lazy('setor_manage')
 
 class GerenciaDeleteView(DeleteView):
     model = Gerencia
-    template_name = 'gerencia_confirm_delete.html'
-    success_url = reverse_lazy('gerencia_list')
+    template_name = 'setores/gerencia_confirm_delete.html'
+    success_url = reverse_lazy('setor_manage')
 
 class CoordenacaoListView(ListView):
     model = Coordenacao
-    template_name = 'coordenacao_list.html'
+    template_name = 'setores/coordenacao_list.html'
     context_object_name = 'coordenacoes'
 
 class CoordenacaoCreateView(CreateView):
     model = Coordenacao
     form_class = CoordenacaoForm
-    template_name = 'coordenacao_form.html'
-    success_url = reverse_lazy('coordenacao_list')
+    template_name = 'setores/coordenacao_form.html'
+    success_url = reverse_lazy('setor_manage')
 
 class CoordenacaoUpdateView(UpdateView):
     model = Coordenacao
     form_class = CoordenacaoForm
-    template_name = 'coordenacao_form.html'
-    success_url = reverse_lazy('coordenacao_list')
+    template_name = 'setores/coordenacao_form.html'
+    success_url = reverse_lazy('setor_manage')
 
 class CoordenacaoDeleteView(DeleteView):
     model = Coordenacao
-    template_name = 'coordenacao_confirm_delete.html'
-    success_url = reverse_lazy('coordenacao_list')
+    template_name = 'setores/coordenacao_confirm_delete.html'
+    success_url = reverse_lazy('setor_manage')
 
 class ColaboradorListView(ListView):
     model = Colaborador
@@ -375,9 +377,9 @@ class AditivoDeleteView(DeleteView):
     template_name = 'aditivo_confirm_delete.html'
     success_url = reverse_lazy('aditivo_list')
 
-from django.views.generic import TemplateView
+
 class CentroDeCustoManageView(TemplateView):
-    template_name = 'centrodecusto_manage.html'
+    template_name = 'centros/centrodecusto_manage.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -393,25 +395,20 @@ class CentroDeCustoManageView(TemplateView):
         
         if gestor_form.is_valid():
             gestor_form.save()
-            return redirect('centrodecusto_manage')
+            return redirect('centros/centrodecusto_manage')
         elif solicitante_form.is_valid():
             solicitante_form.save()
-            return redirect('centrodecusto_manage')
+            return redirect('centros/centrodecusto_manage')
         
         context = self.get_context_data()
         context['gestor_form'] = gestor_form
         context['solicitante_form'] = solicitante_form
         return self.render_to_response(context)
     
-# views.py
-
-from django.views.generic import TemplateView
-from django.shortcuts import redirect
-from .models import Direcao, Gerencia, Coordenacao
-from .forms import DirecaoForm, GerenciaForm, CoordenacaoForm
+#======================================================================================================================
 
 class SetorManageView(TemplateView):
-    template_name = 'setor_manage.html'
+    template_name = 'setores/setor_manage.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

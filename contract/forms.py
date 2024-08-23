@@ -1,6 +1,7 @@
 from django import forms
 from .models import (Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,
-                     OrcamentoExterno,Orcamento,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo)
+                     OrcamentoExterno,Orcamento,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo,Prestacao)
+
 # =========================================================================================================================
 
 class CentroDeCustoGestorForm(forms.ModelForm):
@@ -74,22 +75,24 @@ class CoordenacaoForm(forms.ModelForm):
 
 # =========================================================================================================================
 
+from django import forms
+from .models import Colaborador
+
+from django import forms
+from .models import Colaborador
+
 class ColaboradorForm(forms.ModelForm):
     class Meta:
         model = Colaborador
         fields = ['nome_completo', 'mat', 'direcao', 'gerencia', 'coordenacao', 'ramal', 'email']
-        widgets = {
-            'nome_completo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome Completo'}),
-            'mat': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Matrícula'}),
-            'direcao': forms.Select(attrs={'class': 'form-control'}),
-            'gerencia': forms.Select(attrs={'class': 'form-control'}),
-            'coordenacao': forms.Select(attrs={'class': 'form-control'}),
-            'ramal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ramal'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-        }
+
+    def __init__(self, *args, **kwargs):
+        super(ColaboradorForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
 
 # =========================================================================================================================
-from .models import Orcamento, OrcamentoExterno
 
 class OrcamentoForm(forms.ModelForm):
     valores_adicionados = forms.DecimalField(label='Valores Adicionados', max_digits=10, decimal_places=2, required=False, disabled=True)
@@ -114,11 +117,15 @@ class OrcamentoForm(forms.ModelForm):
 class OrcamentoExternoForm(forms.ModelForm):
     class Meta:
         model = OrcamentoExterno
-        fields = ['ano', 'valor', 'centro', 'classe', 'tipo_movimentacao']
+        fields = ['ano', 'centro', 'classe', 'valor', 'tipo_movimentacao']
+
+    def __init__(self, *args, **kwargs):
+        super(OrcamentoExternoForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
 
 # =========================================================================================================================
-
-from .models import LinhaOrcamentaria
 
 class LinhaOrcamentariaForm(forms.ModelForm):
     class Meta:
@@ -152,8 +159,7 @@ class LinhaOrcamentariaForm(forms.ModelForm):
             # Adicione outros widgets personalizados conforme necessário
         }
 
-from django import forms
-from .models import Contrato, Prestacao
+# =========================================================================================================================
 
 class ContratoForm(forms.ModelForm):
     class Meta:
@@ -175,6 +181,8 @@ class ContratoForm(forms.ModelForm):
             'valor_contrato': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
+# =========================================================================================================================
+
 class PrestacaoForm(forms.ModelForm):
     class Meta:
         model = Prestacao
@@ -185,6 +193,7 @@ class PrestacaoForm(forms.ModelForm):
             'status_pagamento': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
+# =========================================================================================================================
 
 class RemanejamentoForm(forms.ModelForm):
     class Meta:
@@ -202,6 +211,7 @@ class RemanejamentoForm(forms.ModelForm):
             'motivo': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
+# =========================================================================================================================
 
 class AditivoForm(forms.ModelForm):
     class Meta:
@@ -220,13 +230,14 @@ class AditivoForm(forms.ModelForm):
             'justificativa': 'Justificativa',
         }
 
-from django import forms
-from .models import CentroDeCustoGestor, CentroDeCustoSolicitante
+# =========================================================================================================================
 
 class CentroDeCustoGestorForm(forms.ModelForm):
     class Meta:
         model = CentroDeCustoGestor
         fields = '__all__'
+
+# =========================================================================================================================
 
 class CentroDeCustoSolicitanteForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,166 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Gestão de Setores</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Direção Section -->
+                        <div class="table-container">
+                            <h4 class="mb-4">Lista de Direções</h4>
+                            <form method="post" class="w-100 mb-3">
+                                {% csrf_token %}
+                                {{ direcao_form.as_p }}
+                                <button type="submit" name="direcao" class="btn btn-primary w-100 btn-sm">Adicionar Direção</button>
+                            </form>
+                            <input type="text" id="searchInputDirecao" class="form-control mb-3" placeholder="Pesquisar por nome...">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="direcaoTable">
+                                    {% for direcao in direcoes %}
+                                    <tr>
+                                        <td>{{ direcao.nome }}</td>
+                                        <td>
+                                            <a href="{% url 'direcao_update' direcao.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'direcao_delete' direcao.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Gerência Section -->
+                        <div class="table-container">
+                            <h2 class="mb-4">Lista de Gerências</h2>
+                            <form method="post" class="w-100 mb-3">
+                                {% csrf_token %}
+                                {{ gerencia_form.as_p }}
+                                <button type="submit" name="gerencia" class="btn btn-primary w-100 btn-sm">Adicionar Gerência</button>
+                            </form>
+                            <input type="text" id="searchInputGerencia" class="form-control mb-3" placeholder="Pesquisar por nome...">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Direção</th>
+                                        <th>Nome</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gerenciaTable">
+                                    {% for gerencia in gerencias %}
+                                    <tr>
+                                        <td>{{ gerencia.direcao.nome }}</td>
+                                        <td>{{ gerencia.nome }}</td>
+                                        <td>
+                                            <a href="{% url 'gerencia_update' gerencia.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'gerencia_delete' gerencia.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Coordenação Section -->
+                        <div class="table-container">
+                            <h2 class="mb-4">Lista de Coordenações</h2>
+                            <form method="post" class="w-100 mb-3">
+                                {% csrf_token %}
+                                {{ coordenacao_form.as_p }}
+                                <button type="submit" name="coordenacao" class="btn btn-primary w-100 btn-sm">Adicionar Coordenação</button>
+                            </form>
+                            <input type="text" id="searchInputCoordenacao" class="form-control mb-3" placeholder="Pesquisar por nome...">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Gerência</th>
+                                        <th>Nome</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coordenacaoTable">
+                                    {% for coordenacao in coordenacoes %}
+                                    <tr>
+                                        <td>{{ coordenacao.gerencia.nome }}</td>
+                                        <td>{{ coordenacao.nome }}</td>
+                                        <td>
+                                            <a href="{% url 'coordenacao_update' coordenacao.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'coordenacao_delete' coordenacao.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInputDirecao').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#direcaoTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[0].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('searchInputGerencia').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#gerenciaTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[1].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('searchInputCoordenacao').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#coordenacaoTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[1].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+{% endblock %}

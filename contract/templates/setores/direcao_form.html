@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">Cadastro de Direção</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    {{ form.as_p }}
+                                </div>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success btn-block">Salvar</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{% url 'direcao_list' %}" class="btn btn-danger btn-block">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>

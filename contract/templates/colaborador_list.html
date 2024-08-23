@@ -1,203 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Colaboradores</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: #007bff;
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 60px;
-        }
-        .sidebar a {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 18px;
-            color: #ffffff;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007bff;
-            text-decoration: none;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-        }
-        .table-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        .dropdown-btn {
-            font-size: 18px;
-            border: none;
-            background: none;
-            color: white;
-            padding: 10px 15px;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            outline: none;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-        }
-        .dropdown-container a {
-            padding-left: 30px;
-        }
-        .dropdown-btn:focus {
-            outline: none;
-        }
-    </style>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="{% url 'dashboard' %}">Dashboard</a>
-</nav>
-<div class="sidebar">
-    <a href="{% url 'dashboard' %}">Dashboard</a>
-    <div>
-        <a href="{% url 'setor_manage' %}">Setores</a>       
-    </div>
-    <div>
-        <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
-    </div>
-    <button class="dropdown-btn">Colaboradores 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-        <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-    </div>
-    <button class="dropdown-btn">Auxilios 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
-        <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
-    </div>  
-    <button class="dropdown-btn">Orçamentos 
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-        <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
-        <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
-        <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
-    </div>  
-    <button class="dropdown-btn">Linhas Orçamentárias
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
-        <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
-    </div>
-    <button class="dropdown-btn">Contratos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
-        <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
-    </div>
-    <button class="dropdown-btn">Remanejamentos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
-        <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
-    </div>
-    <button class="dropdown-btn">Aditivos
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-container">
-        <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
-        <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
-    </div>   
-</div>
+{% extends 'index.html' %}
 
-<div class="content">
-    <div class="table-container">
-        <h2 class="mb-4">Lista de Colaboradores</h2>
-        <div class="mb-4">
-            <a href="{% url 'colaborador_create' %}" class="btn btn-primary">Adicionar Colaborador</a>
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Lista de Colaboradores</h4>
+                        <a href="{% url 'colaborador_create' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Adicionar Colaborador
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome Completo</th>
+                                    <th>Matrícula</th>
+                                    <th>Direção</th>
+                                    <th>Gerência</th>
+                                    <th>Coordenação</th>
+                                    <th>Ramal</th>
+                                    <th>Email</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="colaboradorTable">
+                                {% for colaborador in colaboradores %}
+                                <tr>
+                                    <td>{{ colaborador.nome_completo }}</td>
+                                    <td>{{ colaborador.mat }}</td>
+                                    <td>{{ colaborador.direcao.nome }}</td>
+                                    <td>{{ colaborador.gerencia.nome }}</td>
+                                    <td>{{ colaborador.coordenacao.nome }}</td>
+                                    <td>{{ colaborador.ramal }}</td>
+                                    <td>{{ colaborador.email }}</td>
+                                    <td>
+                                        <a href="{% url 'colaborador_update' colaborador.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'colaborador_delete' colaborador.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-4">
-            <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
-        </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nome Completo</th>
-                    <th>Matrícula</th>
-                    <th>Direção</th>
-                    <th>Gerência</th>
-                    <th>Coordenação</th>
-                    <th>Ramal</th>
-                    <th>Email</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="colaboradorTable">
-                {% for colaborador in colaboradores %}
-                <tr>
-                    <td>{{ colaborador.nome_completo }}</td>
-                    <td>{{ colaborador.mat }}</td>
-                    <td>{{ colaborador.direcao.nome }}</td>
-                    <td>{{ colaborador.gerencia.nome }}</td>
-                    <td>{{ colaborador.coordenacao.nome }}</td>
-                    <td>{{ colaborador.ramal }}</td>
-                    <td>{{ colaborador.email }}</td>
-                    <td>
-                        <a href="{% url 'colaborador_update' colaborador.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="{% url 'colaborador_delete' colaborador.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
 </div>
 
@@ -216,9 +69,7 @@
     });
 
     var dropdowns = document.getElementsByClassName("dropdown-btn");
-    var i;
-
-    for (i = 0; i < dropdowns.length; i++) {
+    for (var i = 0; i < dropdowns.length; i++) {
         dropdowns[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var dropdownContent = this.nextElementSibling;
@@ -230,5 +81,4 @@
         });
     }
 </script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card confirm-container">
+        <div class="card-body text-center">
+            <h2 class="card-title">Confirmar Deleção</h2>
+            <p class="card-text">Você tem certeza que deseja deletar "{{ object.nome }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger">Deletar</button>
+                    <a href="{% url 'direcao_list' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
