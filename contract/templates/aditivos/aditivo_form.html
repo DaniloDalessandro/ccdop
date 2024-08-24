@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container-fluid">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">{% if aditivo.pk %}Editar{% else %}Adicionar{% endif %} Aditivo</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">{% if aditivo.pk %}Salvar{% else %}Adicionar{% endif %}</button>
+                                <a href="{% url 'aditivo_list' %}" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

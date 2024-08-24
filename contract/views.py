@@ -240,13 +240,13 @@ class OrcamentoExternoDeleteView(DeleteView):
     
 class LinhaOrcamentariaListView(ListView):
     model = LinhaOrcamentaria
-    template_name = 'linhaorcamentaria_list.html'
+    template_name = 'linhas/linhaorcamentaria_list.html'
     context_object_name = 'linhaorcamentarias'
     paginate_by = 10
 
 class LinhaOrcamentariaDetailView(DetailView):
     model = LinhaOrcamentaria
-    template_name = 'linhaorcamentaria_detail.html'
+    template_name = 'linhas/linhaorcamentaria_detail.html'
     context_object_name = 'linhaorcamentaria'
 
     def get_context_data(self, **kwargs):
@@ -261,19 +261,21 @@ class LinhaOrcamentariaDetailView(DetailView):
 class LinhaOrcamentariaCreateView(CreateView):
     model = LinhaOrcamentaria
     form_class = LinhaOrcamentariaForm
-    template_name = 'linhaorcamentaria_form.html'
+    template_name = 'linhas/linhaorcamentaria_form.html'
     success_url = reverse_lazy('linhaorcamentaria_list')
 
 class LinhaOrcamentariaUpdateView(UpdateView):
     model = LinhaOrcamentaria
     form_class = LinhaOrcamentariaForm
-    template_name = 'linhaorcamentaria_form.html'
+    template_name = 'linhas/linhaorcamentaria_form.html'
     success_url = reverse_lazy('linhaorcamentaria_list')
 
 class LinhaOrcamentariaDeleteView(DeleteView):
     model = LinhaOrcamentaria
-    template_name = 'linhaorcamentaria_confirm_delete.html'
+    template_name = 'linhas/linhaorcamentaria_confirm_delete.html'
     success_url = reverse_lazy('linhaorcamentaria_list')
+
+#======================================================================================================================
 
 class ContratoListView(ListView):
     model = Contrato
@@ -313,20 +315,22 @@ def marcar_prestacao_como_paga(request, pk):
     prestacao.save()
     return redirect('contratos/contrato-detail', pk=prestacao.contrato.pk)
 
+#======================================================================================================================
+
 class RemanejamentoListView(ListView):
     model = Remanejamento
-    template_name = 'remanejamento_list.html'
+    template_name = 'remanejamentos/remanejamento_list.html'
     context_object_name = 'remanejamentos'
 
 class RemanejamentoDetailView(DetailView):
     model = Remanejamento
-    template_name = 'remanejamento_detail.html'
+    template_name = 'remanejamentos/remanejamento_detail.html'
     context_object_name = 'remanejamento'
 
 class RemanejamentoCreateView(CreateView):
     model = Remanejamento
     form_class = RemanejamentoForm
-    template_name = 'remanejamento_form.html'
+    template_name = 'remanejamentos/remanejamento_form.html'
     success_url = reverse_lazy('remanejamento_list')
 
     def form_valid(self, form):
@@ -337,7 +341,7 @@ class RemanejamentoCreateView(CreateView):
 class RemanejamentoUpdateView(UpdateView):
     model = Remanejamento
     form_class = RemanejamentoForm
-    template_name = 'remanejamento_form.html'
+    template_name = 'remanejamentos/remanejamento_form.html'
     success_url = reverse_lazy('remanejamento_list')
 
     def form_valid(self, form):
@@ -347,36 +351,38 @@ class RemanejamentoUpdateView(UpdateView):
 
 class RemanejamentoDeleteView(DeleteView):
     model = Remanejamento
-    template_name = 'remanejamento_confirm_delete.html'
+    template_name = 'remanejamentos/remanejamento_confirm_delete.html'
     success_url = reverse_lazy('remanejamento_list')
+
+#======================================================================================================================
 
 class AditivoListView(ListView):
     model = Aditivo
-    template_name = 'aditivo_list.html'
+    template_name = 'aditivos/aditivo_list.html'
     context_object_name = 'aditivos'
 
 class AditivoDetailView(DetailView):
     model = Aditivo
-    template_name = 'aditivo_detail.html'
+    template_name = 'aditivos/aditivo_detail.html'
     context_object_name = 'aditivo'
 
 class AditivoCreateView(CreateView):
     model = Aditivo
     form_class = AditivoForm
-    template_name = 'aditivo_form.html'
+    template_name = 'aditivos/aditivo_form.html'
     success_url = reverse_lazy('aditivo_list')
 
 class AditivoUpdateView(UpdateView):
     model = Aditivo
     form_class = AditivoForm
-    template_name = 'aditivo_form.html'
+    template_name = 'aditivos/aditivo_form.html'
     success_url = reverse_lazy('aditivo_list')
 
-#======================================================================================================================
+
 
 class AditivoDeleteView(DeleteView):
     model = Aditivo
-    template_name = 'aditivo_confirm_delete.html'
+    template_name = 'aditivos/aditivo_confirm_delete.html'
     success_url = reverse_lazy('aditivo_list')
 
 #======================================================================================================================
