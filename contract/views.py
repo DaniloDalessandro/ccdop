@@ -372,11 +372,14 @@ class AditivoUpdateView(UpdateView):
     template_name = 'aditivo_form.html'
     success_url = reverse_lazy('aditivo_list')
 
+#======================================================================================================================
+
 class AditivoDeleteView(DeleteView):
     model = Aditivo
     template_name = 'aditivo_confirm_delete.html'
     success_url = reverse_lazy('aditivo_list')
 
+#======================================================================================================================
 
 class CentroDeCustoManageView(TemplateView):
     template_name = 'centros/centrodecusto_manage.html'

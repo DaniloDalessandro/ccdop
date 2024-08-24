@@ -1,171 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linhas Orçamentárias</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { display: flex; min-height: 100vh; background-color: #f8f9fa; }
-        .sidebar { width: 250px; background-color: #343a40; height: 100vh; position: fixed; padding-top: 20px; }
-        .sidebar a, .dropdown-btn { padding: 10px 15px; text-align: left; font-size: 18px; color: white; display: block; text-decoration: none; }
-        .sidebar a:hover, .dropdown-btn:hover { background-color: #007bff; }
-        .dropdown-container { display: none; background-color: #414a4c; padding-left: 20px; }
-        .dropdown-btn { border: none; background: none; outline: none; cursor: pointer; }
-        .content { margin-left: 250px; padding: 20px; flex: 1; }
-        .table-container { background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <a href="{% url 'dashboard' %}">Dashboard</a>
-        <div>
-            <a href="{% url 'setor_manage' %}">Setores</a>       
-        </div>
-        <div>
-            <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
-        </div>
-        <button class="dropdown-btn">Colaboradores 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-        </div>
-        <button class="dropdown-btn">Auxilios 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
-            <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
-        </div>  
-        <button class="dropdown-btn">Orçamentos 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-            <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
-            <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
-            <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
-        </div>  
-        <button class="dropdown-btn">Linhas Orçamentárias
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
-            <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
-        </div>
-        <button class="dropdown-btn">Contratos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
-            <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
-        </div>
-        <button class="dropdown-btn">Remanejamentos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
-            <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
-        </div>
-        <button class="dropdown-btn">Aditivos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
-            <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
-        </div>   
-    </div>
+{% extends 'index.html' %}
 
-<div class="content">
-    <h1 class="text-center">Linhas Orçamentárias</h1>
-    <div class="d-flex justify-content-between mb-4">
-        <a href="{% url 'linhaorcamentaria_create' %}" class="btn btn-success">Adicionar Linha Orçamentária</a>
-        <form class="form-inline" method="get" action="{% url 'linhaorcamentaria_list' %}">
-            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
-    </div>
-    <div class="table-container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Classe</th>
-                    <th>Custo/Despesa</th>
-                    <th>Centro Custo Gestor</th>
-                    <th>Centro Custo Solicitante</th>
-                    <th>Descrição Resumida</th>
-                    <th>Objeto</th>
-                    <th>Valor Orcado</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for linha in linhaorcamentarias %}
-                <tr>
-                    <td>{{ linha.get_classe_display }}</td>
-                    <td>{{ linha.get_custo_despesa_display }}</td>
-                    <td>{{ linha.centro_custo_gestor }}</td>
-                    <td>{{ linha.centro_custo_solicitante }}</td>
-                    <td>{{ linha.descricao_resumida }}</td>
-                    <td>{{ linha.objeto }}</td>
-                    <td>{{ linha.valor_orcado }}</td>
-                    <td>
-                        <a href="{% url 'linhaorcamentaria_detail' linha.pk %}" class="btn btn-info btn-sm">Detalhes</a>
-                        <a href="{% url 'linhaorcamentaria_update' linha.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="{% url 'linhaorcamentaria_delete' linha.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">Nenhuma linha orçamentária encontrada.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-center">
-            {% if is_paginated %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Primeira">
-                                    <span aria-hidden="true">&laquo;&laquo;</span>
-                                    <span class="sr-only">Primeira</span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Anterior">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Anterior</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% for num in paginator.page_range %}
-                            {% if num == page_obj.number %}
-                                <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
-                            {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a></li>
+{% block 'conteudo' %}
+<div class="container-fluid">
+    <div class="page-inner">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">Linhas Orçamentárias</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Gerenciar Linhas Orçamentárias</h5>
+                            <a href="{% url 'linhaorcamentaria_create' %}" class="btn btn-success">Adicionar Linha Orçamentária</a>
+                        </div>
+                        <form class="form-inline mb-4" method="get" action="{% url 'linhaorcamentaria_list' %}">
+                            <div class="form-group w-100">
+                                <input class="form-control flex-grow-1 mr-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Classe</th>
+                                        <th>Custo/Despesa</th>
+                                        <th>Centro Custo Gestor</th>
+                                        <th>Centro Custo Solicitante</th>
+                                        <th>Descrição Resumida</th>
+                                        <th>Objeto</th>
+                                        <th>Valor Orçado</th>
+                                        <th class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for linha in linhaorcamentarias %}
+                                    <tr>
+                                        <td>{{ linha.get_classe_display }}</td>
+                                        <td>{{ linha.get_custo_despesa_display }}</td>
+                                        <td>{{ linha.centro_custo_gestor }}</td>
+                                        <td>{{ linha.centro_custo_solicitante }}</td>
+                                        <td>{{ linha.descricao_resumida }}</td>
+                                        <td>{{ linha.objeto }}</td>
+                                        <td>{{ linha.valor_orcado }}</td>
+                                        <td class="text-center">
+                                            <a href="{% url 'linhaorcamentaria_detail' linha.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                                            <a href="{% url 'linhaorcamentaria_update' linha.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'linhaorcamentaria_delete' linha.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center">Nenhuma linha orçamentária encontrada.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            {% if is_paginated %}
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Primeira">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                            <span class="sr-only">Primeira</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Anterior">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Anterior</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    {% for num in paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                    <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Próxima">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Próxima</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Última">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                            <span class="sr-only">Última</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
                             {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Próxima">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Próxima</span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Última">
-                                    <span aria-hidden="true">&raquo;&raquo;</span>
-                                    <span class="sr-only">Última</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -189,3 +127,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+{% endblock %}

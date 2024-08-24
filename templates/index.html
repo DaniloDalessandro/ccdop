@@ -173,15 +173,10 @@
                 <div class="collapse" id="sidebarLayouts">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="sidebar-style-2.html">
-                        <span class="sub-item">Sidebar Style 2</span>
+                      <a href="{% url 'centrodecusto_manage' %}">
+                        <span class="sub-item">Listar Centros</span>
                       </a>
-                    </li>
-                    <li>
-                      <a href="icon-menu.html">
-                        <span class="sub-item">Icon Menu</span>
-                      </a>
-                    </li>
+                    </li>                    
                   </ul>
                 </div>
               </li>
@@ -215,13 +210,13 @@
                 <div class="collapse" id="tables">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="tables/tables.html">
-                        <span class="sub-item">Basic Table</span>
+                      <a href="{% url 'linhaorcamentaria_list' %}">
+                        <span class="sub-item">Listar Linhas Orçamentarias</span>
                       </a>
                     </li>
                     <li>
-                      <a href="tables/datatables.html">
-                        <span class="sub-item">Datatables</span>
+                      <a href="{% url 'linhaorcamentaria_create' %}">
+                        <span class="sub-item">Adicionar Linhas Orçamentarias</span>
                       </a>
                     </li>
                   </ul>
@@ -267,13 +262,13 @@
                 <div class="collapse" id="charts">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="charts/charts.html">
-                        <span class="sub-item">Chart Js</span>
+                      <a href="{% url 'remanejamento_list' %}">
+                        <span class="sub-item">Listar Remanejamentos</span>
                       </a>
                     </li>
                     <li>
-                      <a href="charts/sparkline.html">
-                        <span class="sub-item">Sparkline</span>
+                      <a href="{% url 'remanejamento_create' %}">
+                        <span class="sub-item">Adicionar Remanejamento</span>
                       </a>
                     </li>
                   </ul>
