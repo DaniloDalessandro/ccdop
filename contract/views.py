@@ -11,6 +11,8 @@ from django.views.generic import TemplateView
 from .forms import DirecaoForm, GerenciaForm, CoordenacaoForm
 from django.views.generic import TemplateView
 
+#======================================================================================================================
+
 class ColaboradorListView(ListView):
     model = Colaborador
     template_name = 'colaborador_list.html'
@@ -33,49 +35,55 @@ class ColaboradorDeleteView(DeleteView):
     template_name = 'colaborador/colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
 
+#======================================================================================================================
+
 class CentroDeCustoGestorListView(ListView):
     model = CentroDeCustoGestor
-    template_name = 'centrodecustogestor_list.html'
+    template_name = 'centros/centrodecustogestor_list.html'
     context_object_name = 'centros'
 
 class CentroDeCustoGestorCreateView(CreateView):
     model = CentroDeCustoGestor
     form_class = CentroDeCustoGestorForm
-    template_name = 'centrodecustogestor_form.html'
-    success_url = reverse_lazy('centrodecustogestor_list')
+    template_name = 'centros/centrodecustogestor_form.html'
+    success_url = reverse_lazy('centrodecustogestor_form')
 
 class CentroDeCustoGestorUpdateView(UpdateView):
     model = CentroDeCustoGestor
     form_class = CentroDeCustoGestorForm
-    template_name = 'centrodecustogestor_form.html'
+    template_name = 'centros/centrodecustogestor_form.html'
     success_url = reverse_lazy('centrodecustogestor_list')
 
 class CentroDeCustoGestorDeleteView(DeleteView):
     model = CentroDeCustoGestor
-    template_name = 'centrodecustogestor_confirm_delete.html'
+    template_name = 'centros/centrodecustogestor_confirm_delete.html'
     success_url = reverse_lazy('centrodecustogestor_list')
+
+#======================================================================================================================
 
 class CentroDeCustoSolicitanteListView(ListView):
     model = CentroDeCustoSolicitante
-    template_name = 'centrodeustosolicitante_list.html'
+    template_name = 'centros/centrodeustosolicitante_list.html'
     context_object_name = 'solicitantes'
 
 class CentroDeCustoSolicitanteCreateView(CreateView):
     model = CentroDeCustoSolicitante
     form_class = CentroDeCustoSolicitanteForm
-    template_name = 'centrodeustosolicitante_form.html'
+    template_name = 'centros/centrodeustosolicitante_form.html'
     success_url = reverse_lazy('centrodeustosolicitante_list')
 
 class CentroDeCustoSolicitanteUpdateView(UpdateView):
     model = CentroDeCustoSolicitante
     form_class = CentroDeCustoSolicitanteForm
-    template_name = 'centrodeustosolicitante_form.html'
+    template_name = 'centros/centrodeustosolicitante_form.html'
     success_url = reverse_lazy('centrodeustosolicitante_list')
 
 class CentroDeCustoSolicitanteDeleteView(DeleteView):
     model = CentroDeCustoSolicitante
-    template_name = 'centrodeustosolicitante_confirm_delete.html'
+    template_name = 'centros/centrodeustosolicitante_confirm_delete.html'
     success_url = reverse_lazy('centrodeustosolicitante_list')
+
+#======================================================================================================================
 
 class DirecaoListView(ListView):
     model = Direcao
@@ -98,6 +106,8 @@ class DirecaoDeleteView(DeleteView):
     model = Direcao
     template_name = 'setores/direcao_confirm_delete.html'
     success_url = reverse_lazy('setor_manage')
+
+#======================================================================================================================
 
 class GerenciaListView(ListView):
     model = Gerencia
@@ -122,6 +132,8 @@ class GerenciaDeleteView(DeleteView):
     template_name = 'setores/gerencia_confirm_delete.html'
     success_url = reverse_lazy('setor_manage')
 
+#======================================================================================================================
+
 class CoordenacaoListView(ListView):
     model = Coordenacao
     template_name = 'setores/coordenacao_list.html'
@@ -144,6 +156,8 @@ class CoordenacaoDeleteView(DeleteView):
     template_name = 'setores/coordenacao_confirm_delete.html'
     success_url = reverse_lazy('setor_manage')
 
+#======================================================================================================================
+
 class ColaboradorListView(ListView):
     model = Colaborador
     template_name = 'colaborador_list.html'
@@ -165,6 +179,8 @@ class ColaboradorDeleteView(DeleteView):
     model = Colaborador
     template_name = 'orcamentos/colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
+
+#======================================================================================================================
 
 class OrcamentoListView(ListView):
     model = Orcamento
@@ -238,6 +254,9 @@ class OrcamentoExternoDeleteView(DeleteView):
         self.object.delete()
         return redirect(self.success_url)
     
+
+#======================================================================================================================
+
 class LinhaOrcamentariaListView(ListView):
     model = LinhaOrcamentaria
     template_name = 'linhas/linhaorcamentaria_list.html'
@@ -385,35 +404,6 @@ class AditivoDeleteView(DeleteView):
     template_name = 'aditivos/aditivo_confirm_delete.html'
     success_url = reverse_lazy('aditivo_list')
 
-#======================================================================================================================
-
-class CentroDeCustoManageView(TemplateView):
-    template_name = 'centros/centrodecusto_manage.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['gestor_form'] = CentroDeCustoGestorForm(prefix='gestor')
-        context['solicitante_form'] = CentroDeCustoSolicitanteForm(prefix='solicitante')
-        context['gestores'] = CentroDeCustoGestor.objects.all()
-        context['solicitantes'] = CentroDeCustoSolicitante.objects.all()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        gestor_form = CentroDeCustoGestorForm(request.POST, prefix='gestor')
-        solicitante_form = CentroDeCustoSolicitanteForm(request.POST, prefix='solicitante')
-        
-        if gestor_form.is_valid():
-            gestor_form.save()
-            return redirect('centros/centrodecusto_manage')
-        elif solicitante_form.is_valid():
-            solicitante_form.save()
-            return redirect('centros/centrodecusto_manage')
-        
-        context = self.get_context_data()
-        context['gestor_form'] = gestor_form
-        context['solicitante_form'] = solicitante_form
-        return self.render_to_response(context)
-    
 #======================================================================================================================
 
 class SetorManageView(TemplateView):

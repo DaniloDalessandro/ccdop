@@ -229,11 +229,19 @@ class AditivoForm(forms.ModelForm):
 class CentroDeCustoGestorForm(forms.ModelForm):
     class Meta:
         model = CentroDeCustoGestor
-        fields = '__all__'
+        fields = ['nome']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome do Centro de Custo Gestor'}),
+        }
+
 
 # =========================================================================================================================
 
 class CentroDeCustoSolicitanteForm(forms.ModelForm):
     class Meta:
         model = CentroDeCustoSolicitante
-        fields = '__all__'
+        fields = ['centro_gestor', 'nome']
+        widgets = {
+            'centro_gestor': forms.Select(attrs={'class': 'form-control'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome do Centro de Custo Solicitante'}),
+        }

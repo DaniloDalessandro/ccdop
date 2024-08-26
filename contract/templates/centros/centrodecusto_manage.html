@@ -10,15 +10,12 @@
                         <h4 class="card-title mb-0">Gestão de Centros de Custo</h4>
                     </div>
                     <div class="card-body">
-                        <!-- Centros de Custo Gestor -->
+                        <!-- Formulário para Adicionar Centro de Custo Gestor -->
                         <div class="mb-4">
-                            <h5 class="mb-3">Centros de Custo Gestor</h5>
-                            <form method="post" class="form-inline mb-3">
+                            <h5 class="mb-3">Adicionar Centro de Custo Gestor</h5>
+                            <form method="post" class="mb-3">
                                 {% csrf_token %}
-                                <div class="form-group mr-2 flex-grow-1">
-                                    <label for="id_nome" class="sr-only">Nome</label>
-                                    <input type="text" class="form-control w-100" name="nome" id="id_nome" placeholder="Nome do Centro de Custo Gestor">
-                                </div>
+                                {{ gestor_form.as_p }}
                                 <button type="submit" class="btn btn-success">Adicionar</button>
                             </form>
                             <input type="text" id="searchInputGestor" class="form-control mb-3" placeholder="Pesquisar por nome...">
@@ -43,24 +40,12 @@
                             </table>
                         </div>
 
-                        <!-- Centros de Custo Solicitante -->
+                        <!-- Formulário para Adicionar Centro de Custo Solicitante -->
                         <div class="mb-4">
-                            <h5 class="mb-3">Centros de Custo Solicitante</h5>
-                            <form method="post" class="form-inline mb-3">
+                            <h5 class="mb-3">Adicionar Centro de Custo Solicitante</h5>
+                            <form method="post" class="mb-3">
                                 {% csrf_token %}
-                                <div class="form-group mr-2 flex-grow-1">
-                                    <label for="id_nome_solicitante" class="sr-only">Nome</label>
-                                    <input type="text" class="form-control w-100" name="nome" id="id_nome_solicitante" placeholder="Nome do Centro Solicitante">
-                                </div>
-                                <div class="form-group mr-2 flex-grow-1">
-                                    <label for="id_centro_gestor" class="sr-only">Centro Gestor</label>
-                                    <select class="form-control w-100" name="centro_gestor" id="id_centro_gestor">
-                                        <option value="" disabled selected>Centro Gestor</option>
-                                        {% for gestor in gestores %}
-                                        <option value="{{ gestor.pk }}">{{ gestor.nome }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                                {{ solicitante_form.as_p }}
                                 <button type="submit" class="btn btn-success">Adicionar</button>
                             </form>
                             <input type="text" id="searchInputSolicitante" class="form-control mb-3" placeholder="Pesquisar por nome...">
@@ -93,9 +78,6 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     document.getElementById('searchInputGestor').addEventListener('keyup', function() {
         var searchValue = this.value.toLowerCase();

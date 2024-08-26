@@ -12,6 +12,7 @@ from .views import (
     OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
     OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView,ContratoListView,
 )
+
 from .views import (
     LinhaOrcamentariaListView,
     LinhaOrcamentariaDetailView,
@@ -37,7 +38,7 @@ from .views import (
 )
 
 from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
-from .views import CentroDeCustoManageView,SetorManageView
+from .views import SetorManageView
 from .views import ContratoCreateView, marcar_prestacao_como_paga
 
 urlpatterns = [
@@ -107,9 +108,6 @@ urlpatterns = [
     path('aditivos/<int:pk>/editar/', AditivoUpdateView.as_view(), name='aditivo_update'),
     path('aditivos/<int:pk>/excluir/', AditivoDeleteView.as_view(), name='aditivo_delete'),
 
-    path('centros_de_custo/manage/', CentroDeCustoManageView.as_view(), name='centrodecusto_manage'),
-
-    path('centros/manage/', CentroDeCustoManageView.as_view(), name='centrodecusto_manage'),
     path('setores/manage/', SetorManageView.as_view(), name='setor_manage'),
 
     path('novo-contrato/', ContratoCreateView.as_view(), name='novo-contrato'),
