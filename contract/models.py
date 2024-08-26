@@ -77,7 +77,7 @@ class Colaborador(models.Model):
     email = models.EmailField(max_length=50,null=True, blank=True)
 
     def __str__(self):
-        return self.nome_completo
+        return self.nome_completo or "Colaborador sem Nome"
     
     class Meta:
         verbose_name = 'Colaborador'
@@ -424,7 +424,7 @@ class Contrato(models.Model):
                 )
 
     def __str__(self):
-        return self.numero_protocolo
+        return self.descricao or "Linha Orçamentária sem Descrição"
 
 
 class Prestacao(models.Model):

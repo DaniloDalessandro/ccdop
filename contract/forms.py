@@ -75,12 +75,6 @@ class CoordenacaoForm(forms.ModelForm):
 
 # =========================================================================================================================
 
-from django import forms
-from .models import Colaborador
-
-from django import forms
-from .models import Colaborador
-
 class ColaboradorForm(forms.ModelForm):
     class Meta:
         model = Colaborador

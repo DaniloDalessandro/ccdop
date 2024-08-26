@@ -10,85 +10,82 @@
                         <h4 class="card-title mb-0">Gestão de Centros de Custo</h4>
                     </div>
                     <div class="card-body">
-                        <!-- Header with Title and Add Button -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0">Centros de Custo Gestor</h5>
-                            <form method="post" class="form-inline">
+                        <!-- Centros de Custo Gestor -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Centros de Custo Gestor</h5>
+                            <form method="post" class="form-inline mb-3">
                                 {% csrf_token %}
-                                <div class="form-group mb-2">
+                                <div class="form-group mr-2 flex-grow-1">
                                     <label for="id_nome" class="sr-only">Nome</label>
-                                    <input type="text" class="form-control mr-2" name="nome" id="id_nome" placeholder="Nome do Centro de Custo Gestor">
+                                    <input type="text" class="form-control w-100" name="nome" id="id_nome" placeholder="Nome do Centro de Custo Gestor">
                                 </div>
-                                <button type="submit" class="btn btn-success mb-2">Adicionar</button>
+                                <button type="submit" class="btn btn-success">Adicionar</button>
                             </form>
+                            <input type="text" id="searchInputGestor" class="form-control mb-3" placeholder="Pesquisar por nome...">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="centrodecustogestorTable">
+                                    {% for gestor in gestores %}
+                                    <tr>
+                                        <td>{{ gestor.nome }}</td>
+                                        <td class="text-center">
+                                            <a href="{% url 'centrodecustogestor_update' gestor.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'centrodecustogestor_delete' gestor.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- Search Input -->
-                        <input type="text" id="searchInputGestor" class="form-control mb-4" placeholder="Pesquisar por nome...">
-                        <!-- Table for Gestores -->
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="centrodecustogestorTable">
-                                {% for gestor in gestores %}
-                                <tr>
-                                    <td>{{ gestor.nome }}</td>
-                                    <td class="text-center">
-                                        <a href="{% url 'centrodecustogestor_update' gestor.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{% url 'centrodecustogestor_delete' gestor.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <!-- Header with Title and Add Button -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0">Centros de Custo Solicitante</h5>
-                            <form method="post" class="form-inline">
+                        <!-- Centros de Custo Solicitante -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Centros de Custo Solicitante</h5>
+                            <form method="post" class="form-inline mb-3">
                                 {% csrf_token %}
-                                <div class="form-group mb-2">
-                                    <label for="id_nome" class="sr-only">Nome</label>
-                                    <input type="text" class="form-control mr-2" name="nome" id="id_nome" placeholder="Nome do Centro Solicitante">
+                                <div class="form-group mr-2 flex-grow-1">
+                                    <label for="id_nome_solicitante" class="sr-only">Nome</label>
+                                    <input type="text" class="form-control w-100" name="nome" id="id_nome_solicitante" placeholder="Nome do Centro Solicitante">
                                 </div>
-                                <div class="form-group mb-2">
+                                <div class="form-group mr-2 flex-grow-1">
                                     <label for="id_centro_gestor" class="sr-only">Centro Gestor</label>
-                                    <input type="text" class="form-control mr-2" name="centro_gestor" id="id_centro_gestor" placeholder="Centro Gestor">
+                                    <select class="form-control w-100" name="centro_gestor" id="id_centro_gestor">
+                                        <option value="" disabled selected>Centro Gestor</option>
+                                        {% for gestor in gestores %}
+                                        <option value="{{ gestor.pk }}">{{ gestor.nome }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                                <button type="submit" class="btn btn-success mb-2">Adicionar</button>
+                                <button type="submit" class="btn btn-success">Adicionar</button>
                             </form>
+                            <input type="text" id="searchInputSolicitante" class="form-control mb-3" placeholder="Pesquisar por nome...">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Centro Gestor</th>
+                                        <th>Centro Solicitante</th>
+                                        <th class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="centrodeustosolicitanteTable">
+                                    {% for solicitante in solicitantes %}
+                                    <tr>
+                                        <td>{{ solicitante.centro_gestor.nome }}</td>
+                                        <td>{{ solicitante.nome }}</td>
+                                        <td class="text-center">
+                                            <a href="{% url 'centrodeustosolicitante_update' solicitante.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="{% url 'centrodeustosolicitante_delete' solicitante.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- Search Input -->
-                        <input type="text" id="searchInputSolicitante" class="form-control mb-4" placeholder="Pesquisar por nome...">
-                        <!-- Table for Solicitantes -->
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Centro Gestor</th>
-                                    <th>Centro Solicitante</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="centrodeustosolicitanteTable">
-                                {% for solicitante in solicitantes %}
-                                <tr>
-                                    <td>{{ solicitante.centro_gestor.nome }}</td>
-                                    <td>{{ solicitante.nome }}</td>
-                                    <td class="text-center">
-                                        <a href="{% url 'centrodeustosolicitante_update' solicitante.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{% url 'centrodeustosolicitante_delete' solicitante.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

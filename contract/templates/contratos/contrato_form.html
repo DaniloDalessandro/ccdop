@@ -3,133 +3,54 @@
 {% block 'conteudo' %}
 <div class="container">
     <div class="page-inner">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="card-title text-center">Linhas Orçamentárias</h4>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Contrato</h4>
                     </div>
                     <div class="card-body">
-                        <!-- Header with Title and Add Button -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0">Gerenciar Linhas Orçamentárias</h5>
-                            <a href="{% url 'linhaorcamentaria_create' %}" class="btn btn-success">Adicionar Linha Orçamentária</a>
-                        </div>
-
-                        <!-- Search Form -->
-                        <form class="form-inline mb-4" method="get" action="{% url 'linhaorcamentaria_list' %}">
-                            <div class="form-group w-100">
-                                <input class="form-control flex-grow-1 mr-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
-                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_linha_orcamentaria">Linha Orçamentária</label>
+                                        {{ form.linha_orcamentaria }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_data_assinatura">Data de Assinatura</label>
+                                        {{ form.data_assinatura }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_data_vencimento">Data de Vencimento</label>
+                                        {{ form.data_vencimento }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_fiscal_principal">Fiscal Principal</label>
+                                        {{ form.fiscal_principal }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_fiscal_substituto">Fiscal Substituto</label>
+                                        {{ form.fiscal_substituto }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_valor_contrato">Valor do Contrato</label>
+                                        {{ form.valor_contrato }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-action mt-3">
+                                <button type="submit" class="btn btn-success w-100">{% if form.instance.pk %}Salvar{% else %}Adicionar{% endif %}</button>
+                                <a href="{% url 'contrato-list' %}" class="btn btn-danger w-100 mt-2">Cancelar</a>
                             </div>
                         </form>
-
-                        <!-- Table for Budget Lines -->
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Classe</th>
-                                        <th>Custo/Despesa</th>
-                                        <th>Centro Custo Gestor</th>
-                                        <th>Centro Custo Solicitante</th>
-                                        <th>Descrição Resumida</th>
-                                        <th>Objeto</th>
-                                        <th>Valor Orçado</th>
-                                        <th class="text-center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for linha in linhaorcamentarias %}
-                                    <tr>
-                                        <td>{{ linha.get_classe_display }}</td>
-                                        <td>{{ linha.get_custo_despesa_display }}</td>
-                                        <td>{{ linha.centro_custo_gestor }}</td>
-                                        <td>{{ linha.centro_custo_solicitante }}</td>
-                                        <td>{{ linha.descricao_resumida }}</td>
-                                        <td>{{ linha.objeto }}</td>
-                                        <td>{{ linha.valor_orcado }}</td>
-                                        <td class="text-center">
-                                            <a href="{% url 'linhaorcamentaria_detail' linha.pk %}" class="btn btn-info btn-sm">Detalhes</a>
-                                            <a href="{% url 'linhaorcamentaria_update' linha.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                            <a href="{% url 'linhaorcamentaria_delete' linha.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="8" class="text-center">Nenhuma linha orçamentária encontrada.</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-center">
-                            {% if is_paginated %}
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    {% if page_obj.has_previous %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Primeira">
-                                            <span aria-hidden="true">&laquo;&laquo;</span>
-                                            <span class="sr-only">Primeira</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Anterior">
-                                            <span aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Anterior</span>
-                                        </a>
-                                    </li>
-                                    {% endif %}
-                                    {% for num in paginator.page_range %}
-                                    {% if num == page_obj.number %}
-                                    <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
-                                    {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a></li>
-                                    {% endif %}
-                                    {% endfor %}
-                                    {% if page_obj.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Próxima">
-                                            <span aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Próxima</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Última">
-                                            <span aria-hidden="true">&raquo;&raquo;</span>
-                                            <span class="sr-only">Última</span>
-                                        </a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
-                            {% endif %}
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    var dropdowns = document.getElementsByClassName("dropdown-btn");
-    for (var i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var dropdownContent = this.nextElementSibling;
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-            } else {
-                dropdownContent.style.display = "block";
-            }
-        });
-    }
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
