@@ -1,147 +1,27 @@
 {% extends 'index.html' %}
 
 {% block 'conteudo' %}
-<div class="container-fluid">
+<div class="container">
     <div class="page-inner">
-        <div class="row">
-            <!-- Gestão de Centros de Custo Gestor -->
-            <div class="col-lg-6 mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0">Centros de Custo Gestor</h4>
-                        <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#formGestor" aria-expanded="false" aria-controls="formGestor">
-                            Novo
-                        </button>
-                    </div>
-                    <div class="collapse" id="formGestor">
-                        <div class="card-body">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="form-row">
-                                    <div class="form-group col-md-8">
-                                        <label for="id_nome_gestor">Nome do Centro Gestor</label>
-                                        <input type="text" class="form-control" id="id_nome_gestor" name="nome" placeholder="Nome do Centro de Custo Gestor">
-                                    </div>
-                                    <div class="form-group col-md-4 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-success w-100">Adicionar</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="card-title mb-0">Cadastro de Colaborador</h4>
                     </div>
                     <div class="card-body">
-                        <input type="text" id="searchInputGestor" class="form-control mb-4" placeholder="Pesquisar por nome...">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Nome</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="centrodecustogestorTable">
-                                {% for gestor in gestores %}
-                                <tr>
-                                    <td>{{ gestor.nome }}</td>
-                                    <td class="text-center">
-                                        <a href="{% url 'centrodecustogestor_update' gestor.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{% url 'centrodecustogestor_delete' gestor.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Gestão de Centros de Custo Solicitante -->
-            <div class="col-lg-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0">Centros de Custo Solicitante</h4>
-                        <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#formSolicitante" aria-expanded="false" aria-controls="formSolicitante">
-                            Novo
-                        </button>
-                    </div>
-                    <div class="collapse" id="formSolicitante">
-                        <div class="card-body">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="id_nome_solicitante">Nome do Centro Solicitante</label>
-                                        <input type="text" class="form-control" id="id_nome_solicitante" name="nome" placeholder="Nome do Centro Solicitante">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="id_centro_gestor">Centro Gestor</label>
-                                        <select class="form-control" id="id_centro_gestor" name="centro_gestor">
-                                            {% for gestor in gestores %}
-                                            <option value="{{ gestor.pk }}">{{ gestor.nome }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-12 d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-success w-100">Adicionar</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <input type="text" id="searchInputSolicitante" class="form-control mb-4" placeholder="Pesquisar por nome...">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Centro Gestor</th>
-                                    <th>Centro Solicitante</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="centrodeustosolicitanteTable">
-                                {% for solicitante in solicitantes %}
-                                <tr>
-                                    <td>{{ solicitante.centro_gestor.nome }}</td>
-                                    <td>{{ solicitante.nome }}</td>
-                                    <td class="text-center">
-                                        <a href="{% url 'centrodeustosolicitante_update' solicitante.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{% url 'centrodeustosolicitante_delete' solicitante.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="form-group text-center mt-4">
+                                <button type="submit" class="btn btn-success">Salvar</button>
+                                <a href="{% url 'colaborador_list' %}" class="btn btn-danger">Cancelar</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById('searchInputGestor').addEventListener('keyup', function() {
-        var searchValue = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
-        rows.forEach(function(row) {
-            var nome = row.cells[0].textContent.toLowerCase();
-            if (nome.includes(searchValue)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('searchInputSolicitante').addEventListener('keyup', function() {
-        var searchValue = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#centrodeustosolicitanteTable tr');
-        rows.forEach(function(row) {
-            var nome = row.cells[1].textContent.toLowerCase();
-            if (nome.includes(searchValue)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-</script>
 {% endblock %}
