@@ -173,15 +173,25 @@
                 <div class="collapse" id="sidebarLayouts">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="{% url 'centrodecustogestor_create' %}">
+                      <a href="{% url 'centrodecustogestor_list' %}">                      
                         <span class="sub-item">Listar Centros de Custo Gestor</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{% url 'centrodecustogestor_create' %}">
-                        <span class="sub-item">Ad Centros</span>
+                        <span class="sub-item">Adicionar Centro de Custo Gestor</span>
                       </a>
-                    </li>                    
+                    </li>
+                    <li>
+                      <a href="{% url 'centrodecustogestor_list' %}">                      
+                        <span class="sub-item">Listar Centros de Custo Solicitante</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{% url 'centrodecustogestor_list' %}">
+                        <span class="sub-item">Adicionar Centro de Custo Solicitante</span>
+                      </a>
+                    </li>                     
                   </ul>
                 </div>
               </li>

@@ -1,7 +1,5 @@
 {% extends 'index.html' %}
 
-{% block title %}{{ view.object.pk|default:"Novo" }} Centro de Custo Gestor{% endblock %}
-
 {% block 'conteudo' %}
 <div class="container">
     <div class="row justify-content-center">
@@ -24,7 +22,7 @@
                             <button type="submit" class="btn btn-success">
                                 {% if view.object.pk %}Atualizar{% else %}Cadastrar{% endif %}
                             </button>
-                            <a href="" class="btn btn-secondary">Cancelar</a>
+                            <a href="{% url 'centrodecustogestor_list' %}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>
