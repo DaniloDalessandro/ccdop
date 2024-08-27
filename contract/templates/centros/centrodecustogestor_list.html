@@ -1,168 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Centros de Custo Gestor</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: #007bff;
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 60px;
-        }
-        .sidebar a {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 18px;
-            color: #ffffff;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #007bff;
-            text-decoration: none;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-        }
-        .table-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        .dropdown-btn {
-            font-size: 18px;
-            border: none;
-            background: none;
-            color: white;
-            padding: 10px 15px;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            outline: none;
-        }
-        .dropdown-container {
-            display: none;
-            background-color: #414a4c;
-        }
-        .dropdown-container a {
-            padding-left: 30px;
-        }
-        .dropdown-btn:focus {
-            outline: none;
-        }
-    </style>
-</head>
-<body>
+{% extends 'index.html' %}
 
-<div class="content">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="table-container">
-                    <h2 class="mb-4">Lista de Centros de Custo Gestor</h2>
-                    <div class="mb-4">
-                        <a href="{% url 'centrodecustogestor_create' %}" class="btn btn-primary">Adicionar Centro de Custo Gestor</a>
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title">Centros de Custo Gestor</h4>
                     </div>
-                    <div class="mb-4">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
+                    <div class="card-body">
+                        <!-- Botão para adicionar novo Centro de Custo Gestor -->
+                        <div class="mb-4">
+                            <a href="{% url 'centrodecustogestor_create' %}" class="btn btn-success">Adicionar Centro de Custo Gestor</a>
+                        </div>
+
+                        <!-- Tabela de listagem -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for centro in centros %}
+                                <tr>
+                                    <td>{{ centro.nome }}</td>
+                                    <td class="text-center">
+                                        <!-- Botão para editar -->
+                                        <a href="{% url 'centrodecustogestor_update' centro.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <!-- Botão para excluir -->
+                                        <form method="post" action="{% url 'centrodecustogestor_delete' centro.pk %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este centro de custo?');">Deletar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center">Nenhum centro de custo gestor encontrado.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                        <!-- Paginação (se houver) -->
+                        <div class="d-flex justify-content-center">
+                            {% if is_paginated %}
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1" aria-label="Primeira">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                            <span class="sr-only">Primeira</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Anterior</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    {% for num in paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                    <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próxima">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Próxima</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ paginator.num_pages }}" aria-label="Última">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                            <span class="sr-only">Última</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            {% endif %}
+                        </div>
                     </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="centrodecustogestorTable">
-                            {% for centro in centros %}
-                            <tr>
-                                <td>{{ centro.nome }}</td>
-                                <td>
-                                    <a href="{% url 'centrodecustogestor_update' centro.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                    <a href="{% url 'centrodecustogestor_delete' centro.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    document.getElementById('searchInput').addEventListener('keyup', function() {
-        var searchValue = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
-        rows.forEach(function(row) {
-            var nome = row.cells[0].textContent.toLowerCase();
-            if (nome.includes(searchValue)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-
-    var dropdowns = document.getElementsByClassName("dropdown-btn");
-    var i;
-
-    for (i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var dropdownContent = this.nextElementSibling;
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-            } else {
-                dropdownContent.style.display = "block";
-            }
-        });
-    }
-</script>
-</body>
-</html>
+{% endblock %}

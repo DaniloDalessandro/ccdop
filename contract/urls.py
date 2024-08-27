@@ -47,6 +47,7 @@ urlpatterns = [
     path('<int:pk>/editarcolaborador/', ColaboradorUpdateView.as_view(), name='colaborador_update'),
     path('<int:pk>/deletarcolaborador/', ColaboradorDeleteView.as_view(), name='colaborador_delete'),
     # ==============================================================================================
+    path('centros/', CentroDeCustoGestorListView.as_view(), name='centrodecustogestor_list'),
     path('novocentrodecusto/', CentroDeCustoGestorCreateView.as_view(), name='centrodecustogestor_create'),
     path('<int:pk>/editarcentrodecusto/', CentroDeCustoGestorUpdateView.as_view(), name='centrodecustogestor_update'),
     path('<int:pk>/deletarcentrodecusto/', CentroDeCustoGestorDeleteView.as_view(), name='centrodecustogestor_delete'),
