@@ -52,7 +52,8 @@ urlpatterns = [
     path('<int:pk>/editarcentrodecusto/', CentroDeCustoGestorUpdateView.as_view(), name='centrodecustogestor_update'),
     path('<int:pk>/deletarcentrodecusto/', CentroDeCustoGestorDeleteView.as_view(), name='centrodecustogestor_delete'),
     # ==============================================================================================
-    path('novosolicitante/', CentroDeCustoSolicitanteCreateView.as_view(), name='centrodeustosolicitante_create'),
+    path('centrosolicitante/', CentroDeCustoSolicitanteListView.as_view(), name='centrodecustosolicitante_list'),
+    path('novosolicitante/', CentroDeCustoSolicitanteCreateView.as_view(), name='centrodecustosolicitante_create'),
     path('<int:pk>/editarsolicitante/', CentroDeCustoSolicitanteUpdateView.as_view(), name='centrodeustosolicitante_update'),
     path('<int:pk>/deletarsolicitante/', CentroDeCustoSolicitanteDeleteView.as_view(), name='centrodeustosolicitante_delete'),
     # ==============================================================================================

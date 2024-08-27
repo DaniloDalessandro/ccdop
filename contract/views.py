@@ -63,25 +63,25 @@ class CentroDeCustoGestorDeleteView(DeleteView):
 
 class CentroDeCustoSolicitanteListView(ListView):
     model = CentroDeCustoSolicitante
-    template_name = 'centros/centrodeustosolicitante_list.html'
+    template_name = 'centros/centrodecustosolicitante_list.html'
     context_object_name = 'solicitantes'
 
 class CentroDeCustoSolicitanteCreateView(CreateView):
     model = CentroDeCustoSolicitante
     form_class = CentroDeCustoSolicitanteForm
-    template_name = 'centros/centrodeustosolicitante_form.html'
-    success_url = reverse_lazy('centrodeustosolicitante_list')
+    template_name = 'centros/centrodecustosolicitante_form.html'
+    success_url = reverse_lazy('centrodecustosolicitante_list')
 
 class CentroDeCustoSolicitanteUpdateView(UpdateView):
     model = CentroDeCustoSolicitante
     form_class = CentroDeCustoSolicitanteForm
-    template_name = 'centros/centrodeustosolicitante_form.html'
-    success_url = reverse_lazy('centrodeustosolicitante_list')
+    template_name = 'centros/centrodecustosolicitante_form.html'
+    success_url = reverse_lazy('centrodecustosolicitante_list')
 
 class CentroDeCustoSolicitanteDeleteView(DeleteView):
     model = CentroDeCustoSolicitante
     template_name = 'centros/centrodeustosolicitante_confirm_delete.html'
-    success_url = reverse_lazy('centrodeustosolicitante_list')
+    success_url = reverse_lazy('centrodecustosolicitante_list')
 
 #======================================================================================================================
 

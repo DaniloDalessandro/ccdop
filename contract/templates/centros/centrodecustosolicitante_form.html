@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="form-container">
+                    <h2 class="form-title text-center">Cadastro de Centro de Custo Solicitante</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+                        <a href="{% url 'centrodecustosolicitante_list' %}" class="btn btn-secondary btn-block">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+{% endblock %}
