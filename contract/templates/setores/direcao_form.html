@@ -4,26 +4,24 @@
 <div class="container">
     <div class="page-inner">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h4 class="card-title mb-0">Cadastro de Direção</h4>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">{% if form.instance.pk %}Editar Direção{% else %}Adicionar Direção{% endif %}</h4>
                     </div>
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    {{ form.as_p }}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.as_p }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-row mt-4">
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-success btn-block">Salvar</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="{% url 'direcao_list' %}" class="btn btn-danger btn-block">Cancelar</a>
-                                </div>
+                            <div class="form-group text-center mt-4 d-flex justify-content-left">
+                                <button type="submit" class="btn btn-success mx-2 w-40">Salvar</button>
+                                <a href="{% url 'direcao_list' %}" class="btn btn-danger mx-2 w-40">Cancelar</a>
                             </div>
                         </form>
                     </div>
