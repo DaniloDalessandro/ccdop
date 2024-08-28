@@ -94,18 +94,18 @@ class DirecaoCreateView(CreateView):
     model = Direcao
     form_class = DirecaoForm
     template_name = 'setores/direcao_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('direcao_list')
 
 class DirecaoUpdateView(UpdateView):
     model = Direcao
     form_class = DirecaoForm
     template_name = 'setores/direcao_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('direcao_list')
 
 class DirecaoDeleteView(DeleteView):
     model = Direcao
     template_name = 'setores/direcao_confirm_delete.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('direcao_list')
 
 #======================================================================================================================
 
@@ -119,18 +119,18 @@ class GerenciaCreateView(CreateView):
     model = Gerencia
     form_class = GerenciaForm
     template_name = 'setores/gerencia_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('gerencia_list')
 
 class GerenciaUpdateView(UpdateView):
     model = Gerencia
     form_class = GerenciaForm
     template_name = 'gerencia_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('gerencia_list')
 
 class GerenciaDeleteView(DeleteView):
     model = Gerencia
     template_name = 'setores/gerencia_confirm_delete.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('gerencia_list')
 
 #======================================================================================================================
 
@@ -143,42 +143,47 @@ class CoordenacaoCreateView(CreateView):
     model = Coordenacao
     form_class = CoordenacaoForm
     template_name = 'setores/coordenacao_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('coordenacao_list')
 
 class CoordenacaoUpdateView(UpdateView):
     model = Coordenacao
     form_class = CoordenacaoForm
     template_name = 'setores/coordenacao_form.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('coordenacao_list')
 
 class CoordenacaoDeleteView(DeleteView):
     model = Coordenacao
     template_name = 'setores/coordenacao_confirm_delete.html'
-    success_url = reverse_lazy('setor_manage')
+    success_url = reverse_lazy('coordenacao_list')
 
 #======================================================================================================================
 
 class ColaboradorListView(ListView):
     model = Colaborador
-    template_name = 'colaborador_list.html'
+    template_name = 'colaborador/colaborador_list.html'
     context_object_name = 'colaboradores'
 
 class ColaboradorCreateView(CreateView):
     model = Colaborador
     form_class = ColaboradorForm
-    template_name = 'colaborador_form.html'
+    template_name = 'colaborador/colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
 class ColaboradorUpdateView(UpdateView):
     model = Colaborador
     form_class = ColaboradorForm
-    template_name = 'orcamentos/colaborador_form.html'
+    template_name = 'colaborador/colaborador_form.html'
     success_url = reverse_lazy('colaborador_list')
 
 class ColaboradorDeleteView(DeleteView):
     model = Colaborador
-    template_name = 'orcamentos/colaborador_confirm_delete.html'
+    template_name = 'colaborador/colaborador_confirm_delete.html'
     success_url = reverse_lazy('colaborador_list')
+
+class ColaboradorDetailView(DetailView):
+    model = Colaborador
+    template_name = 'colaborador/colaborador_detail.html'
+    context_object_name = 'colaborador'
 
 #======================================================================================================================
 

@@ -7,7 +7,7 @@ from .views import ( CentroDeCustoSolicitanteListView, CentroDeCustoSolicitanteC
 from .views import ( DirecaoListView,DirecaoCreateView,DirecaoUpdateView,DirecaoDeleteView)
 from .views import ( GerenciaListView,GerenciaCreateView,GerenciaUpdateView,GerenciaDeleteView)
 from .views import CoordenacaoListView,CoordenacaoCreateView,CoordenacaoUpdateView,CoordenacaoDeleteView
-from .views import ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView
+from .views import ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView,ColaboradorDetailView
 from .views import (
     OrcamentoListView, OrcamentoDetailView, OrcamentoCreateView, OrcamentoUpdateView, OrcamentoDeleteView,
     OrcamentoExternoListView, OrcamentoExternoDetailView, OrcamentoExternoCreateView, OrcamentoExternoUpdateView, OrcamentoExternoDeleteView,ContratoListView,
@@ -76,6 +76,7 @@ urlpatterns = [
     path('colaboradores/novo/', ColaboradorCreateView.as_view(), name='colaborador_create'),
     path('colaboradores/<int:pk>/editar/', ColaboradorUpdateView.as_view(), name='colaborador_update'),
     path('colaboradores/<int:pk>/deletar/', ColaboradorDeleteView.as_view(), name='colaborador_delete'),
+    path('colaboradores/<int:pk>/', ColaboradorDetailView.as_view(), name='colaborador_detail'),
     # ==============================================================================================
   
     path('orcamentos/', OrcamentoListView.as_view(), name='orcamento_list'),
