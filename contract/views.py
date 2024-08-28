@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView,CreateView, UpdateView, DeleteView,DetailView
 from .models import Colaborador,CentroDeCustoGestor,CentroDeCustoSolicitante,Direcao,Gerencia,Coordenacao,Orcamento,OrcamentoExterno,LinhaOrcamentaria,Contrato,Remanejamento,Aditivo
@@ -192,6 +193,13 @@ class ColaboradorListView(ListView):
     model = Colaborador
     template_name = 'colaborador/colaborador_list.html'
     context_object_name = 'colaboradores'
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+
+        if query:
+            return Colaborador.objects.filter(nome_icontains=query)
+        return Colaborador.objects.all()
 
 class ColaboradorCreateView(CreateView):
     model = Colaborador

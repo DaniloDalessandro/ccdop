@@ -31,13 +31,8 @@
                                 <tr>
                                     <td>{{ centro.nome }}</td>
                                     <td class="text-center">
-                                        <!-- Botão para editar -->
                                         <a href="{% url 'centrodecustogestor_update' centro.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <!-- Botão para excluir -->
-                                        <form method="post" action="{% url 'centrodecustogestor_delete' centro.pk %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este centro de custo?');">Deletar</button>
-                                        </form>
+                                        <a href="{% url 'centrodecustogestor_delete' centro.pk %}" class="btn btn-danger btn-sm">Deletar</a>
                                     </td>
                                 </tr>
                                 {% empty %}

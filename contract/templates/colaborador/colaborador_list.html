@@ -13,12 +13,9 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <form method="GET" action="{% url 'colaborador_list' %}">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" name="search" placeholder="Buscar colaborador...">
-                                <button class="btn btn-primary" type="submit">Buscar</button>
-                            </div>
-                        </form>
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar colaborador...">
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -28,7 +25,7 @@
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="colaboradorTable">
                                 {% for colaborador in colaboradores %}
                                 <tr>
                                     <td>{{ colaborador.nome_completo }}</td>
@@ -37,10 +34,7 @@
                                     <td class="text-center">
                                         <a href="{% url 'colaborador_detail' colaborador.pk %}" class="btn btn-info btn-sm">Detalhes</a>
                                         <a href="{% url 'colaborador_update' colaborador.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <form action="{% url 'colaborador_delete' colaborador.pk %}" method="POST" style="display:inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
-                                        </form>
+                                        <a href="{% url 'colaborador_delete' colaborador.pk %}" class="btn btn-danger btn-sm">Deletar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
@@ -56,4 +50,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#colaboradorTable tr');
+        rows.forEach(function(row) {
+            var nome = row.cells[0].textContent.toLowerCase();
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 {% endblock %}
