@@ -42,11 +42,18 @@ class CentroDeCustoGestorListView(ListView):
     template_name = 'centros/centrodecustogestor_list.html'
     context_object_name = 'centros'
 
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            return CentroDeCustoGestor.objects.filter(nome__icontains=query)
+        return CentroDeCustoGestor.objects.all()
+    
+
 class CentroDeCustoGestorCreateView(CreateView):
     model = CentroDeCustoGestor
     form_class = CentroDeCustoGestorForm
     template_name = 'centros/centrodecustogestor_form.html'
-    success_url = reverse_lazy('centrodecustogestor_form')
+    success_url = reverse_lazy('centrodecustogestor_list')
 
 class CentroDeCustoGestorUpdateView(UpdateView):
     model = CentroDeCustoGestor
@@ -65,6 +72,12 @@ class CentroDeCustoSolicitanteListView(ListView):
     model = CentroDeCustoSolicitante
     template_name = 'centros/centrodecustosolicitante_list.html'
     context_object_name = 'solicitantes'
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            return CentroDeCustoSolicitante.objects.filter(nome__icontains=query)
+        return CentroDeCustoSolicitante.objects.all()
 
 class CentroDeCustoSolicitanteCreateView(CreateView):
     model = CentroDeCustoSolicitante
@@ -90,6 +103,12 @@ class DirecaoListView(ListView):
     template_name = 'setores/direcao_list.html'
     context_object_name = 'direcoes'
 
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            return Direcao.objects.filter(nome__icontains=query)
+        return Direcao.objects.all()
+
 class DirecaoCreateView(CreateView):
     model = Direcao
     form_class = DirecaoForm
@@ -114,6 +133,11 @@ class GerenciaListView(ListView):
     template_name = 'setores/gerencia_list.html'
     context_object_name = 'gerencias'
 
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            return Gerencia.objects.filter(nome__icontains=query)
+        return Gerencia.objects.all()
 
 class GerenciaCreateView(CreateView):
     model = Gerencia
@@ -138,6 +162,12 @@ class CoordenacaoListView(ListView):
     model = Coordenacao
     template_name = 'setores/coordenacao_list.html'
     context_object_name = 'coordenacoes'
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            return Coordenacao.objects.filter(nome__icontains=query)
+        return Coordenacao.objects.all()
 
 class CoordenacaoCreateView(CreateView):
     model = Coordenacao

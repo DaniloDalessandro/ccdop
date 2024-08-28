@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 # ============================================================================================================
 
 class CentroDeCustoGestor(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
         return self.nome
@@ -30,7 +30,7 @@ class CentroDeCustoSolicitante(models.Model):
 # ============================================================================================================
 
 class Direcao(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
         return self.nome
@@ -41,7 +41,7 @@ class Direcao(models.Model):
         
 
 class Gerencia(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100,unique=True)
     direcao = models.ForeignKey(Direcao, on_delete=models.CASCADE, related_name='gerencias')
 
     def __str__(self):
@@ -53,7 +53,7 @@ class Gerencia(models.Model):
         unique_together = ('direcao','nome')
 
 class Coordenacao(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100,unique=True)
     gerencia = models.ForeignKey(Gerencia, on_delete=models.CASCADE, related_name='coordenacoes')
 
     def __str__(self):
@@ -69,7 +69,7 @@ class Coordenacao(models.Model):
 class Colaborador(models.Model):
     
     nome_completo = models.CharField(max_length=100, null=True)
-    mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula')     
+    mat = models.IntegerField(null=True, blank=True,verbose_name='Matrícula',unique=True)     
     direcao = models.ForeignKey(Direcao, on_delete=models.CASCADE,null=True)
     gerencia = models.ForeignKey(Gerencia, on_delete=models.SET_NULL,null=True)
     coordenacao = models.ForeignKey(Coordenacao, on_delete=models.SET_NULL,null=True)

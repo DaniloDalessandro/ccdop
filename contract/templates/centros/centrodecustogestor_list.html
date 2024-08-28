@@ -14,12 +14,9 @@
                     </div>
                     <div class="card-body">
                         <!-- Campo de pesquisa -->
-                        <form method="GET" action="{% url 'centrodecustogestor_list' %}">
-                            <div class="input-group mb-3">
-                                <input type="text" id="searchInput" class="form-control" name="search" placeholder="Pesquisar centro de custo...">
-                                <button class="btn btn-primary" type="submit">Buscar</button>
-                            </div>
-                        </form>
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar centro de custo...">
+                        </div>
 
                         <!-- Tabela de listagem -->
                         <table class="table table-striped">
@@ -29,7 +26,7 @@
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="centrodecustogestorTable">
                                 {% for centro in centros %}
                                 <tr>
                                     <td>{{ centro.nome }}</td>
@@ -105,7 +102,7 @@
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function() {
         var searchValue = this.value.toLowerCase();
-        var rows = document.querySelectorAll('tbody tr');
+        var rows = document.querySelectorAll('#centrodecustogestorTable tr');
         rows.forEach(function(row) {
             var nome = row.cells[0].textContent.toLowerCase();
             if (nome.includes(searchValue)) {

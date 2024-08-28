@@ -54,8 +54,8 @@ urlpatterns = [
     # ==============================================================================================
     path('centrosolicitante/', CentroDeCustoSolicitanteListView.as_view(), name='centrodecustosolicitante_list'),
     path('novosolicitante/', CentroDeCustoSolicitanteCreateView.as_view(), name='centrodecustosolicitante_create'),
-    path('<int:pk>/editarsolicitante/', CentroDeCustoSolicitanteUpdateView.as_view(), name='centrodeustosolicitante_update'),
-    path('<int:pk>/deletarsolicitante/', CentroDeCustoSolicitanteDeleteView.as_view(), name='centrodeustosolicitante_delete'),
+    path('<int:pk>/editarsolicitante/', CentroDeCustoSolicitanteUpdateView.as_view(), name='centrodecustosolicitante_update'),
+    path('<int:pk>/deletarsolicitante/', CentroDeCustoSolicitanteDeleteView.as_view(), name='centrodecustosolicitante_delete'),
     # ==============================================================================================
     path('listardirecoes/', DirecaoListView.as_view(), name='direcao_list'),
     path('novadirecao/', DirecaoCreateView.as_view(), name='direcao_create'),

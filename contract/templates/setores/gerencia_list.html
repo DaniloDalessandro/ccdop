@@ -13,12 +13,12 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <form method="GET" action="{% url 'gerencia_list' %}">
-                            <div class="input-group mb-3">
-                                <input type="text" id="searchInput" class="form-control" name="search" placeholder="Pesquisar por nome...">
-                                <button class="btn btn-primary" type="submit">Buscar</button>
-                            </div>
-                        </form>
+                        <!-- Campo de pesquisa -->
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por nome...">
+                        </div>
+
+                        <!-- Tabela de listagem -->
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -46,4 +46,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#gerenciaTable tr');
+        
+        rows.forEach(function(row) {
+            var nome = row.cells[1].textContent.toLowerCase();  // Usando o índice 1 para o campo "Nome"
+            if (nome.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 {% endblock %}

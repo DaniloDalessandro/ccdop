@@ -2,29 +2,31 @@
 
 {% block 'conteudo' %}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card mt-4">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="card-title mb-0">
-                        {% if view.object.pk %}
-                            Editar Centro de Custo Gestor
-                        {% else %}
-                            Adicionar Novo Centro de Custo Gestor
-                        {% endif %}
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-success">
-                                {% if view.object.pk %}Atualizar{% else %}Cadastrar{% endif %}
-                            </button>
-                            <a href="{% url 'centrodecustogestor_list' %}" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">{% if form.instance.pk %}Editar Centro de Custo Gestor{% else %}Adicionar Novo Centro de Custo Gestor{% endif %}</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.as_p }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center mt-4 d-flex justify-content-left">
+                                <button type="submit" class="btn btn-success mx-2 w-40">
+                                    {% if view.object.pk %}Atualizar{% else %}Cadastrar{% endif %}
+                                </button>
+                                <a href="{% url 'centrodecustogestor_list' %}" class="btn btn-danger mx-2 w-40">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,21 +4,36 @@
 <div class="container">
     <div class="page-inner">
         <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="form-container">
-                    <h2 class="form-title text-center">Cadastro de Centro de Custo Solicitante</h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-                        <a href="{% url 'centrodecustosolicitante_list' %}" class="btn btn-secondary btn-block">Cancelar</a>
-                    </form>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">{% if form.instance.pk %}Editar Centro de Custo Solicitante{% else %}Adicionar Centro de Custo Solicitante{% endif %}</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.as_p }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center mt-4 d-flex justify-content-left">
+                                <button type="submit" class="btn btn-success mx-2 w-40">Salvar</button>
+                                <a href="{% url 'centrodecustosolicitante_list' %}" class="btn btn-danger mx-2 w-40">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     var dropdowns = document.getElementsByClassName("dropdown-btn");
     var i;
