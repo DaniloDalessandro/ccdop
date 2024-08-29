@@ -212,7 +212,7 @@ class LinhaOrcamentaria(models.Model):
     centro_custo_gestor = models.ForeignKey(CentroDeCustoGestor, on_delete=models.SET_NULL, null=True, blank=True)
     centro_custo_solicitante = models.ForeignKey(CentroDeCustoSolicitante, on_delete=models.SET_NULL, null=True, blank=True)
     descricao_resumida = models.CharField(max_length=255, null=True, blank=True, verbose_name='Finalidade')
-    objeto = models.CharField(max_length=255, blank=True, null=True, verbose_name='Objeto')
+    objeto = models.CharField(max_length=80, blank=True, null=True, verbose_name='Objeto')
 
     CLASSIFICACAO_CHOICES = [
         ('NOVO', 'NOVO'),

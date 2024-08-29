@@ -145,12 +145,24 @@ class LinhaOrcamentariaForm(forms.ModelForm):
             'obs_contrato',
         ]
         widgets = {
+            'classe': forms.Select(attrs={'class': 'form-control'}),
+            'custo_despesa': forms.Select(attrs={'class': 'form-control'}),
+            'centro_custo_gestor': forms.Select(attrs={'class': 'form-control'}),
+            'centro_custo_solicitante': forms.Select(attrs={'class': 'form-control'}),
             'descricao_resumida': forms.TextInput(attrs={'class': 'form-control'}),
             'objeto': forms.Textarea(attrs={'class': 'form-control'}),
-            'obs_contrato': forms.Textarea(attrs={'class': 'form-control'}),
+            'classificacao_orcamento': forms.TextInput(attrs={'class': 'form-control'}),
+            'possivel_fiscal': forms.TextInput(attrs={'class': 'form-control'}),
+            'ano_orcamento': forms.NumberInput(attrs={'class': 'form-control'}),
+            'tipo_contrato': forms.Select(attrs={'class': 'form-control'}),
+            'status_linha_orcamentaria': forms.Select(attrs={'class': 'form-control'}),
+            'tipo_provavel_contratacao': forms.Select(attrs={'class': 'form-control'}),
             'valor_orcado': forms.NumberInput(attrs={'class': 'form-control'}),
+            'status_elaboracao_tr': forms.Select(attrs={'class': 'form-control'}),
             'necessidade_contratacao': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            # Adicione outros widgets personalizados conforme necessário
+            'status_processo': forms.Select(attrs={'class': 'form-control'}),
+            'status_contratacao': forms.Select(attrs={'class': 'form-control'}),
+            'obs_contrato': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
 # =========================================================================================================================

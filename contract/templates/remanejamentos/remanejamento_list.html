@@ -1,51 +1,51 @@
 {% extends 'index.html' %}
 
 {% block 'conteudo' %}
-<div class="container-fluid">
+<div class="container">
     <div class="page-inner">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h4 class="card-title mb-0">Lista de Remanejamentos</h4>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Lista de Remanejamentos</h4>
+                        <a href="{% url 'remanejamento_create' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Novo Remanejamento
+                        </a>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0">Gerenciar Remanejamentos</h5>
-                            <a href="{% url 'remanejamento_create' %}" class="btn btn-success">Novo Remanejamento</a>
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar remanejamento...">
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Valor</th>
-                                        <th>Linha Origem</th>
-                                        <th>Linha Destino</th>
-                                        <th>Data</th>
-                                        <th class="text-center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for remanejamento in object_list %}
-                                    <tr>
-                                        <td>{{ remanejamento.valor }}</td>
-                                        <td>{{ remanejamento.linha_origem }}</td>
-                                        <td>{{ remanejamento.linha_destino }}</td>
-                                        <td>{{ remanejamento.data_remanejamento }}</td>
-                                        <td class="text-center">
-                                            <a href="{% url 'remanejamento_detail' remanejamento.pk %}" class="btn btn-info btn-sm">Detalhes</a>
-                                            <a href="{% url 'remanejamento_update' remanejamento.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                            <a href="{% url 'remanejamento_delete' remanejamento.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="5" class="text-center">Nenhum remanejamento encontrado.</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Valor</th>
+                                    <th>Linha Origem</th>
+                                    <th>Linha Destino</th>
+                                    <th>Data</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="remanejamentoTable">
+                                {% for remanejamento in object_list %}
+                                <tr>
+                                    <td>{{ remanejamento.valor }}</td>
+                                    <td>{{ remanejamento.linha_origem }}</td>
+                                    <td>{{ remanejamento.linha_destino }}</td>
+                                    <td>{{ remanejamento.data_remanejamento }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'remanejamento_detail' remanejamento.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                                        <a href="{% url 'remanejamento_update' remanejamento.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'remanejamento_delete' remanejamento.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">Nenhum remanejamento encontrado.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,21 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#remanejamentoTable tr');
+        rows.forEach(function(row) {
+            var valor = row.cells[0].textContent.toLowerCase();
+            var linhaOrigem = row.cells[1].textContent.toLowerCase();
+            var linhaDestino = row.cells[2].textContent.toLowerCase();
+            var data = row.cells[3].textContent.toLowerCase();
+            if (valor.includes(searchValue) || linhaOrigem.includes(searchValue) || linhaDestino.includes(searchValue) || data.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -4,80 +4,99 @@
 <div class="container">
     <div class="page-inner">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h4 class="card-title mb-0">{% if form.instance.pk %}Editar Linha Orçamentária{% else %}Adicionar Linha Orçamentária{% endif %}</h4>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title text-center">{% if form.instance.pk %}Editar Linha Orçamentária{% else %}Adicionar Linha Orçamentária{% endif %}</h4>
                     </div>
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
                             <div class="row">
+                                <!-- Primeira Coluna -->
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {{ form.classe.label_tag }} {{ form.classe }}
+                                        {{ form.classe.label_tag }}
+                                        {{ form.classe }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.custo_despesa.label_tag }} {{ form.custo_despesa }}
+                                        {{ form.custo_despesa.label_tag }}
+                                        {{ form.custo_despesa }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.centro_custo_gestor.label_tag }} {{ form.centro_custo_gestor }}
+                                        {{ form.centro_custo_gestor.label_tag }}
+                                        {{ form.centro_custo_gestor }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.centro_custo_solicitante.label_tag }} {{ form.centro_custo_solicitante }}
+                                        {{ form.centro_custo_solicitante.label_tag }}
+                                        {{ form.centro_custo_solicitante }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.descricao_resumida.label_tag }} {{ form.descricao_resumida }}
+                                        {{ form.descricao_resumida.label_tag }}
+                                        {{ form.descricao_resumida }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.objeto.label_tag }} {{ form.objeto }}
+                                        {{ form.objeto.label_tag }}
+                                        {{ form.objeto }}
                                     </div>
                                 </div>
+                                <!-- Segunda Coluna -->
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        {{ form.classificacao_orcamento.label_tag }} {{ form.classificacao_orcamento }}
-                                   
+                                        {{ form.classificacao_orcamento.label_tag }}
+                                        {{ form.classificacao_orcamento }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.possivel_fiscal.label_tag }} {{ form.possivel_fiscal }}
+                                        {{ form.possivel_fiscal.label_tag }}
+                                        {{ form.possivel_fiscal }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.ano_orcamento.label_tag }} {{ form.ano_orcamento }}
+                                        {{ form.ano_orcamento.label_tag }}
+                                        {{ form.ano_orcamento }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.tipo_contrato.label_tag }} {{ form.tipo_contrato }}
+                                        {{ form.tipo_contrato.label_tag }}
+                                        {{ form.tipo_contrato }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.status_linha_orcamentaria.label_tag }} {{ form.status_linha_orcamentaria }}
+                                        {{ form.status_linha_orcamentaria.label_tag }}
+                                        {{ form.status_linha_orcamentaria }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.tipo_provavel_contratacao.label_tag }} {{ form.tipo_provavel_contratacao }}
+                                        {{ form.tipo_provavel_contratacao.label_tag }}
+                                        {{ form.tipo_provavel_contratacao }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.valor_orcado.label_tag }} {{ form.valor_orcado }}
+                                        {{ form.valor_orcado.label_tag }}
+                                        {{ form.valor_orcado }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.status_elaboracao_tr.label_tag }} {{ form.status_elaboracao_tr }}
+                                        {{ form.status_elaboracao_tr.label_tag }}
+                                        {{ form.status_elaboracao_tr }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.necessidade_contratacao.label_tag }} {{ form.necessidade_contratacao }}
+                                        {{ form.necessidade_contratacao.label_tag }}
+                                        {{ form.necessidade_contratacao }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.status_processo.label_tag }} {{ form.status_processo }}
+                                        {{ form.status_processo.label_tag }}
+                                        {{ form.status_processo }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.status_contratacao.label_tag }} {{ form.status_contratacao }}
+                                        {{ form.status_contratacao.label_tag }}
+                                        {{ form.status_contratacao }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.obs_contrato.label_tag }} {{ form.obs_contrato }}
+                                        {{ form.obs_contrato.label_tag }}
+                                        {{ form.obs_contrato }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-success w-40 mx-2">
+                            <div class="form-group text-center mt-4 d-flex justify-content-left">
+                                <button type="submit" class="btn btn-success mx-2 w-40">
                                     {% if form.instance.pk %}Salvar{% else %}Adicionar{% endif %}
                                 </button>
-                                <a href="{% url 'linhaorcamentaria_list' %}" class="btn btn-danger w-40 mx-2">Cancelar</a>
+                                <a href="{% url 'linhaorcamentaria_list' %}" class="btn btn-danger mx-2 w-40">Cancelar</a>
                             </div>
                         </form>
                     </div>
