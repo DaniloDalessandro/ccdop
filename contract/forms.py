@@ -89,22 +89,21 @@ class ColaboradorForm(forms.ModelForm):
 # =========================================================================================================================
 
 class OrcamentoForm(forms.ModelForm):
-    valores_adicionados = forms.DecimalField(label='Valores Adicionados', max_digits=10, decimal_places=2, required=False, disabled=True)
-    valores_enviados = forms.DecimalField(label='Valores Enviados', max_digits=10, decimal_places=2, required=False, disabled=True)
-    valor_total = forms.DecimalField(label='Valor Total', max_digits=10, decimal_places=2, required=False, disabled=True)
-    orcamento_total = forms.DecimalField(label='Orçamento Total', max_digits=10, decimal_places=2, required=False, disabled=True)
-
     class Meta:
         model = Orcamento
-        fields = ['ano', 'centro', 'classe', 'valor', 'valores_adicionados', 'valores_enviados', 'valor_total', 'orcamento_total']
-
-    def __init__(self, *args, **kwargs):
-        super(OrcamentoForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['valores_adicionados'].initial = self.instance.valores_adicionados
-            self.fields['valores_enviados'].initial = self.instance.valores_enviados
-            self.fields['valor_total'].initial = self.instance.valor_total
-            self.fields['orcamento_total'].initial = self.instance.orcamento_total
+        fields = ['ano', 'centro', 'classe', 'valor']
+        widgets = {
+            'ano': forms.NumberInput(attrs={'class': 'form-control'}),
+            'centro': forms.Select(attrs={'class': 'form-control'}),
+            'classe': forms.Select(attrs={'class': 'form-control'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'ano': 'Ano',
+            'centro': 'Centro de Custo Gestor',
+            'classe': 'Classe',
+            'valor': 'Valor',
+        }
 
 # =========================================================================================================================
 

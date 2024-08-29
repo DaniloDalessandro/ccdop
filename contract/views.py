@@ -252,6 +252,8 @@ class OrcamentoDeleteView(DeleteView):
     template_name = 'orcamentos/orcamento_confirm_delete.html'
     success_url = reverse_lazy('orcamento_list')
 
+#======================================================================================================================
+
 class OrcamentoExternoListView(ListView):
     model = OrcamentoExterno
     template_name = 'orcamentos/orcamentoexterno_list.html'

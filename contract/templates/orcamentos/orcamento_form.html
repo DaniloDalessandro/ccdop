@@ -6,8 +6,8 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Orçamento</h4>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title text-center">{% if form.instance.pk %}Editar Orçamento{% else %}Adicionar Orçamento{% endif %}</h4>
                     </div>
                     <div class="card-body">
                         <form method="post">
@@ -18,13 +18,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="{{ form.ano.id_for_label }}">{{ form.ano.label }}</label>
-                                        <input type="text" name="{{ form.ano.name }}" id="{{ form.ano.id_for_label }}" class="form-control" value="{{ form.ano.value }}" placeholder="Ano">
+                                        {{ form.ano }}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="{{ form.centro.id_for_label }}">{{ form.centro.label }}</label>
-                                        <input type="text" name="{{ form.centro.name }}" id="{{ form.centro.id_for_label }}" class="form-control" value="{{ form.centro.value }}">
+                                        {{ form.centro }}
                                     </div>
                                 </div>
                             </div>
@@ -33,13 +33,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="{{ form.classe.id_for_label }}">{{ form.classe.label }}</label>
-                                        <input type="text" name="{{ form.classe.name }}" id="{{ form.classe.id_for_label }}" class="form-control" value="{{ form.classe.value }}">
+                                        {{ form.classe }}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
-                                        <input type="text" name="{{ form.valor.name }}" id="{{ form.valor.id_for_label }}" class="form-control" value="{{ form.valor.value }}">
+                                        {{ form.valor }}
                                     </div>
                                 </div>
                             </div>
@@ -74,9 +74,9 @@
                                 </div>
                             </div>
 
-                            <div class="card-action mt-4">
-                                <button type="submit" class="btn btn-success">Salvar</button>
-                                <a href="{% url 'orcamento_list' %}" class="btn btn-danger">Voltar</a>
+                            <div class="form-group text-center mt-4 d-flex justify-content-center">
+                                <button type="submit" class="btn btn-success mx-2 w-40">Salvar</button>
+                                <a href="{% url 'orcamento_list' %}" class="btn btn-danger mx-2 w-40">Voltar</a>
                             </div>
                         </form>
                     </div>
