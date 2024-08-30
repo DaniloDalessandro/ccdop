@@ -1,161 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes da Linha Orçamentária</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { display: flex; min-height: 100vh; background-color: #f8f9fa; }
-        .sidebar { width: 250px; background-color: #343a40; height: 100vh; position: fixed; padding-top: 20px; }
-        .sidebar a, .dropdown-btn { padding: 10px 15px; text-align: left; font-size: 18px; color: white; display: block; text-decoration: none; }
-        .sidebar a:hover, .dropdown-btn:hover { background-color: #007bff; }
-        .dropdown-container { display: none; background-color: #414a4c; padding-left: 20px; }
-        .dropdown-btn { border: none; background: none; outline: none; cursor: pointer; }
-        .content { margin-left: 250px; padding: 20px; flex: 1; }
-        .details-container { background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        .details-header { display: flex; justify-content: space-between; align-items: center; }
-        .btn-primary { background-color: #007bff; border: none; }
-        .btn-primary:hover { background-color: #0056b3; }
-        .btn-secondary { background-color: #6c757d; border: none; }
-        .btn-secondary:hover { background-color: #5a6268; }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <a href="{% url 'dashboard' %}">Dashboard</a>
-        <div>
-            <a href="{% url 'setor_manage' %}">Setores</a>       
-        </div>
-        <div>
-            <a href="{% url 'centrodecusto_manage' %}">Centros</a>        
-        </div>
-        <button class="dropdown-btn">Colaboradores 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'colaborador_create' %}">Adicionar Colaborador</a>
-            <a href="{% url 'colaborador_list' %}">Lista de Colaboradores</a>
-        </div>
-        <button class="dropdown-btn">Auxilios 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'auxiliocolaborador_create' %}">Adicionar Auxilios</a>
-            <a href="{% url 'auxiliocolaborador_list' %}">Lista de Auxilios</a>
-        </div>  
-        <button class="dropdown-btn">Orçamentos 
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'orcamento_create' %}">Adicionar Orçamento</a>
-            <a href="{% url 'orcamento_list' %}">Lista de Orçamentos</a>
-            <a href="{% url 'orcamentoexterno_create' %}">Adicionar Orçamento externo</a>
-            <a href="{% url 'orcamentoexterno_list' %}">Lista de Orçamentos externo</a>
-        </div>  
-        <button class="dropdown-btn">Linhas Orçamentárias
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'linhaorcamentaria_list' %}">Lista de Linhas Orçamentárias</a>
-            <a href="{% url 'linhaorcamentaria_create' %}">Adicionar Linha Orçamentária</a>
-        </div>
-        <button class="dropdown-btn">Contratos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'contrato_list' %}">Lista de Contratos</a>
-            <a href="{% url 'contrato_create' %}">Adicionar Contrato</a>
-        </div>
-        <button class="dropdown-btn">Remanejamentos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'remanejamento_list' %}">Lista de Remanejamentos</a>
-            <a href="{% url 'remanejamento_create' %}">Adicionar Remanejamento</a>
-        </div>
-        <button class="dropdown-btn">Aditivos
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="{% url 'aditivo_list' %}">Lista de Aditivos</a>
-            <a href="{% url 'aditivo_create' %}">Adicionar Aditivo</a>
-        </div>   
-    </div>
+{% extends 'index.html' %}
 
-<div class="content">
-    <div class="details-container">
-        <div class="details-header">
-            <h2>Detalhes da Linha Orçamentária</h2>
-            <a href="{% url 'linhaorcamentaria_update' linhaorcamentaria.pk %}" class="btn btn-primary">Editar</a>
-        </div>
-        <div class="details-body mt-4">
-            <div class="form-group">
-                <p><strong>Classe:</strong> {{ linhaorcamentaria.get_classe_display }}</p>
+{% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Detalhes da Linha Orçamentária</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>Tipo de Linha:</strong>
+                            <p>{{ linhaorcamentaria.get_classe_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Custo/Despesa:</strong>
+                            <p>{{ linhaorcamentaria.get_custo_despesa_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Centro de Custo Gestor:</strong>
+                            <p>{{ linhaorcamentaria.centro_custo_gestor }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Centro de Custo Solicitante:</strong>
+                            <p>{{ linhaorcamentaria.centro_custo_solicitante }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Finalidade:</strong>
+                            <p>{{ linhaorcamentaria.descricao_resumida }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Objeto:</strong>
+                            <p>{{ linhaorcamentaria.objeto }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Classificação Orçamentária:</strong>
+                            <p>{{ linhaorcamentaria.classificacao_orcamento }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Fiscal:</strong>
+                            <p>{{ linhaorcamentaria.possivel_fiscal }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Ano Orçamento:</strong>
+                            <p>{{ linhaorcamentaria.ano_orcamento }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Tipo de Contrato:</strong>
+                            <p>{{ linhaorcamentaria.get_tipo_contrato_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Status da Linha Orçamentária:</strong>
+                            <p>{{ linhaorcamentaria.get_status_linha_orcamentaria_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Tipo de Provável Contratação:</strong>
+                            <p>{{ linhaorcamentaria.get_tipo_provavel_contratacao_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Valor Orçado:</strong>
+                            <p>{{ linhaorcamentaria.valor_orcado }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Status de Elaboração do TR:</strong>
+                            <p>{{ linhaorcamentaria.get_status_elaboracao_tr_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Necessidade de Contratação:</strong>
+                            <p>{{ linhaorcamentaria.necessidade_contratacao }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Status do Processo:</strong>
+                            <p>{{ linhaorcamentaria.get_status_processo_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Status da Contratação:</strong>
+                            <p>{{ linhaorcamentaria.get_status_contratacao_display }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Observações:</strong>
+                            <p>{{ linhaorcamentaria.obs_contrato }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Valor Aprovisionado:</strong>
+                            <p>{{ linhaorcamentaria.valor_aprovisionado }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Valor Remanejado Total:</strong>
+                            <p>{{ linhaorcamentaria.valor_remanejado_total }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Valor Atual:</strong>
+                            <p>{{ linhaorcamentaria.saldo_orcamentario_pos_remanejamento }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Tempo para Contratação:</strong>
+                            <p>{{ linhaorcamentaria.tempo_para_contratacao }} dias</p>
+                        </div>
+                        <div class="text-center mt-4 d-flex justify-content-start">
+                            <a href="{% url 'linhaorcamentaria_list' %}" class="btn btn-danger w-40 mx-2">Voltar à lista</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <p><strong>Custo/Despesa:</strong> {{ linhaorcamentaria.get_custo_despesa_display }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Centro Custo Gestor:</strong> {{ linhaorcamentaria.centro_custo_gestor }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Centro Custo Solicitante:</strong> {{ linhaorcamentaria.centro_custo_solicitante }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Descrição Resumida:</strong> {{ linhaorcamentaria.descricao_resumida }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Objeto:</strong> {{ linhaorcamentaria.objeto }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Valor Orçado:</strong> {{ linhaorcamentaria.valor_orcado }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Status da Linha Orçamentária:</strong> {{ linhaorcamentaria.get_status_linha_orcamentaria_display }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Status da Contratação:</strong> {{ linhaorcamentaria.get_status_contratacao_display }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Observações:</strong> {{ linhaorcamentaria.obs_contrato }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Valor Remanejado Total:</strong> {{ linhaorcamentaria.valor_remanejado_total }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Saldo Orçamentário Pós-Remanejamento:</strong> {{ linhaorcamentaria.saldo_orcamentario_pos_remanejamento }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Tempo para Contratação:</strong> {{ linhaorcamentaria.tempo_para_contratacao }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>Valor Aprovisionado:</strong> {{ linhaorcamentaria.valor_aprovisionado }}</p>
-            </div>
-        </div>
-        
-        <div class="details-footer mt-4">
-            <a href="{% url 'linhaorcamentaria_list' %}" class="btn btn-secondary">Voltar</a>
         </div>
     </div>
 </div>
-
-<script>
-    var dropdowns = document.getElementsByClassName("dropdown-btn");
-    for (var i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var dropdownContent = this.nextElementSibling;
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-            } else {
-                dropdownContent.style.display = "block";
-            }
-        });
-    }
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}

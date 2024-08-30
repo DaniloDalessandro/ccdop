@@ -113,7 +113,7 @@ urlpatterns = [
 
     path('setores/manage/', SetorManageView.as_view(), name='setor_manage'),
 
-    path('novo-contrato/', ContratoCreateView.as_view(), name='novo-contrato'),
+    path('novo-contrato/', ContratoCreateView.as_view(), name='contrato_create'),
     path('list-contrato/', ContratoListView.as_view(), name='contrato-list'),
     path('<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato-update'),
     path('<int:pk>/deletar/', ContratoDeleteView.as_view(), name='contrato-delete'),

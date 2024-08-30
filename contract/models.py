@@ -196,8 +196,8 @@ class OrcamentoExterno(models.Model):
 
 class LinhaOrcamentaria(models.Model):
     CLASSE_CHOICES = [
-        ('A', 'OPEX'),
-        ('B', 'CAPEX'),
+        ('OPEX', 'OPEX'),
+        ('CAPEX', 'CAPEX'),
     ]
     classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True, verbose_name='Tipo de linha')
 
@@ -293,8 +293,13 @@ class LinhaOrcamentaria(models.Model):
     status_contratacao = models.CharField(max_length=100, choices=STATUSCONTRATACAO_CHOICES, blank=True, null=True)
     obs_contrato = models.TextField(max_length=400, blank=True, null=True)
 
+    def saldo_disponivel(self):
+        total_contratos = self.contratos.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
+        saldo = self.valor_orcado - total_contratos
+        return saldo
+    
     def update_valor_aprovisionado(self):
-        self._valor_aprovisionado = self.contrato.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
+        self._valor_aprovisionado = self.contratos.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
         self.save(update_fields=['_valor_aprovisionado'])
 
     @property
@@ -381,11 +386,17 @@ class Contrato(models.Model):
     num_prestacoes = models.PositiveIntegerField(editable=False)  # Agora calculado automaticamente
 
     def save(self, *args, **kwargs):
+        saldo_disponivel = self.linha_orcamentaria.saldo_disponivel()
+
+        if self.valor_contrato > saldo_disponivel:
+            raise ValueError(f"O valor do contrato ({self.valor_contrato}) excede o saldo disponível ({saldo_disponivel}) na linha orçamentária.")
+
         if not self.numero_protocolo:
             self.numero_protocolo = self.generate_protocolo()
+
         if self.data_assinatura and self.data_vencimento:
-            # Calcula o número de prestações com base na diferença de meses entre a assinatura e o vencimento
             self.num_prestacoes = self.calculate_num_prestacoes()
+
         super().save(*args, **kwargs)
         self.create_prestacoes()
         self.linha_orcamentaria.update_valor_aprovisionado()
