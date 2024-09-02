@@ -294,8 +294,8 @@ class LinhaOrcamentaria(models.Model):
     obs_contrato = models.TextField(max_length=400, blank=True, null=True)
 
     def saldo_disponivel(self):
-        total_contratos = self.contratos.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
-        saldo = self.valor_orcado - total_contratos
+        total_contratos = self.contratos.aggregate(total=Sum('valor_contrato'))['total'] or Decimal('0.0')
+        saldo = Decimal(self.valor_orcado) - total_contratos
         return saldo
     
     def update_valor_aprovisionado(self):
