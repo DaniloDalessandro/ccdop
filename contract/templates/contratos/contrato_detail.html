@@ -1,50 +1,83 @@
 {% extends 'index.html' %}
 
 {% block 'conteudo' %}
-<h1>Contrato: {{ contrato.numero_protocolo }}</h1>
-<p>Fiscal Principal: {{ contrato.fiscal_principal }}</p>
-<p>Fiscal Substituto: {{ contrato.fiscal_substituto }}</p>
-<p>Valor: {{ contrato.valor_contrato }}</p>
-<p>Data de Assinatura: {{ contrato.data_assinatura }}</p>
-<p>Data de Vencimento: {{ contrato.data_vencimento }}</p>
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Detalhes do Contrato</h4>
+                        <a href="{% url 'contrato-list' %}" class="btn btn-secondary btn-sm">Voltar</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>Número do Protocolo:</strong>
+                            <p>{{ contrato.numero_protocolo }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Fiscal Principal:</strong>
+                            <p>{{ contrato.fiscal_principal }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Fiscal Substituto:</strong>
+                            <p>{{ contrato.fiscal_substituto }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Valor:</strong>
+                            <p>{{ contrato.valor_contrato }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Data de Assinatura:</strong>
+                            <p>{{ contrato.data_assinatura }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Data de Vencimento:</strong>
+                            <p>{{ contrato.data_vencimento }}</p>
+                        </div>
 
-<h2>Prestações</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Parcela</th>
-            <th>Valor</th>
-            <th>Data de Vencimento</th>
-            <th>Status de Pagamento</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for prestacao in contrato.prestacao_set.all %}
-        <tr>
-            <td>{{ prestacao.numero }}</td>
-            <td>{{ prestacao.valor_parcela }}</td>
-            <td>{{ prestacao.data_vencimento }}</td>
-            <td>
-                {% if prestacao.status_pagamento %}
-                <span class="badge bg-success">Pago</span>
-                {% elif prestacao.data_vencimento < today %}
-                <span class="badge bg-danger">Atrasado</span>
-                {% else %}
-                <span class="badge bg-warning">Pendente</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if not prestacao.status_pagamento %}
-                <form action="{% url 'prestacao-pagar' prestacao.pk %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary btn-sm">Marcar como Pago</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<a href="{% url 'contrato-list' %}" class="btn btn-secondary">Voltar</a>
+                        <h4 class="mt-4">Prestações</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Parcela</th>
+                                    <th>Valor</th>
+                                    <th>Data de Vencimento</th>
+                                    <th>Status de Pagamento</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prestacao in contrato.prestacao_set.all %}
+                                <tr>
+                                    <td>{{ prestacao.numero }}</td>
+                                    <td>{{ prestacao.valor_parcela }}</td>
+                                    <td>{{ prestacao.data_vencimento }}</td>
+                                    <td>
+                                        {% if prestacao.status_pagamento %}
+                                        <span class="badge bg-success">Pago</span>
+                                        {% elif prestacao.data_vencimento < today %}
+                                        <span class="badge bg-danger">Atrasado</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Pendente</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if not prestacao.status_pagamento %}
+                                        <form action="{% url 'prestacao-pagar' prestacao.pk %}" method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary btn-sm">Marcar como Pago</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
