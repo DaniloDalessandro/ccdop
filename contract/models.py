@@ -120,6 +120,12 @@ class Orcamento(models.Model):
             orcamentos_externos = OrcamentoExterno.objects.filter(ano=self).aggregate(total=Sum('valor'))['total'] or 0
             return orcamentos_internos + orcamentos_externos
         return self.valor
+    
+    @property
+    def valor_restante(self):
+        linhas_orcamentarias = self.contratos.all()  # Accessing via related_name
+        total_linhas = sum(Decimal(linha.valor_orcado) for linha in linhas_orcamentarias)
+        return self.valor - total_linhas
 
     def __str__(self):
         return f"{self.ano} - {self.centro}"
@@ -185,6 +191,8 @@ class OrcamentoExterno(models.Model):
         self.ano.save()
         super().delete(*args, **kwargs)
 
+    
+
     class Meta:
         verbose_name = 'Orçamento Externo'
         verbose_name_plural = 'Orçamentos Externos'
@@ -226,7 +234,6 @@ class LinhaOrcamentaria(models.Model):
     possivel_fiscal = models.ForeignKey('Colaborador', on_delete=models.PROTECT, related_name='contratos_fiscal_possivel', verbose_name='Fiscal')
 
     ano_orcamento = models.ForeignKey(Orcamento, on_delete=models.PROTECT, related_name='contratos', null=True, blank=True)
-
     TIPOCONTRATO_CHOICES = [
         ('I', 'SERVIÇO'),
         ('II', 'FORNECIMENTO'),
@@ -301,6 +308,11 @@ class LinhaOrcamentaria(models.Model):
     def update_valor_aprovisionado(self):
         self._valor_aprovisionado = self.contratos.aggregate(total=Sum('valor_contrato'))['total'] or 0.0
         self.save(update_fields=['_valor_aprovisionado'])
+
+    def save(self, *args, **kwargs):
+        if self.ano_orcamento and self.valor_orcado > self.ano_orcamento.valor_restante:
+            raise ValidationError('O valor orçado excede o valor restante do orçamento.')
+        super().save(*args, **kwargs)
 
     @property
     def valor_aprovisionado(self):

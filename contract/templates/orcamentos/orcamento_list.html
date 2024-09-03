@@ -20,7 +20,7 @@
                                     <th>Centro</th>
                                     <th>Classe</th>
                                     <th>Valor Original</th>
-                                    <th>Valor Pós Remanejamentos</th>
+                                    <th>Valor Restante</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -31,7 +31,7 @@
                                     <td>{{ orcamento.centro }}</td>
                                     <td>{{ orcamento.get_classe_display }}</td>
                                     <td>{{ orcamento.valor }}</td>
-                                    <td>{{ orcamento.valor_total }}</td>
+                                    <td>{{ orcamento.valor_restante }}</td>
                                     <td>
                                         <a href="{% url 'orcamento_update' orcamento.pk %}" class="btn btn-warning btn-sm">Editar</a>
                                         <a href="{% url 'orcamento_delete' orcamento.pk %}" class="btn btn-danger btn-sm">Deletar</a>
