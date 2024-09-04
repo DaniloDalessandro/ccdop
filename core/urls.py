@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('auxilios/', include('auxilios.urls')),
     path('accounts/', include('allauth.urls')),
+    
 
     
 ]
