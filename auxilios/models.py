@@ -1,22 +1,25 @@
 from django.db import models
 from contract.models import Colaborador,Orcamento
-from django.db.models import F,Case, When, BooleanField
+from django.db.models import F
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from django.core.validators import MinValueValidator
+
+#============================================================================================================================
 
 class AuxilioColaborador(models.Model):
     baneficiado = models.ForeignKey(Colaborador, on_delete=models.PROTECT)
     orcamento = models.ForeignKey(Orcamento, related_name='auxilios_colaboradores', on_delete=models.PROTECT)
     tipo_choices = [
-        ('A', 'Graduação'),
-        ('B', 'Pós-Graduação'),
-        ('C', 'Auxilio creche escola'),
-        ('D', 'Língua estrangeira'),
+        ('Graduação', 'Graduação'),
+        ('Pós-Graduação', 'Pós-Graduação'),
+        ('Auxilio creche escola', 'Auxilio creche escola'),
+        ('Língua estrangeira', 'Língua estrangeira'),
     ]
     tipo = models.CharField(max_length=100, choices=tipo_choices, null=True, blank=True)
     beneficio = models.CharField(max_length=100, blank=False)
     valor_parcela = models.FloatField(null=True, blank=True)
-    valor_total = models.FloatField(null=True, blank=True, editable=False)
+    valor_total = models.FloatField(null=True, blank=True, editable=False,validators=[MinValueValidator(0.01)] )
     obs = models.CharField(max_length=200, null=True, blank=True)
     mes_inicio = models.DateField()
     qtd_parcelas = models.PositiveIntegerField()

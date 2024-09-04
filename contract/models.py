@@ -5,6 +5,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
+from django.core.validators import MinValueValidator
 
 
 # ============================================================================================================
@@ -93,7 +94,7 @@ class Orcamento(models.Model):
         ('B', 'CAPEX'),
     ]
     classe = models.CharField(max_length=100, choices=CLASSE_CHOICES, blank=True, null=True)
-    valor = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0.01)] )
 
     @property
     def valores_adicionados(self):
@@ -144,7 +145,7 @@ class OrcamentoExterno(models.Model):
     ]
 
     ano = models.ForeignKey(Orcamento, on_delete=models.CASCADE, related_name='orcamentos_externos')
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    valor = models.DecimalField(max_digits=10, decimal_places=2,validators=[MinValueValidator(0.01)])
     centro = models.CharField(max_length=20)
     CLASSE_CHOICES = [
         ('OPEX', 'OPEX'),
@@ -250,9 +251,6 @@ class LinhaOrcamentaria(models.Model):
     ]
     status_linha_orcamentaria = models.CharField(max_length=100, choices=STATUS_LINHA_ORCAMENTARIA_CHOICES, blank=True, null=True)
 
-    # Removendo o valor_aprovisionado do formulário de edição
-    _valor_aprovisionado = models.FloatField(default=0.0)
-
     TIPOCONTRATACAOPROVAVEL_CHOICES = [
         ('A', 'LICITAÇÃO'),
         ('B', 'DISPENSA EM RAZÃO DO VALOR'),
@@ -264,7 +262,7 @@ class LinhaOrcamentaria(models.Model):
         ('I', 'APOSTILAMENTO'),
     ]
     tipo_provavel_contratacao = models.CharField(max_length=100, choices=TIPOCONTRATACAOPROVAVEL_CHOICES)
-    valor_orcado = models.FloatField(default=0, blank=True, null=True)
+    valor_orcado = models.FloatField(default=0, blank=True, null=True,validators=[MinValueValidator(0.01)])
 
     STATUSELABORACAOTR_CHOICES = [
         ('I', 'VENCIDO'),
@@ -353,7 +351,7 @@ class LinhaOrcamentaria(models.Model):
 # ============================================================================================================
 
 class Remanejamento(models.Model):
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    valor = models.DecimalField(max_digits=10, decimal_places=2,validators=[MinValueValidator(0.01)])
     linha_origem = models.ForeignKey(LinhaOrcamentaria, related_name='remanejamentos_origem', on_delete=models.CASCADE)
     linha_destino = models.ForeignKey(LinhaOrcamentaria, related_name='remanejamentos_destino', on_delete=models.CASCADE)
     data_remanejamento = models.DateTimeField(default=timezone.now)
@@ -394,7 +392,7 @@ class Contrato(models.Model):
     data_vencimento = models.DateField(null=True, blank=True)
     fiscal_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
     fiscal_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
-    valor_contrato = models.DecimalField(max_digits=10, decimal_places=2)
+    valor_contrato = models.DecimalField(max_digits=10, decimal_places=2,validators=[MinValueValidator(0.01)])
     num_prestacoes = models.PositiveIntegerField(editable=False)  # Agora calculado automaticamente
 
     def save(self, *args, **kwargs):
@@ -453,7 +451,7 @@ class Contrato(models.Model):
 class Prestacao(models.Model):
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE)
     numero = models.PositiveIntegerField()
-    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, editable=False,validators=[MinValueValidator(0.01)])
     data_vencimento = models.DateField()
     data_pagamento = models.DateField(null=True, blank=True)
     status_pagamento = models.BooleanField(default=False)  # True se paga, False se não paga
