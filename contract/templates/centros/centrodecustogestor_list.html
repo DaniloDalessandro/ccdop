@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody id="centrodecustogestorTable">
-                                {% for centro in centros %}
+                                {% for centro in page_obj %}
                                 <tr>
                                     <td>{{ centro.nome }}</td>
                                     <td class="text-center">
@@ -43,7 +43,7 @@
                             </tbody>
                         </table>
                         
-                        <!-- Paginação (se houver) -->
+                        <!-- Paginação -->
                         <div class="d-flex justify-content-center">
                             {% if is_paginated %}
                             <nav aria-label="Page navigation">
@@ -52,17 +52,15 @@
                                     <li class="page-item">
                                         <a class="page-link" href="?page=1" aria-label="Primeira">
                                             <span aria-hidden="true">&laquo;&laquo;</span>
-                                            <span class="sr-only">Primeira</span>
                                         </a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
                                             <span aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Anterior</span>
                                         </a>
                                     </li>
                                     {% endif %}
-                                    {% for num in paginator.page_range %}
+                                    {% for num in page_obj.paginator.page_range %}
                                     {% if num == page_obj.number %}
                                     <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
                                     {% else %}
@@ -73,13 +71,11 @@
                                     <li class="page-item">
                                         <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próxima">
                                             <span aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Próxima</span>
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ paginator.num_pages }}" aria-label="Última">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última">
                                             <span aria-hidden="true">&raquo;&raquo;</span>
-                                            <span class="sr-only">Última</span>
                                         </a>
                                     </li>
                                     {% endif %}

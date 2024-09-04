@@ -120,5 +120,7 @@ urlpatterns = [
     path('<int:pk>/', ContratoDetailView.as_view(), name='contrato-detail'),
     path('prestacao/<int:pk>/pagar/', marcar_prestacao_como_paga, name='prestacao-pagar'),
 
+    
+
 ]
 

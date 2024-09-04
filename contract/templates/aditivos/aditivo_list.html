@@ -13,9 +13,17 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <div class="input-group mb-3">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar aditivo...">
-                        </div>
+                        <!-- Campo de pesquisa -->
+                        <form method="GET" action="{% url 'aditivo_list' %}">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="search" value="{{ search_query }}" placeholder="Buscar aditivo...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Tabela de listagem -->
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -23,18 +31,16 @@
                                     <th>Contrato</th>
                                     <th>Data</th>
                                     <th>Valor</th>
-                                    
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="aditivoTable">
-                                {% for aditivo in aditivos %}
+                                {% for aditivo in page_obj %}
                                 <tr>
                                     <td>{{ aditivo.id }}</td>
                                     <td>{{ aditivo.contrato.numero_protocolo }}</td>
                                     <td>{{ aditivo.data }}</td>
                                     <td>{{ aditivo.valor }}</td>
-                                    
                                     <td class="text-center">
                                         <a href="{% url 'aditivo_detail' aditivo.pk %}" class="btn btn-info btn-sm">Detalhes</a>
                                         <a href="{% url 'aditivo_update' aditivo.pk %}" class="btn btn-warning btn-sm">Editar</a>
@@ -43,11 +49,52 @@
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="6" class="text-center">Nenhum aditivo encontrado.</td>
+                                    <td colspan="5" class="text-center">Nenhum aditivo encontrado.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+
+                        <!-- Paginação -->
+                        <div class="d-flex justify-content-center">
+                            {% if is_paginated %}
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Primeira">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Anterior">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    {% for num in page_obj.paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                    <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Próxima">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Última">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,8 +108,8 @@
         var rows = document.querySelectorAll('#aditivoTable tr');
         rows.forEach(function(row) {
             var contrato = row.cells[1].textContent.toLowerCase();
-            var justificativa = row.cells[4].textContent.toLowerCase();
-            if (contrato.includes(searchValue) || justificativa.includes(searchValue)) {
+            var valor = row.cells[3].textContent.toLowerCase();
+            if (contrato.includes(searchValue) || valor.includes(searchValue)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';

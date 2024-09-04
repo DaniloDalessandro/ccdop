@@ -1,7 +1,96 @@
 {% extends 'index.html' %}
 
 {% block 'conteudo' %}
+<div class="container">
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Gráficos de Colaboradores por Direção</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Gráfico 1 -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="colaboradorChart1" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
 
- 
+                            <!-- Gráfico 2 -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="colaboradorChart2" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gráfico 3 -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="colaboradorChart3" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gráfico 4 -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="colaboradorChart4" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- fim da card-body -->
+                </div> <!-- fim da card -->
+            </div> <!-- fim da col-md-12 -->
+        </div> <!-- fim da row -->
+    </div> <!-- fim da page-inner -->
+</div> <!-- fim da container -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- Chart.js CDN -->
+
+<script>
+    // Dados compartilhados (exemplo: mesmos dados para todos os gráficos)
+    var labels = {{ labels|safe }};  // Labels (nomes das direções)
+    var data = {{ data|safe }};      // Dados (quantidade de colaboradores)
+
+    // Função para criar gráficos
+    function criarGrafico(id, tipo) {
+        var ctx = document.getElementById(id).getContext('2d');
+        return new Chart(ctx, {
+            type: tipo,  // Tipo de gráfico (barras, linhas, etc.)
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Número de Colaboradores',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',  // Cor das barras
+                    borderColor: 'rgba(54, 162, 235, 1)',  // Cor da borda das barras
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true  // Começa o eixo Y no zero
+                    }
+                }
+            }
+        });
+    }
+
+    // Criação dos 4 gráficos com tipos diferentes
+    criarGrafico('colaboradorChart1', 'bar');   // Gráfico de barras
+    criarGrafico('colaboradorChart2', 'line');  // Gráfico de linhas
+    criarGrafico('colaboradorChart3', 'pie');   // Gráfico de pizza
+    criarGrafico('colaboradorChart4', 'doughnut');  // Gráfico de rosca
+</script>
 
 {% endblock %}

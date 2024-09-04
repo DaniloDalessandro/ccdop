@@ -16,8 +16,10 @@
                         <!-- Campo de pesquisa -->
                         <form method="GET" action="{% url 'centrodecustosolicitante_list' %}">
                             <div class="input-group mb-3">
-                                <input type="text" id="searchInput" class="form-control" name="search" placeholder="Pesquisar centro de custo...">
-                                
+                                <input type="text" id="searchInput" class="form-control" name="search" value="{{ search_query }}" placeholder="Pesquisar centro de custo...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                </div>
                             </div>
                         </form>
 
@@ -31,7 +33,7 @@
                                 </tr>
                             </thead>
                             <tbody id="centrodeustosolicitanteTable">
-                                {% for solicitante in solicitantes %}
+                                {% for solicitante in page_obj %}
                                 <tr>
                                     <td>{{ solicitante.centro_gestor.nome }}</td>
                                     <td>{{ solicitante.nome }}</td>
@@ -55,36 +57,32 @@
                                 <ul class="pagination">
                                     {% if page_obj.has_previous %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page=1" aria-label="Primeira">
+                                        <a class="page-link" href="?search={{ search_query }}&page=1" aria-label="Primeira">
                                             <span aria-hidden="true">&laquo;&laquo;</span>
-                                            <span class="sr-only">Primeira</span>
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                        <a class="page-link" href="?search={{ search_query }}&page={{ page_obj.previous_page_number }}" aria-label="Anterior">
                                             <span aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Anterior</span>
                                         </a>
                                     </li>
                                     {% endif %}
-                                    {% for num in paginator.page_range %}
+                                    {% for num in page_obj.paginator.page_range %}
                                     {% if num == page_obj.number %}
                                     <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(atual)</span></span></li>
                                     {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="?search={{ search_query }}&page={{ num }}">{{ num }}</a></li>
                                     {% endif %}
                                     {% endfor %}
                                     {% if page_obj.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próxima">
+                                        <a class="page-link" href="?search={{ search_query }}&page={{ page_obj.next_page_number }}" aria-label="Próxima">
                                             <span aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Próxima</span>
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ paginator.num_pages }}" aria-label="Última">
+                                        <a class="page-link" href="?search={{ search_query }}&page={{ paginator.num_pages }}" aria-label="Última">
                                             <span aria-hidden="true">&raquo;&raquo;</span>
-                                            <span class="sr-only">Última</span>
                                         </a>
                                     </li>
                                     {% endif %}

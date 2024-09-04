@@ -18,6 +18,7 @@ class ColaboradorListView(ListView):
     model = Colaborador
     template_name = 'colaborador_list.html'
     context_object_name = 'colaboradores'
+    paginate_by = 5
 
 class ColaboradorCreateView(CreateView):
     model = Colaborador
@@ -42,6 +43,7 @@ class CentroDeCustoGestorListView(ListView):
     model = CentroDeCustoGestor
     template_name = 'centros/centrodecustogestor_list.html'
     context_object_name = 'centros'
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -49,7 +51,6 @@ class CentroDeCustoGestorListView(ListView):
             return CentroDeCustoGestor.objects.filter(nome__icontains=query)
         return CentroDeCustoGestor.objects.all()
     
-
 class CentroDeCustoGestorCreateView(CreateView):
     model = CentroDeCustoGestor
     form_class = CentroDeCustoGestorForm
@@ -73,6 +74,7 @@ class CentroDeCustoSolicitanteListView(ListView):
     model = CentroDeCustoSolicitante
     template_name = 'centros/centrodecustosolicitante_list.html'
     context_object_name = 'solicitantes'
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -109,6 +111,8 @@ class DirecaoListView(ListView):
         if query:
             return Direcao.objects.filter(nome__icontains=query)
         return Direcao.objects.all()
+    
+    paginate_by = 5
 
 class DirecaoCreateView(CreateView):
     model = Direcao
@@ -133,6 +137,7 @@ class GerenciaListView(ListView):
     model = Gerencia
     template_name = 'setores/gerencia_list.html'
     context_object_name = 'gerencias'
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -163,6 +168,7 @@ class CoordenacaoListView(ListView):
     model = Coordenacao
     template_name = 'setores/coordenacao_list.html'
     context_object_name = 'coordenacoes'
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -193,6 +199,7 @@ class ColaboradorListView(ListView):
     model = Colaborador
     template_name = 'colaborador/colaborador_list.html'
     context_object_name = 'colaboradores'
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('search')
@@ -229,6 +236,7 @@ class OrcamentoListView(ListView):
     model = Orcamento
     template_name = 'orcamentos/orcamento_list.html'
     context_object_name = 'orcamentos'
+    paginate_by = 5
 
 class OrcamentoDetailView(DetailView):
     model = Orcamento
@@ -258,6 +266,7 @@ class OrcamentoExternoListView(ListView):
     model = OrcamentoExterno
     template_name = 'orcamentos/orcamentoexterno_list.html'
     context_object_name = 'orcamentos_externos'
+    paginate_by = 5
 
 class OrcamentoExternoDetailView(DetailView):
     model = OrcamentoExterno
@@ -306,7 +315,7 @@ class LinhaOrcamentariaListView(ListView):
     model = LinhaOrcamentaria
     template_name = 'linhas/linhaorcamentaria_list.html'
     context_object_name = 'linhaorcamentarias'
-    paginate_by = 10
+    paginate_by = 5
 
 class LinhaOrcamentariaDetailView(DetailView):
     model = LinhaOrcamentaria
@@ -345,6 +354,7 @@ class ContratoListView(ListView):
     model = Contrato
     template_name = 'contratos/contrato_list.html'
     context_object_name = 'contratos'
+    paginate_by = 5
 
 class ContratoCreateView(CreateView):
     model = Contrato
@@ -385,6 +395,7 @@ class RemanejamentoListView(ListView):
     model = Remanejamento
     template_name = 'remanejamentos/remanejamento_list.html'
     context_object_name = 'remanejamentos'
+    paginate_by = 5
 
 class RemanejamentoDetailView(DetailView):
     model = Remanejamento
@@ -424,6 +435,7 @@ class AditivoListView(ListView):
     model = Aditivo
     template_name = 'aditivos/aditivo_list.html'
     context_object_name = 'aditivos'
+    paginate_by = 5
 
 class AditivoDetailView(DetailView):
     model = Aditivo
@@ -441,8 +453,6 @@ class AditivoUpdateView(UpdateView):
     form_class = AditivoForm
     template_name = 'aditivos/aditivo_form.html'
     success_url = reverse_lazy('aditivo_list')
-
-
 
 class AditivoDeleteView(DeleteView):
     model = Aditivo
