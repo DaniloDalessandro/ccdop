@@ -8,12 +8,12 @@ from django.core.validators import MinValueValidator
 #============================================================================================================================
 
 class AuxilioColaborador(models.Model):
-    baneficiado = models.ForeignKey(Colaborador, on_delete=models.PROTECT)
+    beneficiado = models.ForeignKey(Colaborador, on_delete=models.PROTECT)
     orcamento = models.ForeignKey(Orcamento, related_name='auxilios_colaboradores', on_delete=models.PROTECT)
     tipo_choices = [
         ('Graduação', 'Graduação'),
         ('Pós-Graduação', 'Pós-Graduação'),
-        ('Auxilio creche escola', 'Auxilio creche escola'),
+        ('Auxílio creche escola', 'Auxílio creche escola'),
         ('Língua estrangeira', 'Língua estrangeira'),
     ]
     tipo = models.CharField(max_length=100, choices=tipo_choices, null=True, blank=True)
