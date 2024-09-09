@@ -58,7 +58,7 @@
               <tbody>
                 {% for prestacao in prestações %}
                 <tr>
-                  <td>{{ prestacao.numero }}</td>
+                  <td>{{ prestacao.numero_parcela }}</td>
                   <td>{{ prestacao.valor_parcela }}</td>
                   <td>{{ prestacao.data_pagamento|default_if_none:"-" }}</td>
                   <td>

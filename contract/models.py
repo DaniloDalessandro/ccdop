@@ -451,23 +451,27 @@ class Contrato(models.Model):
 from django.db import models
 from django.core.validators import MinValueValidator
 
+from django.db import models
+from django.core.validators import MinValueValidator
+
 class Prestacao(models.Model):
     contrato = models.ForeignKey('Contrato', on_delete=models.CASCADE)
+    numero_parcela = models.PositiveIntegerField(editable=False)  # O número da parcela será gerado automaticamente
     valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     data_pagamento = models.DateField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # Verifica o número de prestações já existentes para este contrato
-        if not self.pk:  # Verifica se é uma nova prestação
-            # Contabiliza as prestações já existentes
-            prestacoes_existentes = Prestacao.objects.filter(contrato=self.contrato).count()
-            # Define o número da nova prestação com base no total de prestações existentes
-            self.numero = prestacoes_existentes + 1
+        if not self.pk:  # Se for uma nova prestação (sem ID)
+            # Verifica quantas prestações já existem para este contrato
+            total_prestacoes = Prestacao.objects.filter(contrato=self.contrato).count()
+            # Define o próximo número da parcela
+            self.numero_parcela = total_prestacoes + 1
 
-        super().save(*args, **kwargs)
+        super(Prestacao, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'Prestação {self.numero} do contrato {self.contrato.numero_protocolo}'
+        return f'Prestação {self.numero_parcela} do contrato {self.contrato.numero_protocolo}'
+
 
     
 # ============================================================================================================

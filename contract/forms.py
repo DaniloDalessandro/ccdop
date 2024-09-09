@@ -210,10 +210,13 @@ class ContratoForm(forms.ModelForm):
 from django import forms
 from .models import Prestacao
 
+from django import forms
+from .models import Prestacao
+
 class PrestacaoForm(forms.ModelForm):
     class Meta:
         model = Prestacao
-        fields = ['valor_parcela', 'data_pagamento']  # Sem o campo 'numero'
+        fields = ['valor_parcela', 'data_pagamento']  # Remover o campo numero_parcela, pois será gerado automaticamente
         widgets = {
             'valor_parcela': forms.NumberInput(attrs={'class': 'form-control'}),
             'data_pagamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
