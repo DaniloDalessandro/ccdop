@@ -1,7 +1,7 @@
 from django.urls import path
 
 from auxilios import views
-from .views import ( ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView)
+from .views import ( ColaboradorListView, ColaboradorCreateView, ColaboradorUpdateView, ColaboradorDeleteView, PrestacaoDeleteView, PrestacaoUpdateView, adicionar_prestacao)
 from .views import ( CentroDeCustoGestorListView, CentroDeCustoGestorCreateView, CentroDeCustoGestorUpdateView, CentroDeCustoGestorDeleteView)
 from .views import ( CentroDeCustoSolicitanteListView, CentroDeCustoSolicitanteCreateView, CentroDeCustoSolicitanteUpdateView, CentroDeCustoSolicitanteDeleteView)
 from .views import ( DirecaoListView,DirecaoCreateView,DirecaoUpdateView,DirecaoDeleteView)
@@ -39,7 +39,7 @@ from .views import (
 
 from .views import AditivoListView, AditivoDetailView, AditivoCreateView, AditivoUpdateView, AditivoDeleteView
 from .views import SetorManageView
-from .views import ContratoCreateView, marcar_prestacao_como_paga
+from .views import ContratoCreateView
 
 urlpatterns = [
     path('listarcolaboradores/', ColaboradorListView.as_view(), name='colaborador_list'),
@@ -117,10 +117,12 @@ urlpatterns = [
     path('list-contrato/', ContratoListView.as_view(), name='contrato-list'),
     path('<int:pk>/editar/', ContratoUpdateView.as_view(), name='contrato-update'),
     path('<int:pk>/deletar/', ContratoDeleteView.as_view(), name='contrato-delete'),
-    path('<int:pk>/', ContratoDetailView.as_view(), name='contrato-detail'),
-    path('prestacao/<int:pk>/pagar/', marcar_prestacao_como_paga, name='prestacao-pagar'),
-
-    
-
+       
+    path('contrato/<int:pk>/', ContratoDetailView.as_view(), name='contrato_detail'),
+    path('contrato/<int:contrato_id>/adicionar-prestacao/', adicionar_prestacao, name='adicionar_prestacao'),
+    path('prestacao/<int:pk>/editar/', PrestacaoUpdateView.as_view(), name='editar_prestacao'),
+    path('prestacao/<int:pk>/deletar/', PrestacaoDeleteView.as_view(), name='deletar_prestacao'),
 ]
+
+
 

@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+  <h2>Adicionar Prestação para o Contrato: {{ contrato.numero_protocolo }}</h2>
+  
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a href="{% url 'contrato_detail' contrato.pk %}" class="btn btn-secondary">Cancelar</a> <!-- Nome da URL corrigido -->
+  </form>
+</div>
+{% endblock %}

@@ -6,9 +6,8 @@ from .forms import (ColaboradorForm,CentroDeCustoGestorForm,CentroDeCustoSolicit
                     GerenciaForm,CoordenacaoForm,OrcamentoExternoForm,OrcamentoForm,LinhaOrcamentariaForm,ContratoForm,RemanejamentoForm,AditivoForm)
 from django.urls import reverse_lazy
 from .models import Contrato, Prestacao
-from .forms import ContratoForm, PrestacaoForm
+from .forms import ContratoForm
 from django.utils import timezone
-from django.views.generic import TemplateView
 from .forms import DirecaoForm, GerenciaForm, CoordenacaoForm
 from django.views.generic import TemplateView
 
@@ -380,14 +379,10 @@ class ContratoDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['today'] = timezone.now().date()
+        context['prestações'] = Prestacao.objects.filter(contrato=self.object)
         return context
 
-def marcar_prestacao_como_paga(request, pk):
-    prestacao = get_object_or_404(Prestacao, pk=pk)
-    prestacao.status_pagamento = True
-    prestacao.save()
-    return redirect('contratos/contrato-detail', pk=prestacao.contrato.pk)
+
 
 #======================================================================================================================
 
@@ -491,3 +486,41 @@ class SetorManageView(TemplateView):
 
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Contrato, Prestacao
+from .forms import PrestacaoForm
+
+def adicionar_prestacao(request, contrato_id):
+    contrato = get_object_or_404(Contrato, pk=contrato_id)
+    
+    if request.method == 'POST':
+        form = PrestacaoForm(request.POST)
+        if form.is_valid():
+            prestacao = form.save(commit=False)
+            prestacao.contrato = contrato  # Relaciona a prestação com o contrato
+            prestacao.save()  # O número será automaticamente atribuído no método save()
+            return redirect('contrato_detail', pk=contrato.pk)
+    else:
+        form = PrestacaoForm()
+
+    return render(request, 'contratos/adicionar_prestacao.html', {'form': form, 'contrato': contrato})
+
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.views.generic import UpdateView, DeleteView
+
+class PrestacaoUpdateView(UpdateView):
+    model = Prestacao
+    form_class = PrestacaoForm
+    template_name = 'contratos/adicionar_prestacao.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('contratos/contrato-detail', kwargs={'pk': self.object.contrato.pk})
+
+
+class PrestacaoDeleteView(DeleteView):
+    model = Prestacao
+    template_name = 'contratos/deletar_prestacao.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('contrato-detail', kwargs={'pk': self.object.contrato.pk})

@@ -448,34 +448,28 @@ class Contrato(models.Model):
         return self.descricao or "Linha Orçamentária sem Descrição"
 
 
+from django.db import models
+from django.core.validators import MinValueValidator
+
 class Prestacao(models.Model):
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE)
-    numero = models.PositiveIntegerField()
-    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, editable=False,validators=[MinValueValidator(0.01)])
-    data_vencimento = models.DateField()
+    contrato = models.ForeignKey('Contrato', on_delete=models.CASCADE)
+    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     data_pagamento = models.DateField(null=True, blank=True)
-    status_pagamento = models.BooleanField(default=False)  # True se paga, False se não paga
 
     def save(self, *args, **kwargs):
-        # Se a parcela foi paga, mas não tem data de pagamento, define a data de pagamento como hoje
-        if self.status_pagamento and not self.data_pagamento:
-            self.data_pagamento = timezone.now().date()
+        # Verifica o número de prestações já existentes para este contrato
+        if not self.pk:  # Verifica se é uma nova prestação
+            # Contabiliza as prestações já existentes
+            prestacoes_existentes = Prestacao.objects.filter(contrato=self.contrato).count()
+            # Define o número da nova prestação com base no total de prestações existentes
+            self.numero = prestacoes_existentes + 1
+
         super().save(*args, **kwargs)
 
-    @property
-    def is_atrasada(self):
-        """
-        Retorna True se a prestação está atrasada (data de vencimento ultrapassada e não foi paga)
-        """
-        if not self.status_pagamento and self.data_vencimento < timezone.now().date():
-            return True
-        return False
-
     def __str__(self):
-        status = "Atrasada" if self.is_atrasada else "Paga" if self.status_pagamento else "Pendente"
-        return f"Parcela {self.numero} do Contrato {self.contrato.numero_protocolo} - {status}"
+        return f'Prestação {self.numero} do contrato {self.contrato.numero_protocolo}'
 
-
+    
 # ============================================================================================================
 
 class Aditivo(models.Model):

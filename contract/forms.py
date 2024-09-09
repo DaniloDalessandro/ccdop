@@ -207,15 +207,18 @@ class ContratoForm(forms.ModelForm):
 
 # =========================================================================================================================
 
+from django import forms
+from .models import Prestacao
+
 class PrestacaoForm(forms.ModelForm):
     class Meta:
         model = Prestacao
-        fields = ['data_vencimento', 'data_pagamento', 'status_pagamento']
+        fields = ['valor_parcela', 'data_pagamento']  # Sem o campo 'numero'
         widgets = {
-            'data_vencimento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'data_pagamento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'status_pagamento': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'valor_parcela': forms.NumberInput(attrs={'class': 'form-control'}),
+            'data_pagamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
+
 
 # =========================================================================================================================
 

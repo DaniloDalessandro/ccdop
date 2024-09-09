@@ -2,82 +2,80 @@
 
 {% block 'conteudo' %}
 <div class="container">
-    <div class="page-inner">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Detalhes do Contrato</h4>
-                        <a href="{% url 'contrato-list' %}" class="btn btn-secondary btn-sm">Voltar</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <strong>Número do Protocolo:</strong>
-                            <p>{{ contrato.numero_protocolo }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Fiscal Principal:</strong>
-                            <p>{{ contrato.fiscal_principal }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Fiscal Substituto:</strong>
-                            <p>{{ contrato.fiscal_substituto }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Valor:</strong>
-                            <p>{{ contrato.valor_contrato }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Data de Assinatura:</strong>
-                            <p>{{ contrato.data_assinatura }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Data de Vencimento:</strong>
-                            <p>{{ contrato.data_vencimento }}</p>
-                        </div>
-
-                        <h4 class="mt-4">Prestações</h4>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Parcela</th>
-                                    <th>Valor</th>
-                                    <th>Data de Vencimento</th>
-                                    <th>Status de Pagamento</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for prestacao in contrato.prestacao_set.all %}
-                                <tr>
-                                    <td>{{ prestacao.numero }}</td>
-                                    <td>{{ prestacao.valor_parcela }}</td>
-                                    <td>{{ prestacao.data_vencimento }}</td>
-                                    <td>
-                                        {% if prestacao.status_pagamento %}
-                                        <span class="badge bg-success">Pago</span>
-                                        {% elif prestacao.data_vencimento < today %}
-                                        <span class="badge bg-danger">Atrasado</span>
-                                        {% else %}
-                                        <span class="badge bg-warning">Pendente</span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-center">
-                                        {% if not prestacao.status_pagamento %}
-                                        <form action="{% url 'prestacao-pagar' prestacao.pk %}" method="POST">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-primary btn-sm">Marcar como Pago</button>
-                                        </form>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+  <div class="page-inner">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Detalhes do Contrato -->
+        <div class="card">
+          <div class="card-header">
+            <h4>Detalhes do Contrato: {{ contrato.numero_protocolo }}</h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <tr>
+                <th>Fiscal Principal:</th>
+                <td>{{ contrato.fiscal_principal }}</td>
+              </tr>
+              <tr>
+                <th>Fiscal Substituto:</th>
+                <td>{{ contrato.fiscal_substituto }}</td>
+              </tr>
+              <tr>
+                <th>Data de Assinatura:</th>
+                <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
+              </tr>
+              <tr>
+                <th>Data de Vencimento:</th>
+                <td>{{ contrato.data_vencimento|date:"d/m/Y" }}</td>
+              </tr>
+              <tr>
+                <th>Valor do Contrato:</th>
+                <td>{{ contrato.valor_contrato }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
+
+        <!-- Lista de Prestações -->
+        <div class="card mt-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Prestações</h4>
+            <a href="{% url 'adicionar_prestacao' contrato.pk %}" class="btn btn-success btn-sm">
+              <i class="fas fa-plus"></i> Adicionar Prestação
+            </a>
+          </div>
+          <div class="card-body">
+            {% if prestações %}
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Número</th>
+                  <th>Valor Parcela</th>
+                  <th>Data de Pagamento</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for prestacao in prestações %}
+                <tr>
+                  <td>{{ prestacao.numero }}</td>
+                  <td>{{ prestacao.valor_parcela }}</td>
+                  <td>{{ prestacao.data_pagamento|default_if_none:"-" }}</td>
+                  <td>
+                    <a href="{% url 'editar_prestacao' prestacao.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'deletar_prestacao' prestacao.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar esta prestação?');">Deletar</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p>Nenhuma prestação registrada.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
