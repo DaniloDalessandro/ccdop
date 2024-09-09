@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block 'conteudo' %}
+<div class="container">
+  <div class="page-inner">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Formulário de Edição da Prestação -->
+        <div class="card">
+          <div class="card-header">
+            <h4>Editar Prestação do Contrato: {{ prestacao.contrato.numero_protocolo }}</h4>
+          </div>
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              {{ form.as_p }}  <!-- Renderiza os campos do formulário -->
+              <button type="submit" class="btn btn-success">Salvar Alterações</button>
+              <a href="{% url 'contrato_detail' prestacao.contrato.pk %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

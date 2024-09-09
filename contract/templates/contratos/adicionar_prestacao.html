@@ -2,13 +2,39 @@
 
 {% block 'conteudo' %}
 <div class="container">
-  <h2>Adicionar Prestação para o Contrato: {{ contrato.numero_protocolo }}</h2>
-  
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a href="{% url 'contrato_detail' contrato.pk %}" class="btn btn-secondary">Cancelar</a> <!-- Nome da URL corrigido -->
-  </form>
+    <div class="page-inner">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Adicionar Prestação para o Contrato: {{ contrato.numero_protocolo }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_valor_parcela">Valor da Prestação</label>
+                                        {{ form.valor_parcela }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_data_pagamento">Data de Pagamento</label>
+                                        {{ form.data_pagamento }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center mt-4 d-flex justify-content-left">
+                                <button type="submit" class="btn btn-success mx-2 w-40">Salvar</button>
+                                <a href="{% url 'contrato_detail' contrato.pk %}" class="btn btn-danger mx-2 w-40">Cancelar</a>
+                            </div>                                                     
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

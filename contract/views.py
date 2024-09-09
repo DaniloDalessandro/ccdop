@@ -512,15 +512,19 @@ from django.views.generic import UpdateView, DeleteView
 class PrestacaoUpdateView(UpdateView):
     model = Prestacao
     form_class = PrestacaoForm
-    template_name = 'contratos/adicionar_prestacao.html'
+    template_name = 'contratos/editar_prestacao.html'
     
     def get_success_url(self):
-        return reverse_lazy('contratos/contrato-detail', kwargs={'pk': self.object.contrato.pk})
+        # Aqui garantimos que o redirecionamento use o contrato associado à prestação
+        return reverse_lazy('contrato_detail', kwargs={'pk': self.object.contrato.pk})
 
+from django.urls import reverse_lazy
 
 class PrestacaoDeleteView(DeleteView):
     model = Prestacao
     template_name = 'contratos/deletar_prestacao.html'
     
     def get_success_url(self):
-        return reverse_lazy('contrato-detail', kwargs={'pk': self.object.contrato.pk})
+        # Redirecionar para os detalhes do contrato após deletar a prestação
+        return reverse_lazy('contrato_detail', kwargs={'pk': self.object.contrato.pk})
+
