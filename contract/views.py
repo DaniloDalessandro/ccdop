@@ -372,6 +372,8 @@ class ContratoDeleteView(DeleteView):
     template_name = 'contratos/contrato_confirm_delete.html'
     success_url = reverse_lazy('contrato-list')
 
+from django.db.models import Sum
+
 class ContratoDetailView(DetailView):
     model = Contrato
     template_name = 'contratos/contrato_detail.html'
@@ -379,9 +381,22 @@ class ContratoDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['prestações'] = Prestacao.objects.filter(contrato=self.object)
+        
+        # Filtra as prestações relacionadas ao contrato
+        prestacoes = Prestacao.objects.filter(contrato=self.object)
+        
+        # Calcula o total pago até o momento
+        total_pago = prestacoes.aggregate(total=Sum('valor_parcela'))['total'] or 0
+        
+        # Calcula o valor restante
+        valor_restante = self.object.valor_contrato - total_pago
+        
+        # Adiciona ao contexto
+        context['prestações'] = prestacoes
+        context['total_pago'] = total_pago
+        context['valor_restante'] = valor_restante
+        
         return context
-
 
 
 #======================================================================================================================

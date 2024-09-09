@@ -393,8 +393,18 @@ class Contrato(models.Model):
     fiscal_principal = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_principal', verbose_name='Fiscal Principal')
     fiscal_substituto = models.ForeignKey(Colaborador, on_delete=models.PROTECT, related_name='contratos_fiscal_substituto', verbose_name='Fiscal Substituto')
     valor_contrato = models.DecimalField(max_digits=10, decimal_places=2,validators=[MinValueValidator(0.01)])
-    num_prestacoes = models.PositiveIntegerField(editable=False)  # Agora calculado automaticamente
-
+    TIPO_PAGAMENTO_CHOICES = [
+        ('PAGAMENTO ÚNICO','PAGAMENTO ÚNICO'),
+        ('PAGAMENTO ANUAL','PAGAMENTO ANUAL'),
+        ('PAGAMENTO SEMANAL','PAGAMENTO SEMANAL'),
+        ('PAGAMENTO MENSAL','PAGAMENTO MENSAL'),
+        ('PAGAMENTO QUIZENAL','PAGAMENTO QUINZENAL'),
+        ('PAGAMENTO TRIMESTRAL','PAGAMENTO TRIMESTRAL'),
+        ('PAGAMENTO SEMESTRAL','PAGAMENTO SEMESTRAL'),
+        ('PAGAMENTO SOB DEMANDA','PAGAMENTO SOB DEMANDA'),
+    ]
+    natureza_pagamento = models.CharField(choices=TIPO_PAGAMENTO_CHOICES,max_length=30)
+    
     def save(self, *args, **kwargs):
         saldo_disponivel = self.linha_orcamentaria.saldo_disponivel()
 
@@ -403,13 +413,7 @@ class Contrato(models.Model):
 
         if not self.numero_protocolo:
             self.numero_protocolo = self.generate_protocolo()
-
-        if self.data_assinatura and self.data_vencimento:
-            self.num_prestacoes = self.calculate_num_prestacoes()
-
-        super().save(*args, **kwargs)
-        self.create_prestacoes()
-        self.linha_orcamentaria.update_valor_aprovisionado()
+        
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -426,24 +430,7 @@ class Contrato(models.Model):
             new_sequence = "0001"
 
         return f"{new_sequence}/{year_suffix}"
-
-    def calculate_num_prestacoes(self):
-        # Calcula o número de meses entre a data de assinatura e a data de vencimento
-        delta = relativedelta(self.data_vencimento, self.data_assinatura)
-        return delta.years * 12 + delta.months + 1  # Adiciona 1 para incluir o mês de início
-
-    def create_prestacoes(self):
-        if not self.prestacao_set.exists():  # Apenas cria se não existirem prestações
-            valor_parcela = self.valor_contrato / self.num_prestacoes
-            for i in range(self.num_prestacoes):
-                data_parcela = self.data_assinatura + relativedelta(months=i)
-                Prestacao.objects.create(
-                    contrato=self,
-                    numero=i+1,
-                    valor_parcela=valor_parcela,
-                    data_vencimento=data_parcela
-                )
-
+    
     def __str__(self):
         return self.descricao or "Linha Orçamentária sem Descrição"
 

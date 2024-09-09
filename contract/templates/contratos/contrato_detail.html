@@ -30,7 +30,15 @@
               </tr>
               <tr>
                 <th>Valor do Contrato:</th>
-                <td>{{ contrato.valor_contrato }}</td>
+                <td>R$ {{ contrato.valor_contrato }}</td>
+              </tr>
+              <tr>
+                <th>Total Pago:</th>
+                <td>R$ {{ total_pago }}</td>
+              </tr>
+              <tr>
+                <th>Valor Restante:</th>
+                <td>R$ {{ valor_restante }}</td>
               </tr>
             </table>
           </div>
@@ -59,12 +67,12 @@
                 {% for prestacao in prestações %}
                 <tr>
                   <td>{{ prestacao.numero_parcela }}</td>
-                  <td>{{ prestacao.valor_parcela }}</td>
+                  <td>R$ {{ prestacao.valor_parcela }}</td>
                   <td>{{ prestacao.data_pagamento|default_if_none:"-" }}</td>
                   <td>
                     <a href="{% url 'editar_prestacao' prestacao.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{% url 'deletar_prestacao' prestacao.pk %}" class="btn btn-danger btn-sm">Deletar</a>
-                </td>                
+                    <a href="{% url 'deletar_prestacao' prestacao.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar esta prestação?');">Deletar</a>
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
